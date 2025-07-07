@@ -7,9 +7,9 @@ export function Footer() {
       <div className="container px-4 py-12 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4">
-            <div className="font-serif text-2xl font-bold tracking-tight">ARTISTRY</div>
+            <div className="font-serif text-2xl font-bold tracking-tight">AEservicos</div>
             <p className="text-sm text-muted-foreground">
-              A contemporary art gallery showcasing emerging and established artists from around the world.
+              Una empresa con más de 10 años de experiencia en el rubro de redodelación de interiores y exteriores, ofreciendo servicios de alta calidad y atención personalizada a nuestros clientes.
             </p>
           </div>
           <div>
@@ -51,13 +51,13 @@ export function Footer() {
             <h3 className="mb-4 text-sm font-medium">Contact</h3>
             <address className="space-y-2 text-sm not-italic text-muted-foreground">
               <p>123 Gallery Street</p>
-              <p>New York, NY 10001</p>
-              <p>info@artistrygallery.com</p>
-              <p>+1 (212) 555-1234</p>
+              <p>vivomueblescl@gmail.com</p>
+              <p>aeservicios@gmail.com</p>
+              <p>+56 93498459</p>
             </address>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-medium">Connect</h3>
+            <h3 className="mb-4 text-sm font-medium">Nuestras Redes</h3>
             <div className="flex gap-4">
               <Link href="#" className="text-muted-foreground hover:text-foreground">
                 <Instagram className="h-5 w-5" />

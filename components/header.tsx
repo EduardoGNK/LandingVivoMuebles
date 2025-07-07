@@ -37,9 +37,9 @@ export function Header() {
             >
               <Image
                 src="logo-slogan.png"
-                alt="Artistry Gallery Logo"
-                width={90}
-                height={90}
+                alt="Vivo Muebles Logo"
+                width={130}
+                height={130}
                 className="mr-2 rounded-full"
               />
               
@@ -71,7 +71,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <Button variant="ghost" size="sm" className="hidden md:flex">
-            Sign
+            Iniciar sesión
           </Button>
           <Button size="sm" className="hidden md:flex">
             Cotizar

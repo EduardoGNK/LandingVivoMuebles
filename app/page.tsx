@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, Calendar, Frame, Users } from "lucide-react"
+import { ArrowRight, Calendar, Recycle, Frame, House, Sun } from "lucide-react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 
@@ -15,22 +15,22 @@ import { TestimonialCarousel } from "@/components/testimonial-carousel"
 
 const stats = [
   {
-    name: "Artworks",
-    value: "500+",
-    description: "Unique pieces from emerging and established artists",
-    icon: Frame,
-  },
-  {
-    name: "Artists",
-    value: "100+",
-    description: "Talented creators from around the world",
-    icon: Users,
-  },
-  {
-    name: "Exhibitions",
-    value: "12",
-    description: "Annual curated shows featuring diverse styles",
+    name: "Garantía",
+    value: "6 meses",
+    description: "Disfruta de tu tranquilidad, si algo falla, lo reparamos.",
     icon: Calendar,
+  },
+  {
+    name: "CO₂ evitado al año",
+    value: "~175 kg",
+    description: "Promedio de reducción en el impacto ambiental estimado por familia en un año.",
+    icon: Recycle,
+  },
+  {
+    name: "Clientes satisfechos",
+    value: "+200",
+    description: "Cocinas únicas adaptadas a cada hogar u oficina.",
+    icon: House,
   },
 ]
 
@@ -43,13 +43,13 @@ export default function Home() {
           <div className="absolute inset-0 z-0">
             <div className="relative h-full w-full">
               <Image
-                src="https://images.unsplash.com/photo-1577720643272-265f09367456?q=80&w=1920&auto=format&fit=crop"
-                alt="Gallery interior"
+                src="/cocina_home.jpeg"
+                alt="Cocina home"
                 fill
                 priority
-                className="object-cover opacity-10 dark:opacity-5"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background to-background" />
+                className="object-cover opacity-50 dark:opacity-20" /* Cambia foto fondo*/
+              /> 
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent from-30% via-background/60 to-background" /* Cambia fade de foto fondo *//> 
             </div>
           </div>
           <div className="container relative z-10 flex min-h-[90vh] flex-col items-center justify-center px-4 py-24 text-center md:py-32">
@@ -57,7 +57,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="max-w-4xl space-y-6"
+              className="max-w-4xl space-y-7"
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -65,11 +65,11 @@ export default function Home() {
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="space-y-2"
               >
-                <h2 className="text-lg font-medium text-muted-foreground">Welcome to Artistry Gallery</h2>
+                <h2 className="text-lg font-medium text-muted-foreground">Remodelaciones y cocina sustentable</h2>
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                  Where Art Meets
-                  <span className="relative ml-2 inline-block bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
-                    Innovation
+                  Transforma tu cocina con
+                  <span className="relative ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
+                    Vivo Muebles
                   </span>
                 </h1>
               </motion.div>
@@ -79,23 +79,22 @@ export default function Home() {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="mx-auto max-w-2xl text-xl text-muted-foreground"
               >
-                Discover a curated collection of contemporary masterpieces from emerging and established artists around
-                the globe.
+                Conoce nuesto trabajo y anímate a transformar tu cocina con nuestro equipo de expertos en remodelación en interiores y sustentabilidad.
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
-                className="flex flex-col justify-center gap-3 sm:flex-row"
+                className="flex flex-col justify-center gap-x-5 sm:flex-row"
               >
-                <Button asChild size="lg" className="text-lg">
+                <Button asChild size="lg" className="text-lg bg-blue-600 hover:bg-blue-700 text-white">
                   <Link href="/gallery">
-                    Explore Gallery
+                    Nuestros Proyectos
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button variant="outline" size="lg" className="text-lg">
-                  <Link href="/exhibitions">Current Exhibitions</Link>
+                  <Link href="/exhibitions">Cotiza con nosotros</Link>
                 </Button>
               </motion.div>
             </motion.div>
