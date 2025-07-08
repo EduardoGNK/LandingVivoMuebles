@@ -53,12 +53,12 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-b from-transparent from-30% via-background/60 to-background" /* Cambia fade de foto fondo *//> 
             </div>
           </div>
-          <div className="container relative z-10 flex min-h-[90vh] flex-col items-center justify-center px-4 py-24 text-center md:py-32">
+          <div className="container relative z-10 flex min-h-[90vh] flex-col items-center justify-center px-4 py-8 text-center sm:py-12 md:py-32">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="max-w-4xl space-y-7"
+              className="max-w-4xl space-y-4 sm:space-y-6 md:space-y-7"
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -66,8 +66,8 @@ export default function Home() {
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="space-y-2"
               >
-                <h2 className="text-lg font-medium text-muted-foreground">Remodelaciones y cocina sustentable</h2>
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+                <h2 className="text-sm font-medium text-muted-foreground sm:text-base md:text-lg">Remodelaciones y cocina sustentable</h2>
+                <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
                   Transforma tu cocina con
                   <span className="relative ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
                     Vivo Muebles
@@ -78,7 +78,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
-                className="mx-auto max-w-2xl text-xl text-muted-foreground"
+                className="mx-auto max-w-2xl text-sm text-muted-foreground sm:text-base md:text-lg lg:text-xl"
               >
                 Conoce nuesto trabajo y anímate a transformar tu cocina con nuestro equipo de expertos en remodelación en interiores y sustentabilidad.
               </motion.p>
@@ -86,15 +86,15 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
-                className="flex flex-col justify-center gap-x-5 sm:flex-row"
+                className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4 md:gap-5"
               >
-                <Button asChild size="lg" className="text-lg bg-blue-600 hover:bg-blue-700 text-white">
+                <Button asChild size="lg" className="text-sm bg-blue-600 hover:bg-blue-700 text-white sm:text-base md:text-lg">
                   <Link href="/gallery">
                     Nuestros Proyectos
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                   </Link>
                 </Button>
-                <Button variant="outline" size="lg" className="text-lg">
+                <Button variant="outline" size="lg" className="text-sm sm:text-base md:text-lg">
                   <Link href="/exhibitions">Cotiza con nosotros</Link>
                 </Button>
               </motion.div>
@@ -107,14 +107,14 @@ export default function Home() {
               transition={{ delay: 0.8, duration: 0.5 }}
               className="container px-4"
             >
-              <div className="grid gap-8 rounded-t-3xl bg-muted/50 p-8 backdrop-blur-sm dark:bg-muted/10 md:grid-cols-3">
+              <div className="hidden sm:grid gap-4 rounded-t-3xl bg-muted/50 p-4 backdrop-blur-sm dark:bg-muted/10 sm:gap-6 sm:p-6 md:grid-cols-3 md:gap-8 md:p-8">
                 {stats.map((stat, index) => (
-                  <div key={stat.name} className="relative flex flex-col items-center gap-2 text-center">
-                    {index > 0 && <div className="absolute -left-4 top-0 hidden h-full w-px bg-border md:block" />}
-                    <stat.icon className="h-6 w-6 text-muted-foreground" />
-                    <div className="text-3xl font-bold">{stat.value}</div>
-                    <div className="font-medium">{stat.name}</div>
-                    <p className="text-sm text-muted-foreground">{stat.description}</p>
+                  <div key={stat.name} className="relative flex flex-col items-center gap-1 text-center sm:gap-2">
+                    {index > 0 && <div className="absolute -left-2 top-0 hidden h-full w-px bg-border sm:block sm:-left-3 md:-left-4" />}
+                    <stat.icon className="h-4 w-4 text-muted-foreground sm:h-5 sm:w-5 md:h-6 md:w-6" />
+                    <div className="text-xl font-bold sm:text-2xl md:text-3xl">{stat.value}</div>
+                    <div className="font-medium text-xs sm:text-sm md:text-base">{stat.name}</div>
+                    <p className="text-xs text-muted-foreground sm:text-sm">{stat.description}</p>
                   </div>
                 ))}
               </div>

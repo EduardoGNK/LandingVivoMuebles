@@ -34,7 +34,7 @@ export function GalleryPreview() {
       variants={container}
       initial="hidden"
       animate={isInView ? "show" : "hidden"}
-      className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3"
     >
       {previewArtworks.map((artwork) => (
         <motion.div key={artwork.id} variants={item}>
@@ -45,16 +45,12 @@ export function GalleryPreview() {
                 alt={artwork.title}
                 fill
                 className="object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 translate-y-4">
-                <span className="text-sm font-medium">{artwork.title}</span>
-              </div>
             </div>
-            <div className="p-4">
-              <h3 className="font-medium">{artwork.title}</h3>
-              <p className="text-sm text-muted-foreground">{artwork.artist}</p>
+            <div className="p-2 sm:p-3 md:p-4">
+              <h3 className="font-medium text-xs sm:text-sm md:text-base">{artwork.title}</h3>
+              <p className="text-xs text-muted-foreground">{artwork.artist}</p>
             </div>
           </Link>
         </motion.div>

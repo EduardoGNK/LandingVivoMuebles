@@ -8,7 +8,7 @@ import { useState } from "react"
 import Image from "next/image"
 
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 const navigation = [
@@ -84,10 +84,8 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <div className="flex flex-col gap-6 py-6">
-                <Link href="/" className="flex items-center space-x-2">
-                  <span className="font-serif text-2xl font-bold tracking-tight">ARTISTRY</span>
-                </Link>
+              <SheetTitle className="text-2xl font-bold tracking-tight mb-6">ARTISTRY</SheetTitle>
+              <div className="flex flex-col gap-6">
                 <nav className="flex flex-col gap-4">
                   {navigation.map((item) => (
                     <Link
