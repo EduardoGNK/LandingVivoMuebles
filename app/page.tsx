@@ -12,6 +12,7 @@ import { GalleryPreview } from "@/components/gallery-preview"
 import { NewsletterForm } from "@/components/newsletter-form"
 import { ExhibitionSlider } from "@/components/exhibition-slider"
 import { TestimonialCarousel } from "@/components/testimonial-carousel"
+import { AIKitchenGenerator } from "@/components/ai-kitchen-generator"
 
 const stats = [
   {
@@ -134,6 +135,13 @@ export default function Home() {
               </div>
               <FeaturedArtwork />
             </div>
+          </div>
+        </section>
+
+        {/* AI Kitchen Generator Section */}
+        <section className="relative overflow-hidden bg-muted/50 py-24 dark:bg-muted/10">
+          <div className="container px-4">
+            <AIKitchenGenerator />
           </div>
         </section>
 
