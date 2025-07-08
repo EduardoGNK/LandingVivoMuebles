@@ -11,7 +11,6 @@ import FeaturedArtwork from "@/components/featured-artwork"
 import { GalleryPreview } from "@/components/gallery-preview"
 import { NewsletterForm } from "@/components/newsletter-form"
 import { ExhibitionSlider } from "@/components/exhibition-slider"
-import { TestimonialCarousel } from "@/components/testimonial-carousel"
 import { AIKitchenGenerator } from "@/components/ai-kitchen-generator"
 
 const stats = [
@@ -179,17 +178,27 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Testimonials Section */}
-        <section className="bg-muted/50 py-24 dark:bg-muted/10">
+        {/* Logos Row Section */}
+        <section className="py-12 bg-muted/50 dark:bg-muted/10">
           <div className="container px-4">
-            <div className="flex flex-col gap-8">
-              <div className="flex flex-col items-center gap-4 text-center">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">What Collectors Say</h2>
-                <p className="max-w-[800px] text-lg text-muted-foreground">
-                  Hear from art enthusiasts who have experienced our gallery and collection.
-                </p>
-              </div>
-              <TestimonialCarousel />
+            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-20 lg:gap-28">
+              {[
+                { src: "/logos/Banco_de_Chile.png", alt: "Banco de Chile" },
+                { src: "/logos/banco-estado.png", alt: "Banco Estado" },
+                { src: "/logos/Sodimac.png", alt: "Sodimac" },
+                { src: "/logos/matrix.png", alt: "Matrix Consulting" },
+              ].map((logo, i) => (
+                <div key={i} className="flex items-center justify-center h-14 w-28 md:h-20 md:w-36 lg:h-28 lg:w-48">
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    className="object-contain h-full w-full"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 text-center">
+              <h3 className="text-base font-semibold text-muted-foreground tracking-wide">Casos de éxito como AEservicios</h3>
             </div>
           </div>
         </section>
