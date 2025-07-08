@@ -127,7 +127,7 @@ export default function Home() {
           <div className="container px-4">
             <div className="flex flex-col gap-8">
               <div className="flex flex-col items-center gap-4 text-center">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Featured Artwork</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Algunos de nuestros proyectos</h2>
                 <p className="max-w-[800px] text-lg text-muted-foreground">
                   Conoce algunos de nuestros mejores proyectos donde no solo te ofrecemos una cocina, sino una experiencia única y personalizada.
                 </p>

@@ -114,7 +114,7 @@ export function AIKitchenGenerator() {
                 className="flex flex-col items-center gap-6"
               >
                 <div className="text-center text-muted-foreground">
-                  Tu cocina perfecta se está generando...
+                  Tu cocina perfecta se está generando... esto puede tardar unos minutos.
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="relative">

@@ -47,7 +47,7 @@ export default function FeaturedArtwork() {
         >
           {/* Galería compacta para Featured Artwork */}
           <div className="relative">
-            <div className="relative aspect-[4/3] max-h-[400px] overflow-hidden rounded-lg bg-muted">
+            <div className="relative aspect-[14/9] max-h-[400px] overflow-hidden rounded-lg bg-muted">
               <Image
                 src={currentImages[currentImageIndex]}
                 alt={`${currentArtwork.title} - Imagen ${currentImageIndex + 1}`}
@@ -92,6 +92,34 @@ export default function FeaturedArtwork() {
                 </div>
               )}
             </div>
+
+            {/* Thumbnails - miniaturas debajo de la imagen principal */}
+            {currentImages.length > 1 && (
+              <div className="mt-4 flex gap-2 overflow-x-auto">
+                {currentImages.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToImage(index)}
+                    className={`relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border-2 transition-colors ${
+                      index === currentImageIndex
+                        ? "border-primary ring-2 ring-primary/20"
+                        : "border-transparent hover:border-muted-foreground/50"
+                    }`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${currentArtwork.title} - Miniatura ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="64px"
+                    />
+                    {index === currentImageIndex && (
+                      <div className="absolute inset-0 bg-primary/20" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </motion.div>
         <div className="flex flex-col justify-between p-6">
