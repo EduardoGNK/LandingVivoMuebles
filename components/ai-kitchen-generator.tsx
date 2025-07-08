@@ -7,12 +7,18 @@ import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
+import { useAIImage } from "@/components/ai-image-context"
 
-export function AIKitchenGenerator() {
+interface AIKitchenGeneratorProps {
+  contactFormRef?: React.RefObject<HTMLDivElement>
+}
+
+export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) {
   const [prompt, setPrompt] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const { setIaImage } = useAIImage()
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
@@ -48,8 +54,13 @@ export function AIKitchenGenerator() {
   }
 
   const handleInterest = () => {
-    // Aquí puedes agregar la lógica para manejar el interés del usuario
-    alert("¡Gracias por tu interés! Nos pondremos en contacto contigo pronto.")
+    if (generatedImage) {
+      setIaImage(generatedImage)
+      if (contactFormRef?.current) {
+        const y = contactFormRef.current.getBoundingClientRect().top + window.scrollY - 220;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+    }
   }
 
   return (
@@ -57,7 +68,7 @@ export function AIKitchenGenerator() {
       <div className="flex flex-col items-center gap-4 text-center">
         <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
           Crea tu cocina perfecta con
-          <span className="relative ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
+          <span className="text-12xl relative ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
             IA
           </span>
         </h2>

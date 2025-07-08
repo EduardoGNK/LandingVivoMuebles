@@ -1,52 +1,165 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Loader2 } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { useAIImage } from "@/components/ai-image-context"
+
+interface ContactFormProps {
+  imagenIA?: string | null // Imagen generada por IA (opcional)
+}
 
 export function NewsletterForm() {
+  const { iaImage } = useAIImage()
+  const [nombre, setNombre] = useState("")
   const [email, setEmail] = useState("")
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [telefono, setTelefono] = useState("")
+  const [direccion, setDireccion] = useState("")
+  const [mensaje, setMensaje] = useState("")
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "ratelimit">("idle")
+  const [errorMsg, setErrorMsg] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus("loading")
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setStatus("success")
-    setEmail("")
-
-    // Reset success message after 3 seconds
-    setTimeout(() => setStatus("idle"), 3000)
+    setErrorMsg("")
+    try {
+      const res = await fetch("/api/send-message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, email, telefono, direccion, mensaje, imagenIA: iaImage }),
+      })
+      const data = await res.json()
+      if (res.ok && data.success) {
+        setStatus("success")
+        setNombre("")
+        setEmail("")
+        setTelefono("")
+        setDireccion("")
+        setMensaje("")
+        setTimeout(() => setStatus("idle"), 4000)
+      } else if (res.status === 429 || data.error?.includes("espera")) {
+        setStatus("ratelimit")
+        setErrorMsg(data.error || "⚠️ Por favor espera antes de volver a enviar")
+        setTimeout(() => setStatus("idle"), 4000)
+      } else {
+        setStatus("error")
+        setErrorMsg(data.error || "❌ Hubo un error, intenta más tarde")
+        setTimeout(() => setStatus("idle"), 4000)
+      }
+    } catch (err) {
+      setStatus("error")
+      setErrorMsg("❌ Hubo un error, intenta más tarde")
+      setTimeout(() => setStatus("idle"), 4000)
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4 sm:flex-row">
-      <Input
-        type="email"
-        placeholder="Enter your email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className="h-12"
-      />
-      <Button type="submit" disabled={status === "loading"} className="h-12">
-        {status === "loading" ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : status === "success" ? (
-          <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            Subscribed!
-          </motion.span>
-        ) : (
-          "Subscribe"
+    <div className="flex flex-col md:flex-row items-start justify-center gap-12 w-full max-w-4xl mx-auto">
+      {iaImage && (
+        <div className="flex flex-col items-center md:items-start flex-1 mb-4 md:mb-0">
+          <div className="relative w-full md:w-96 h-60 md:h-96 rounded-lg border shadow-md overflow-hidden mb-2 bg-muted">
+            <img
+              src={iaImage}
+              alt="Imagen generada por IA"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+          <span className="text-blue-600 text-center text-sm md:text-left">Esta imagen se adjuntará a tu correo de cotización.</span>
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 flex-1 min-w-[320px] max-w-lg mx-auto md:mx-0 md:pl-4">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="nombre" className="font-medium">Nombre completo</label>
+          <Input
+            id="nombre"
+            name="nombre"
+            type="text"
+            autoComplete="name"
+            required
+            value={nombre}
+            onChange={e => setNombre(e.target.value)}
+            disabled={status === "loading"}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="email" className="font-medium">Email</label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            disabled={status === "loading"}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="telefono" className="font-medium">Teléfono</label>
+          <Input
+            id="telefono"
+            name="telefono"
+            type="tel"
+            autoComplete="tel"
+            required
+            value={telefono}
+            onChange={e => setTelefono(e.target.value)}
+            disabled={status === "loading"}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="direccion" className="font-medium">Dirección</label>
+          <Input
+            id="direccion"
+            name="direccion"
+            type="text"
+            autoComplete="street-address"
+            required
+            value={direccion}
+            onChange={e => setDireccion(e.target.value)}
+            disabled={status === "loading"}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="mensaje" className="font-medium">Mensaje</label>
+          <Textarea
+            id="mensaje"
+            name="mensaje"
+            autoComplete="off"
+            required
+            value={mensaje}
+            onChange={e => setMensaje(e.target.value)}
+            disabled={status === "loading"}
+            rows={4}
+          />
+        </div>
+        <Button type="submit" disabled={status === "loading"} className="h-12">
+          {status === "loading" ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            "Enviar"
+          )}
+        </Button>
+        {status === "success" && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-green-600 text-center">
+            ✅ Enviado correctamente
+          </motion.div>
         )}
-      </Button>
-    </form>
+        {status === "error" && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-red-500 text-center">
+            {errorMsg || "❌ Hubo un error, intenta más tarde"}
+          </motion.div>
+        )}
+        {status === "ratelimit" && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-yellow-600 text-center">
+            {errorMsg || "⚠️ Por favor espera antes de volver a enviar"}
+          </motion.div>
+        )}
+      </form>
+    </div>
   )
 }

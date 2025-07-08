@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Facebook, Instagram } from "lucide-react"
 import { SiTiktok } from "react-icons/si"
+import { FaXTwitter } from "react-icons/fa6"
 
 export function Footer() {
   return (
@@ -49,16 +50,16 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-medium">Contact</h3>
+            <h3 className="mb-4 text-sm font-medium">Contacto</h3>
             <address className="space-y-2 text-sm not-italic text-muted-foreground">
-              <p>123 Gallery Street</p>
+              <p>Santiago, Chile </p>
               <p>vivomueblescl@gmail.com</p>
-              <p>aeservicios@gmail.com</p>
-              <p>+56 93498459</p>
+              <p>aeservicioshogar@gmail.com</p>
+              <p>+56 9 8418 7065</p>
             </address>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-medium">Nuestras Redes</h3>
+            <h3 className="mb-4 text-sm font-medium">Nuestras redes sociales</h3>
             <div className="flex gap-6">
               <Link href="https://www.instagram.com/vivomuebles.cl/" className="text-muted-foreground hover:text-foreground">
                 <Instagram className="h-7 w-7" />
@@ -69,26 +70,13 @@ export function Footer() {
                 <span className="sr-only">Facebook</span>
               </Link>
               <Link href="#" className="text-muted-foreground hover:text-foreground">
+                <FaXTwitter className="h-7 w-7" />
+                <span className="sr-only">X</span>
+              </Link>
+              <Link href="#" className="text-muted-foreground hover:text-foreground">
                 <SiTiktok className="h-7 w-7" />
                 <span className="sr-only">TikTok</span>
               </Link>
-            </div>
-            <div className="mt-6">
-              <h3 className="mb-4 text-sm font-medium">Subscribe</h3>
-              <form className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
-                >
-                  Subscribe
-                </button>
-              </form>
             </div>
           </div>
         </div>

@@ -48,7 +48,7 @@ export function GalleryPreview() {
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
               />
             </div>
-            <div className="p-2 sm:p-3 md:p-4">
+            <div className="p-2 sm:p-3 md:p-4 bg-zinc-300/20 dark:bg-zinc-900/80 rounded-b-lg">
               <h3 className="font-medium text-xs sm:text-sm md:text-base">{artwork.title}</h3>
               <p className="text-xs text-muted-foreground">{artwork.artist}</p>
             </div>
