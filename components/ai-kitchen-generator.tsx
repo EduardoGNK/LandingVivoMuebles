@@ -68,7 +68,7 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
       <div className="flex flex-col items-center gap-4 text-center">
         <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
           Crea tu cocina perfecta con
-          <span className="text-12xl relative ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
+          <span className="relative ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
             IA
           </span>
         </h2>

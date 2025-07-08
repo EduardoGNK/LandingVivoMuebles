@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     })
 
     const mailOptions: nodemailer.SendMailOptions = {
-      from: user,
+      from: 'eduardo9escalona@gmail.com',
       to: [to1, to2],
       subject: 'Nuevo mensaje de contacto desde el sitio web',
       text: `Nombre: ${nombre}\nEmail: ${email}\nTeléfono: ${telefono}\nDirección: ${direccion}\nMensaje: ${mensaje}`,
