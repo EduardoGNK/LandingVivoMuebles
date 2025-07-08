@@ -188,7 +188,7 @@ export default function Home() {
                 { src: "/logos/Sodimac.png", alt: "Sodimac" },
                 { src: "/logos/matrix.png", alt: "Matrix Consulting" },
               ].map((logo, i) => (
-                <div key={i} className="flex items-center justify-center h-14 w-28 md:h-20 md:w-36 lg:h-28 lg:w-48">
+                <div key={i} className="flex items-center justify-center h-8 w-21 md:h-20 md:w-36 lg:h-28 lg:w-48">
                   <img
                     src={logo.src}
                     alt={logo.alt}

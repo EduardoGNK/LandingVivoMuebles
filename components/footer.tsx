@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { Facebook, Instagram, Twitter } from "lucide-react"
+import { Facebook, Instagram } from "lucide-react"
+import { SiTiktok } from "react-icons/si"
 
 export function Footer() {
   return (
@@ -8,7 +9,7 @@ export function Footer() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4">
             <div className="font-serif text-2xl font-bold tracking-tight">AEservicos</div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-justify text-muted-foreground max-w-[300px] text-sm">
               Una empresa con más de 10 años de experiencia en el rubro de redodelación de interiores y exteriores, ofreciendo servicios de alta calidad y atención personalizada a nuestros clientes.
             </p>
           </div>
@@ -58,18 +59,18 @@ export function Footer() {
           </div>
           <div>
             <h3 className="mb-4 text-sm font-medium">Nuestras Redes</h3>
-            <div className="flex gap-4">
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
-                <Instagram className="h-5 w-5" />
+            <div className="flex gap-6">
+              <Link href="https://www.instagram.com/vivomuebles.cl/" className="text-muted-foreground hover:text-foreground">
+                <Instagram className="h-7 w-7" />
                 <span className="sr-only">Instagram</span>
               </Link>
               <Link href="#" className="text-muted-foreground hover:text-foreground">
-                <Facebook className="h-5 w-5" />
+                <Facebook className="h-7 w-7" />
                 <span className="sr-only">Facebook</span>
               </Link>
               <Link href="#" className="text-muted-foreground hover:text-foreground">
-                <Twitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
+                <SiTiktok className="h-7 w-7" />
+                <span className="sr-only">TikTok</span>
               </Link>
             </div>
             <div className="mt-6">
@@ -92,7 +93,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-6 text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Artistry Gallery. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} AEservicios. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>
