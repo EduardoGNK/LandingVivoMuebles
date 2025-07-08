@@ -129,8 +129,7 @@ export default function Home() {
               <div className="flex flex-col items-center gap-4 text-center">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Featured Artwork</h2>
                 <p className="max-w-[800px] text-lg text-muted-foreground">
-                  Experience our most captivating pieces, each telling a unique story through the artist's vision and
-                  craftsmanship.
+                  Conoce algunos de nuestros mejores proyectos donde no solo te ofrecemos una cocina, sino una experiencia única y personalizada.
                 </p>
               </div>
               <FeaturedArtwork />

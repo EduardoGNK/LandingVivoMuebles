@@ -1,16 +1,39 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
 import { artworks } from "@/data/artworks"
 
 export default function FeaturedArtwork() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const featuredArtworks = artworks.slice(0, 3)
+  const featuredArtworks = artworks.slice(0, 5)
   const currentArtwork = featuredArtworks[currentIndex]
+  
+  // Estado para la galería de imágenes del artwork actual
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const currentImages = currentArtwork.gallery || [currentArtwork.image]
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev === currentImages.length - 1 ? 0 : prev + 1))
+  }
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? currentImages.length - 1 : prev - 1))
+  }
+
+  const goToImage = (index: number) => {
+    setCurrentImageIndex(index)
+  }
+
+  // Resetear índice de imagen cuando cambia el artwork
+  useEffect(() => {
+    setCurrentImageIndex(0)
+  }, [currentArtwork.id])
 
   return (
     <div className="relative overflow-hidden rounded-lg bg-background">
@@ -21,22 +44,55 @@ export default function FeaturedArtwork() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="relative aspect-square overflow-hidden rounded-lg md:aspect-auto"
         >
-          <Image
-            src={currentArtwork.image || "/placeholder.svg"}
-            alt={currentArtwork.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority
-          />
-          <motion.div
-            initial={{ opacity: 0.8 }}
-            animate={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0 bg-background"
-          />
+          {/* Galería compacta para Featured Artwork */}
+          <div className="relative">
+            <div className="relative aspect-[4/3] max-h-[400px] overflow-hidden rounded-lg bg-muted">
+              <Image
+                src={currentImages[currentImageIndex]}
+                alt={`${currentArtwork.title} - Imagen ${currentImageIndex + 1}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
+              />
+              {currentImages.length > 1 && (
+                <div className="absolute inset-0 flex items-center justify-between p-4">
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    onClick={prevImage}
+                    className="h-8 w-8 rounded-full bg-black/50 text-white hover:bg-black/70"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    onClick={nextImage}
+                    className="h-8 w-8 rounded-full bg-black/50 text-white hover:bg-black/70"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+              {currentImages.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+                  <div className="flex gap-2">
+                    {currentImages.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => goToImage(index)}
+                        className={`h-2 w-2 rounded-full transition-colors ${
+                          index === currentImageIndex ? "bg-white" : "bg-white/50"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </motion.div>
         <div className="flex flex-col justify-between p-6">
           <motion.div
@@ -102,7 +158,7 @@ export default function FeaturedArtwork() {
               href={`/artwork/${currentArtwork.id}`}
               className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
             >
-              View Artwork Details
+              Ver Detalles del Proyecto
             </Link>
           </div>
         </div>
