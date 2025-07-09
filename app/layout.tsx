@@ -10,9 +10,14 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Artistry Gallery",
-  description: "A modern art gallery showcasing contemporary masterpieces",
-    generator: 'v0.dev'
+  title: "Vivo Muebles",
+  description: "Transforma tu hogar con Vivo Muebles. Especialistas en remodelaciones de interiores y cocinas sustentables en Santiago, Chile.",
+  generator: 'v0.dev',
+  icons: {
+    icon: '/icono-pestaña.png',
+    shortcut: '/icono-pestaña.png',
+    apple: '/icono-pestaña.png',
+  },
 }
 
 export default function RootLayout({
@@ -21,7 +26,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/icono-pestaña.png" />
+        <link rel="shortcut icon" href="/icono-pestaña.png" />
+        <link rel="apple-touch-icon" href="/icono-pestaña.png" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <div className="flex min-h-screen flex-col bg-background text-foreground">

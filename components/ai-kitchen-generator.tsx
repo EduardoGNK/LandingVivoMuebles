@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useAIImage } from "@/components/ai-image-context"
 
 interface AIKitchenGeneratorProps {
-  contactFormRef?: React.RefObject<HTMLDivElement>
+  contactFormRef?: React.RefObject<HTMLDivElement | null>
 }
 
 export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) {

@@ -147,6 +147,56 @@ export default function Home() {
             </div>
           </section>
 
+          {/* AEservicios Section */}
+          <section className="py-24">
+            <div className="container px-4">
+              <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                  viewport={{ once: true }}
+                  className="space-y-6"
+                >
+                  <div className="space-y-4">
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                      <span className="text-green-600">Vivo Muebles</span> como parte de{" "}
+                      <span className="text-blue-600">AEservicios</span>
+                    </h2>
+                    <p className="text-lg text-justify leading-relaxed">
+                      <strong className="text-foreground">AEservicios</strong> es una empresa dedicada a la remodelación integral de espacios, tanto para hogares como para empresas, combinando diseño funcional con soluciones modernas, duraderas y eficientes.
+                    </p>
+                    <p className="text-lg text-justify leading-relaxed">
+                      Dentro de AEservicios nace <strong className="text-foreground">Vivo Muebles</strong>, una propuesta que ha transformado los hogares de cientos de chilenos, no solo con diseño a medida, sino que también con un compromiso ambiental: nuestros muebles integran botes para separar la basura desde su origen, facilitando la recolección y fomentando un estilo de vida más sustentable.
+                    </p>
+                    <p className="text-lg text-justify leading-relaxed">
+                      Rediseña tus espacios, eleva la estética de tu hogar y sé parte del cambio hacia un futuro más limpio y consciente.
+                    </p>
+                  </div>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                  className="relative"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-muted">
+                    <Image
+                      src="/fotos/modern-kitchen.jpg"
+                      alt="Cocina moderna sustentable"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
           {/* Upcoming Exhibitions Section */}
           <section className="relative overflow-hidden bg-muted/50 py-24 dark:bg-muted/10">
             <div className="container px-4">
@@ -208,7 +258,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="mt-4 text-center">
-                <h3 className="text-base font-semibold text-muted-foreground tracking-wide">Casos de éxito como AEservicios</h3>
+                <h3 className="text-base font-semibold text-muted-foreground tracking-wide">AEservicios remodelando más allá de tu casa.</h3>
               </div>
             </div>
           </section>
