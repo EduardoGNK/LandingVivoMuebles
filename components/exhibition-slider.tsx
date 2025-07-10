@@ -12,27 +12,27 @@ import { Card, CardContent } from "@/components/ui/card"
 const exhibitions = [
   {
     id: 1,
-    title: "Abstract Visions",
-    artist: "Various Artists",
-    date: "March 15 - April 30, 2024",
-    description: "A collective exhibition exploring the boundaries of abstract expression in contemporary art.",
-    image: "https://images.unsplash.com/photo-1541512416146-3cf58d6b27cc?q=80&w=1600&auto=format&fit=crop",
+    title: "Canchas de Padel",
+    artist: "Antofagasta",
+    date: "mayo 15 - Julio 28, 2025",
+    description: "Remodelación de interior dentro del mall Antofagasta para la empresa Infinity Padel. ",
+    image: "masque/cancha-padel.jpg",
   },
   {
     id: 2,
-    title: "Urban Perspectives",
-    artist: "Sarah Chen & Marcus Davis",
-    date: "May 5 - June 20, 2024",
-    description: "A dual exhibition examining the intersection of urban life and artistic interpretation.",
-    image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop",
+    title: "Diseño de oficinas abiertas",
+    artist: "Providencia - Santiago",
+    date: "Septiembre 25 - Octubre 20, 2024",
+    description: "Remodelación de oficina abierta ajustando a la medida mesas y muebles ubicada en oficinas de Costanera Center.",
+    image: "masque/oficina-abierta.jpg",
   },
   {
     id: 3,
-    title: "Digital Frontiers",
-    artist: "Tech Art Collective",
-    date: "July 1 - August 15, 2024",
-    description: "Exploring the convergence of technology and traditional artistic mediums.",
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop",
+    title: "Diseño de exteriores",
+    artist: "La Reina - Santiago",
+    date: "Abril 1 - Mayo 20, 2024",
+    description: "Terraza con trabajos en madera y piedra, integración de estufa y diseño de iluminación para un particular de La Reina.",
+    image: "masque/terraza.jpg",
   },
 ]
 
@@ -80,7 +80,7 @@ export function ExhibitionSlider() {
                   <p className="text-muted-foreground">{exhibitions[currentIndex].description}</p>
                   <div className="mt-4">
                     <Button asChild>
-                      <Link href="/exhibitions">Learn More</Link>
+                      <Link href="/exhibitions">Ver Proyectos</Link>
                     </Button>
                   </div>
                 </CardContent>

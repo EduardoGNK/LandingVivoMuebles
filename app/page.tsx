@@ -219,9 +219,9 @@ export default function Home() {
             <div className="container px-4">
               <div className="flex flex-col gap-8">
                 <div className="flex flex-col items-center gap-4 text-center">
-                  <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Upcoming Exhibitions</h2>
+                  <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Más que solo Cocinas</h2>
                   <p className="max-w-[800px] text-lg text-muted-foreground">
-                    Mark your calendar for these extraordinary showcases of artistic excellence.
+                    Nuestras remodelaciones no solo son cocinas, sino que también son espacios únicos y personalizados para cada cliente con proyectos de todo tipo.
                   </p>
                 </div>
                 <ExhibitionSlider />
