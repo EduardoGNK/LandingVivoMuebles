@@ -6,6 +6,7 @@ import { Menu } from "lucide-react"
 import { motion } from "framer-motion"
 import { useState } from "react"
 import Image from "next/image"
+import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
@@ -23,6 +24,7 @@ const navigation = [
 export function Header() {
   const pathname = usePathname()
   const [hoveredPath, setHoveredPath] = useState(pathname)
+  const { theme } = useTheme()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
@@ -36,7 +38,7 @@ export function Header() {
               className="flex items-center"
             >
               <Image
-                src="logo-slogan.png"
+                src={theme === "dark" ? "/logo-slogan-white.png" : "/logo-slogan.png"}
                 alt="Vivo Muebles Logo"
                 width={130}
                 height={130}

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useAIImage } from "@/components/ai-image-context"
+import { SuccessPopup } from "@/components/success-popup"
 
 interface ContactFormProps {
   imagenIA?: string | null // Imagen generada por IA (opcional)
@@ -21,6 +22,7 @@ export function NewsletterForm() {
   const [mensaje, setMensaje] = useState("")
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "ratelimit">("idle")
   const [errorMsg, setErrorMsg] = useState("")
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,6 +42,7 @@ export function NewsletterForm() {
         setTelefono("")
         setDireccion("")
         setMensaje("")
+        setShowSuccessPopup(true)
         setTimeout(() => setStatus("idle"), 4000)
       } else if (res.status === 429 || data.error?.includes("espera")) {
         setStatus("ratelimit")
@@ -160,6 +163,12 @@ export function NewsletterForm() {
           </motion.div>
         )}
       </form>
+      
+      {/* Pop-up de éxito */}
+      <SuccessPopup 
+        isOpen={showSuccessPopup} 
+        onClose={() => setShowSuccessPopup(false)} 
+      />
     </div>
   )
 }
