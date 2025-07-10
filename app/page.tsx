@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ArrowRight, Calendar, Recycle, Frame, House, Sun } from "lucide-react"
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { useState, useEffect } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -13,6 +14,7 @@ import { NewsletterForm } from "@/components/newsletter-form"
 import { ExhibitionSlider } from "@/components/exhibition-slider"
 import { AIKitchenGenerator } from "@/components/ai-kitchen-generator"
 import { AIImageProvider } from "@/components/ai-image-context"
+import { Preloader } from "@/components/preloader"
 import { useRef } from "react"
 
 const stats = [
@@ -38,6 +40,21 @@ const stats = [
 
 export default function Home() {
   const contactFormRef = useRef<HTMLDivElement>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Simular tiempo de carga mínima para mostrar el preloader
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (isLoading) {
+    return <Preloader onComplete={() => setIsLoading(false)} />
+  }
+
   return (
     <AIImageProvider>
       <div className="flex min-h-screen flex-col">
