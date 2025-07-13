@@ -17,6 +17,21 @@ import { AIImageProvider } from "@/components/ai-image-context"
 import { Preloader } from "@/components/preloader"
 import { useRef } from "react"
 
+interface Project {
+  id: string
+  title: string
+  artist: string
+  year: string
+  medium: string
+  dimensions: string
+  description: string
+  price: string
+  location: string
+  gallery: string[]
+  status: string
+  createdAt: string
+}
+
 const stats = [
   {
     name: "Garantía",
@@ -41,6 +56,7 @@ const stats = [
 export default function Home() {
   const contactFormRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [projects, setProjects] = useState<Project[]>([])
 
   useEffect(() => {
     // Simular tiempo de carga mínima para mostrar el preloader
@@ -48,8 +64,37 @@ export default function Home() {
       setIsLoading(false)
     }, 2000)
 
+    // Cargar proyectos
+    fetchProjects()
+
     return () => clearTimeout(timer)
   }, [])
+
+  const fetchProjects = async () => {
+    try {
+      const res = await fetch("/api/projects")
+      if (res.ok) {
+        const data = await res.json()
+        setProjects(data)
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error)
+    }
+  }
+
+  // Transformar proyectos a formato compatible con GalleryPreview
+  const transformedProjects = projects.map(project => ({
+    id: project.id,
+    title: project.title,
+    artist: project.artist,
+    year: project.year,
+    medium: project.medium,
+    dimensions: project.dimensions,
+    description: project.description,
+    price: project.price,
+    image: project.gallery[0] || "/placeholder.jpg",
+    gallery: project.gallery,
+  }))
 
   if (isLoading) {
     return <Preloader onComplete={() => setIsLoading(false)} />
@@ -239,7 +284,7 @@ export default function Home() {
                     Si aún no te convences de renovar tu hogar, te invitamos a revisar nuestros últimos proyectos y ver cómo podemos ayudarte a transformar tu hogar.
                   </p>
                 </div>
-                <GalleryPreview />
+                <GalleryPreview projects={transformedProjects} />
                 <div className="flex justify-center">
                   <Button asChild size="lg" variant="outline">
                     <Link href="/gallery">Ver más proyectos</Link>

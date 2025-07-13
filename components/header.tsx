@@ -7,6 +7,7 @@ import { motion } from "framer-motion"
 import { useState } from "react"
 import Image from "next/image"
 import { useTheme } from "next-themes"
+import { useSession, signOut } from "next-auth/react"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
@@ -25,6 +26,11 @@ export function Header() {
   const pathname = usePathname()
   const [hoveredPath, setHoveredPath] = useState(pathname)
   const { theme } = useTheme()
+  const { data: session } = useSession()
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: "/" })
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
@@ -72,9 +78,16 @@ export function Header() {
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button variant="ghost" size="sm" className="hidden md:flex">
-            Iniciar sesión
-          </Button>
+          {session?.user?.role === "admin" && (
+            <>
+              <Button variant="ghost" size="sm" className="hidden md:flex" asChild>
+                <Link href="/admin">Admin</Link>
+              </Button>
+              <Button variant="ghost" size="sm" className="hidden md:flex" onClick={handleLogout}>
+                Cerrar Sesión
+              </Button>
+            </>
+          )}
           <Button size="sm" className="hidden md:flex">
             Cotizar
           </Button>
@@ -102,9 +115,16 @@ export function Header() {
                   ))}
                 </nav>
                 <div className="flex flex-col gap-2">
-                  <Button variant="outline" className="w-full">
-                    Sign In
-                  </Button>
+                  {session?.user?.role === "admin" && (
+                    <>
+                      <Button variant="outline" className="w-full" asChild>
+                        <Link href="/admin">Admin</Link>
+                      </Button>
+                      <Button variant="outline" className="w-full" onClick={handleLogout}>
+                        Cerrar Sesión
+                      </Button>
+                    </>
+                  )}
                   <Button className="w-full">Contact Gallery</Button>
                 </div>
               </div>
