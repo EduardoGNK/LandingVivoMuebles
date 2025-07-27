@@ -39,9 +39,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { title, artist, year, medium, dimensions, description, price, location, gallery } = await request.json()
+    const { title, comuna, startDate, endDate, workType, description, propertyType, location, gallery } = await request.json()
 
-    if (!title || !description || !location || !year || !medium || !dimensions || !price) {
+    if (!title || !description || !location || !startDate || !endDate || !workType || !propertyType) {
       return NextResponse.json(
         { error: 'Todos los campos son requeridos' },
         { status: 400 }
@@ -51,12 +51,12 @@ export async function POST(request: NextRequest) {
     const project = await prisma.project.create({
       data: {
         title,
-        artist: artist || "Vivo Muebles",
-        year,
-        medium,
-        dimensions,
+        comuna: comuna || "Santiago",
+        startDate,
+        endDate,
+        workType,
         description,
-        price,
+        propertyType,
         location,
         gallery: gallery || [],
         status: 'published',

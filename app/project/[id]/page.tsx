@@ -12,12 +12,12 @@ import { ImageGallery } from "@/components/image-gallery"
 interface Project {
   id: string
   title: string
-  artist: string
-  year: string
-  medium: string
-  dimensions: string
+  comuna: string
+  startDate: string
+  endDate: string
+  workType: string
   description: string
-  price: string
+  propertyType: string
   location: string
   gallery: string[]
   status: string
@@ -102,20 +102,20 @@ export default function ProjectPage() {
         >
           <div>
             <h1 className="text-3xl font-bold">{project.title}</h1>
-            <p className="text-xl text-muted-foreground">{project.artist}</p>
+            <p className="text-xl text-muted-foreground">{project.comuna}</p>
           </div>
 
           <div className="flex gap-4 text-sm text-muted-foreground">
-            <div>{project.year}</div>
-            <div>{project.medium}</div>
-            <div>{project.dimensions}</div>
+            <div>{project.startDate} - {project.endDate}</div>
+            <div>{project.workType}</div>
+            <div>{project.propertyType}</div>
           </div>
 
           <p className="text-lg">{project.description}</p>
 
           <div className="mt-4">
-            <h3 className="text-lg font-medium">Precio</h3>
-            <p className="text-2xl font-bold">{project.price}</p>
+            <h3 className="text-lg font-medium">Tipo de vivienda</h3>
+            <p className="text-2xl font-bold">{project.propertyType}</p>
           </div>
 
           <div className="mt-4">

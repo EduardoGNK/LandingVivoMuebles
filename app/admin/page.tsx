@@ -9,21 +9,40 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Plus, LogOut, Eye, Edit, Trash2, X, Save } from "lucide-react"
 import { AuthGuard } from "@/components/auth-guard"
 import { ImageUpload } from "@/components/image-upload"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Project {
   id: string
   title: string
-  artist: string
-  year: string
-  medium: string
-  dimensions: string
+  comuna: string
+  startDate: string
+  endDate: string
+  workType: string
   description: string
-  price: string
+  propertyType: string
   location: string
   gallery: string[]
   status: string
   createdAt: string
 }
+
+const workTypes = [
+  "Remodelación de cocinas",
+  "Remodelación de baños",
+  "Ampliaciones de viviendas",
+  "Construcción de terrazas",
+  "Instalación de pisos flotantes o cerámicos",
+  "Cambio de techumbre",
+  "Renovación de fachadas",
+  "Pintura interior y exterior",
+  "Instalación de ventanales y termopaneles",
+  "Construcción de quinchos o áreas de BBQ",
+  "Habilitación de oficinas o espacios comerciales",
+  "Remodelación de dormitorios",
+  "Instalación de muebles a medida",
+  "Aislamiento térmico y acústico",
+  "Revestimientos decorativos en muros"
+]
 
 export default function AdminPanel() {
   const { data: session } = useSession()
@@ -32,12 +51,12 @@ export default function AdminPanel() {
   const [editingProject, setEditingProject] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     title: "",
-    artist: "Vivo Muebles",
-    year: new Date().getFullYear().toString(),
-    medium: "",
-    dimensions: "",
+    comuna: "Santiago",
+    startDate: "",
+    endDate: "",
+    workType: "",
     description: "",
-    price: "",
+    propertyType: "",
     location: "",
     gallery: [] as string[]
   })
@@ -75,12 +94,12 @@ export default function AdminPanel() {
       if (res.ok) {
         setFormData({
           title: "",
-          artist: "Vivo Muebles",
-          year: new Date().getFullYear().toString(),
-          medium: "",
-          dimensions: "",
+          comuna: "Santiago",
+          startDate: "",
+          endDate: "",
+          workType: "",
           description: "",
-          price: "",
+          propertyType: "",
           location: "",
           gallery: []
         })
@@ -97,12 +116,12 @@ export default function AdminPanel() {
     setEditingProject(project.id)
     setFormData({
       title: project.title,
-      artist: project.artist,
-      year: project.year,
-      medium: project.medium,
-      dimensions: project.dimensions,
+      comuna: project.comuna,
+      startDate: project.startDate,
+      endDate: project.endDate,
+      workType: project.workType,
       description: project.description,
-      price: project.price,
+      propertyType: project.propertyType,
       location: project.location,
       gallery: project.gallery || []
     })
@@ -125,12 +144,12 @@ export default function AdminPanel() {
         setEditingProject(null)
         setFormData({
           title: "",
-          artist: "Vivo Muebles",
-          year: new Date().getFullYear().toString(),
-          medium: "",
-          dimensions: "",
+          comuna: "Santiago",
+          startDate: "",
+          endDate: "",
+          workType: "",
           description: "",
-          price: "",
+          propertyType: "",
           location: "",
           gallery: []
         })
@@ -171,12 +190,12 @@ export default function AdminPanel() {
     setEditingProject(null)
     setFormData({
       title: "",
-      artist: "Vivo Muebles",
-      year: new Date().getFullYear().toString(),
-      medium: "",
-      dimensions: "",
+      comuna: "Santiago",
+      startDate: "",
+      endDate: "",
+      workType: "",
       description: "",
-      price: "",
+      propertyType: "",
       location: "",
       gallery: []
     })
@@ -234,59 +253,82 @@ export default function AdminPanel() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label htmlFor="artist" className="text-sm font-medium">
-                      Artista/Responsable
+                    <label htmlFor="comuna" className="text-sm font-medium">
+                      Comuna *
                     </label>
                     <Input
-                      id="artist"
-                      value={formData.artist}
-                      onChange={(e) => setFormData({...formData, artist: e.target.value})}
+                      id="comuna"
+                      value={formData.comuna}
+                      onChange={(e) => setFormData({...formData, comuna: e.target.value})}
+                      required
                       disabled={submitting}
-                      placeholder="Ej: Vivo Muebles"
+                      placeholder="Ej: Las Condes"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="year" className="text-sm font-medium">
-                      Año *
+                    <label htmlFor="propertyType" className="text-sm font-medium">
+                      Tipo de vivienda *
                     </label>
                     <Input
-                      id="year"
-                      value={formData.year}
-                      onChange={(e) => setFormData({...formData, year: e.target.value})}
+                      id="propertyType"
+                      value={formData.propertyType}
+                      onChange={(e) => setFormData({...formData, propertyType: e.target.value})}
                       required
                       disabled={submitting}
-                      placeholder="Ej: 2024"
+                      placeholder="Ej: Casa, Departamento, Oficina"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label htmlFor="medium" className="text-sm font-medium">
-                      Tipo de trabajo *
+                    <label htmlFor="startDate" className="text-sm font-medium">
+                      Fecha de inicio *
                     </label>
                     <Input
-                      id="medium"
-                      value={formData.medium}
-                      onChange={(e) => setFormData({...formData, medium: e.target.value})}
+                      id="startDate"
+                      type="date"
+                      value={formData.startDate}
+                      onChange={(e) => setFormData({...formData, startDate: e.target.value})}
                       required
                       disabled={submitting}
-                      placeholder="Ej: Cocina completa, Remodelación integral"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="dimensions" className="text-sm font-medium">
-                      Dimensiones/Ubicación *
+                    <label htmlFor="endDate" className="text-sm font-medium">
+                      Fecha de fin *
                     </label>
                     <Input
-                      id="dimensions"
-                      value={formData.dimensions}
-                      onChange={(e) => setFormData({...formData, dimensions: e.target.value})}
+                      id="endDate"
+                      type="date"
+                      value={formData.endDate}
+                      onChange={(e) => setFormData({...formData, endDate: e.target.value})}
                       required
                       disabled={submitting}
-                      placeholder="Ej: 4.5 × 3.2 m"
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="workType" className="text-sm font-medium">
+                    Tipo de trabajo *
+                  </label>
+                  <Select
+                    value={formData.workType}
+                    onValueChange={(value) => setFormData({...formData, workType: value})}
+                    disabled={submitting}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona el tipo de trabajo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {workTypes.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-2">
@@ -304,33 +346,18 @@ export default function AdminPanel() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="price" className="text-sm font-medium">
-                      Comuna
-                    </label>
-                    <Input
-                      id="price"
-                      value={formData.price}
-                      onChange={(e) => setFormData({...formData, price: e.target.value})}
-                      required
-                      disabled={submitting}
-                      placeholder="Ej: Las Condes"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="location" className="text-sm font-medium">
-                      Ubicación específica *
-                    </label>
-                    <Input
-                      id="location"
-                      value={formData.location}
-                      onChange={(e) => setFormData({...formData, location: e.target.value})}
-                      required
-                      disabled={submitting}
-                      placeholder="Ej: Las Condes, Santiago"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <label htmlFor="location" className="text-sm font-medium">
+                    Ubicación específica *
+                  </label>
+                  <Input
+                    id="location"
+                    value={formData.location}
+                    onChange={(e) => setFormData({...formData, location: e.target.value})}
+                    required
+                    disabled={submitting}
+                    placeholder="Ej: Las Condes, Santiago"
+                  />
                 </div>
 
                 {/* Subida de imágenes */}
@@ -392,10 +419,13 @@ export default function AdminPanel() {
                       <div className="flex justify-between items-start">
                         <div>
                           <h3 className="font-semibold">{project.title}</h3>
-                          <p className="text-sm text-muted-foreground">{project.artist} • {project.year}</p>
-                          <p className="text-sm text-muted-foreground">{project.medium} • {project.dimensions}</p>
+                          <p className="text-sm text-muted-foreground">{project.comuna} • {project.propertyType}</p>
+                          <p className="text-sm text-muted-foreground">{project.workType}</p>
                           <p className="text-sm text-muted-foreground mt-1">
-                            Precio: {project.price} • Ubicación: {project.location}
+                            Fecha: {project.startDate} - {project.endDate}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Ubicación: {project.location}
                           </p>
                           <p className="text-sm text-muted-foreground">
                             Estado: <span className="capitalize">{project.status}</span>

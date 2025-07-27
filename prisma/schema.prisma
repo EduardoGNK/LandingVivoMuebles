@@ -60,12 +60,12 @@ model VerificationToken {
 model Project {
   id          String   @id @default(cuid())
   title       String
-  artist      String   @default("Vivo Muebles")
-  year        String
-  medium      String
-  dimensions  String
+  comuna      String   @default("Santiago")
+  startDate   String
+  endDate     String
+  workType    String
   description String   @db.Text
-  price       String
+  propertyType String
   location    String
   gallery     Json     @default("[]")
   status      String   @default("published")

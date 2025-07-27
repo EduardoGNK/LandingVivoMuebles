@@ -39,18 +39,18 @@ export async function PUT(
 ) {
   try {
     const { id } = await params
-    const { title, artist, year, medium, dimensions, description, price, location, gallery } = await request.json()
+    const { title, comuna, startDate, endDate, workType, description, propertyType, location, gallery } = await request.json()
     
     const updatedProject = await prisma.project.update({
       where: { id },
       data: {
         title,
-        artist: artist || "Vivo Muebles",
-        year,
-        medium,
-        dimensions,
+        comuna: comuna || "Santiago",
+        startDate,
+        endDate,
+        workType,
         description,
-        price,
+        propertyType,
         location,
         gallery: gallery || [],
       },

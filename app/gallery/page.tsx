@@ -6,12 +6,12 @@ import { ArtworkGrid } from "@/components/artwork-grid"
 interface Project {
   id: string
   title: string
-  artist: string
-  year: string
-  medium: string
-  dimensions: string
+  comuna: string
+  startDate: string
+  endDate: string
+  workType: string
   description: string
-  price: string
+  propertyType: string
   location: string
   gallery: string[]
   status: string
@@ -44,12 +44,12 @@ export default function GalleryPage() {
   const transformedProjects = projects.map(project => ({
     id: project.id,
     title: project.title,
-    artist: project.artist,
-    year: project.year,
-    medium: project.medium,
-    dimensions: project.dimensions,
+    artist: project.comuna, // Usar comuna como artista
+    year: `${project.startDate} - ${project.endDate}`, // Usar fechas como año
+    medium: project.workType, // Usar tipo de trabajo como medio
+    dimensions: project.propertyType, // Usar tipo de vivienda como dimensiones
     description: project.description,
-    price: project.price,
+    price: project.location, // Usar ubicación como precio
     image: project.gallery[0] || "/placeholder.jpg",
     gallery: project.gallery,
   }))
