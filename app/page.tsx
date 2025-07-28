@@ -309,12 +309,12 @@ export default function Home() {
                     href={logo.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center h-18 w-24 p-2 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48"
+                    className="flex items-center justify-center h-18 w-24 p-2 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48 transition-transform duration-300 hover:scale-110"
                   >
                     <img
                       src={logo.src}
                       alt={logo.alt}
-                      className="object-contain h-full w-full filter grayscale brightness-0 dark:invert"
+                      className="object-contain h-full w-full filter grayscale brightness-0 dark:invert transition-all duration-300"
                     />
                   </a>
                 ))}
