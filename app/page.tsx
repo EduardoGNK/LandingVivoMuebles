@@ -105,7 +105,7 @@ export default function Home() {
       <div className="flex min-h-screen flex-col">
         <main className="flex-1">
           {/* Hero Section */}
-          <section className="relative min-h-[90vh] overflow-hidden">
+          <section className="relative min-h-[63vh] sm:min-h-[90vh] overflow-hidden">
             <div className="absolute inset-0 z-0">
               <div className="relative h-full w-full">
                 <Image
@@ -118,7 +118,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent from-30% via-background/60 to-background" /* Cambia fade de foto fondo *//> 
               </div>
             </div>
-            <div className="container relative z-10 flex min-h-[90vh] flex-col items-center justify-center px-4 py-8 text-center sm:py-12 md:py-32">
+            <div className="container relative z-10 flex min-h-[63vh] sm:min-h-[90vh] flex-col items-center justify-center px-4 py-6 sm:py-8 md:py-12 lg:py-32 text-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -131,10 +131,10 @@ export default function Home() {
                   transition={{ delay: 0.2, duration: 0.5 }}
                   className="space-y-2"
                 >
-                  <h2 className="text-sm font-medium text-muted-foreground sm:text-base md:text-lg">Remodelaciones y cocina sustentable</h2>
-                  <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
+                  <h2 className="text-xs font-medium text-muted-foreground sm:text-sm md:text-base lg:text-lg">Remodelaciones y cocina sustentable</h2>
+                  <h1 className="text-2xl font-bold tracking-tighter sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
                     Transforma tu hogar con
-                    <span className="relative ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
+                    <span className="relative ml-1 sm:ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
                       Vivo Muebles
                     </span>
                   </h1>
@@ -143,7 +143,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
-                  className="mx-auto max-w-2xl text-sm text-muted-foreground sm:text-base md:text-lg lg:text-xl"
+                  className="mx-auto max-w-2xl text-xs text-muted-foreground sm:text-sm md:text-base lg:text-lg xl:text-xl"
                 >
                   Conoce nuesto trabajo y anímate a transformar tu hogar con nuestro equipo de expertos en remodelación en interiores y sustentabilidad.
                 </motion.p>
@@ -151,15 +151,15 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.5 }}
-                  className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4 md:gap-5"
+                  className="flex flex-col items-center justify-center gap-2 sm:gap-3 md:flex-row md:gap-4 lg:gap-5"
                 >
-                  <Button asChild size="lg" className="text-sm bg-blue-600 hover:bg-blue-700 text-white sm:text-base md:text-lg">
+                  <Button asChild size="lg" className="text-xs bg-blue-600 hover:bg-blue-700 text-white sm:text-sm md:text-base lg:text-lg w-[48.75%] sm:w-auto">
                     <Link href="/gallery">
                       Nuestros Proyectos
                       <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                     </Link>
                   </Button>
-                  <Button variant="outline" size="lg" className="text-sm sm:text-base md:text-lg">
+                  <Button variant="outline" size="lg" className="text-xs sm:text-sm md:text-base lg:text-lg w-[48.75%] sm:w-auto">
                     <Link href="/exhibitions">Cotiza con nosotros</Link>
                   </Button>
                 </motion.div>
@@ -188,12 +188,12 @@ export default function Home() {
           </section>
 
           {/* Featured Artwork Section */}
-          <section className="py-24">
+          <section className="py-16 sm:py-20 md:py-24">
             <div className="container px-4">
-              <div className="flex flex-col gap-8">
-                <div className="flex flex-col items-center gap-4 text-center">
-                  <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Algunos de nuestros proyectos</h2>
-                  <p className="max-w-[800px] text-lg text-muted-foreground">
+              <div className="flex flex-col gap-6 sm:gap-8">
+                <div className="flex flex-col items-center gap-3 sm:gap-4 text-center">
+                  <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">Algunos de nuestros proyectos</h2>
+                  <p className="max-w-[800px] text-sm sm:text-base md:text-lg text-muted-foreground">
                     Conoce algunos de nuestros mejores proyectos donde no solo te ofrecemos una cocina, sino una experiencia única y personalizada.
                   </p>
                 </div>
@@ -203,35 +203,35 @@ export default function Home() {
           </section>
 
           {/* AI Kitchen Generator Section */}
-          <section className="relative overflow-hidden bg-muted/50 py-24 dark:bg-muted/10">
+          <section className="relative overflow-hidden bg-muted/50 py-16 sm:py-20 md:py-24 dark:bg-muted/10">
             <div className="container px-4">
               <AIKitchenGenerator contactFormRef={contactFormRef} />
             </div>
           </section>
 
           {/* AEservicios Section */}
-          <section className="py-24">
+          <section className="py-16 sm:py-20 md:py-24">
             <div className="container px-4">
-              <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+              <div className="grid gap-8 sm:gap-10 lg:gap-12 lg:grid-cols-2 lg:items-center">
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6 }}
                   viewport={{ once: true }}
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6"
                 >
-                  <div className="space-y-4">
-                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                  <div className="space-y-3 sm:space-y-4">
+                    <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
                       <span className="text-green-600">Vivo Muebles</span> como parte de{" "}
                       <span className="text-blue-600">AEservicios</span>
                     </h2>
-                    <p className="text-lg text-justify leading-relaxed">
+                    <p className="text-sm sm:text-base md:text-lg text-justify leading-relaxed">
                       <strong className="text-foreground">AEservicios</strong> es una empresa dedicada a la remodelación integral de espacios, tanto para hogares como para empresas, combinando diseño funcional con soluciones modernas, duraderas y eficientes.
                     </p>
-                    <p className="text-lg text-justify leading-relaxed">
+                    <p className="text-sm sm:text-base md:text-lg text-justify leading-relaxed">
                       Dentro de AEservicios nace <strong className="text-foreground">Vivo Muebles</strong>, una propuesta que ha transformado los hogares de cientos de chilenos, no solo con diseño a medida, sino que también con un compromiso ambiental: nuestros muebles integran botes para separar la basura desde su origen, facilitando la recolección y fomentando un estilo de vida más sustentable.
                     </p>
-                    <p className="text-lg text-justify leading-relaxed">
+                    <p className="text-sm sm:text-base md:text-lg text-justify leading-relaxed">
                       Rediseña tus espacios, eleva la estética de tu hogar y sé parte del cambio hacia un futuro más limpio y consciente.
                     </p>
                   </div>
@@ -260,12 +260,12 @@ export default function Home() {
           </section>
 
           {/* Upcoming Exhibitions Section */}
-          <section className="relative overflow-hidden bg-muted/50 py-24 dark:bg-muted/10">
+          <section className="relative overflow-hidden bg-muted/50 py-16 sm:py-20 md:py-24 dark:bg-muted/10">
             <div className="container px-4">
-              <div className="flex flex-col gap-8">
-                <div className="flex flex-col items-center gap-4 text-center">
-                  <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Más que solo Cocinas</h2>
-                  <p className="max-w-[800px] text-lg text-muted-foreground">
+              <div className="flex flex-col gap-6 sm:gap-8">
+                <div className="flex flex-col items-center gap-3 sm:gap-4 text-center">
+                  <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">Más que solo Cocinas</h2>
+                  <p className="max-w-[800px] text-sm sm:text-base md:text-lg text-muted-foreground">
                     Nuestras remodelaciones no solo son cocinas, sino que también son espacios únicos y personalizados para cada cliente con proyectos de todo tipo.
                   </p>
                 </div>
@@ -275,18 +275,18 @@ export default function Home() {
           </section>
 
           {/* Gallery Preview Section */}
-          <section className="py-24">
+          <section className="py-16 sm:py-20 md:py-24">
             <div className="container px-4">
-              <div className="flex flex-col gap-8">
-                <div className="flex flex-col items-center gap-4 text-center">
-                  <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Revisa nuestros últimos proyectos</h2>
-                  <p className="max-w-[800px] text-lg text-muted-foreground">
+              <div className="flex flex-col gap-6 sm:gap-8">
+                <div className="flex flex-col items-center gap-3 sm:gap-4 text-center">
+                  <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">Revisa nuestros últimos proyectos</h2>
+                  <p className="max-w-[800px] text-sm sm:text-base md:text-lg text-muted-foreground">
                     Si aún no te convences de renovar tu hogar, te invitamos a revisar nuestros últimos proyectos y ver cómo podemos ayudarte a transformar tu hogar.
                   </p>
                 </div>
                 <GalleryPreview projects={transformedProjects} />
                 <div className="flex justify-center">
-                  <Button asChild size="lg" variant="outline">
+                  <Button asChild size="lg" variant="outline" className="text-sm sm:text-base">
                     <Link href="/gallery">Ver más proyectos</Link>
                   </Button>
                 </div>
@@ -295,9 +295,9 @@ export default function Home() {
           </section>
 
           {/* Logos Row Section */}
-          <section className="py-12 bg-muted/50 dark:bg-muted/10">
+          <section className="py-8 sm:py-10 md:py-12 bg-muted/50 dark:bg-muted/10">
             <div className="container px-4">
-              <div className="flex flex-wrap items-center justify-center gap-8 md:gap-20 lg:gap-28">
+              <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-20 lg:gap-28">
                 {[
                   { src: "/logos/creattiva.png", alt: "Creattiva", href: "https://www.creattiva.cl/" },
                   { src: "/logos/infinity-padel.png", alt: "Infinity Padel", href: "https://talca.infinitypadel.cl/" },
@@ -309,7 +309,7 @@ export default function Home() {
                     href={logo.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center h-18 w-24 p-2 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48 transition-transform duration-300 hover:scale-110"
+                    className="flex items-center justify-center h-16 w-20 p-2 sm:h-18 sm:w-24 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48 transition-transform duration-300 hover:scale-110"
                   >
                     <img
                       src={logo.src}
@@ -319,19 +319,19 @@ export default function Home() {
                   </a>
                 ))}
               </div>
-              <div className="mt-4 text-center">
-                <h3 className="text-base font-semibold text-muted-foreground tracking-wide">AEservicios remodelando más allá de tu casa.</h3>
+              <div className="mt-3 sm:mt-4 text-center">
+                <h3 className="text-sm sm:text-base font-semibold text-muted-foreground tracking-wide">AEservicios remodelando más allá de tu casa.</h3>
               </div>
             </div>
           </section>
 
           {/* Newsletter Section */}
-          <section className="py-24">
+          <section className="py-16 sm:py-20 md:py-24">
             <div className="container px-4">
               <Card className="bg-muted/50 dark:bg-muted/10">
-                <CardContent className="flex flex-col items-center gap-6 p-12 text-center">
-                  <h2 className="text-2xl font-bold sm:text-3xl">Cotiza con Nuestro Equipo </h2>
-                  <p className="max-w-[600px] text-muted-foreground">
+                <CardContent className="flex flex-col items-center gap-4 sm:gap-6 p-6 sm:p-8 md:p-12 text-center">
+                  <h2 className="text-xl font-bold sm:text-2xl md:text-3xl">Cotiza con Nuestro Equipo </h2>
+                  <p className="max-w-[600px] text-sm sm:text-base text-muted-foreground">
                     Completa el siguiente formulario de cotización y nuestro equipo te responderá a la brevedad. No te olvides de describir tu idea y/o duda sobre tu proyecto.
                   </p>
                   <div className="w-full max-w-md" ref={contactFormRef}>

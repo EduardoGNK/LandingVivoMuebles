@@ -199,20 +199,20 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col items-center gap-4 text-center">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+      <div className="flex flex-col items-center gap-3 sm:gap-4 text-center">
+        <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
           Crea tu cocina perfecta con
-          <span className="relative ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
+          <span className="relative ml-1 sm:ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
             IA
           </span>
         </h2>
-        <p className="max-w-[800px] text-lg text-muted-foreground">
+        <p className="max-w-[800px] text-sm sm:text-base md:text-lg text-muted-foreground">
           Sigue estos pasos para crear tu cocina ideal. Te guiaremos a través de cada decisión para obtener el resultado perfecto.
         </p>
       </div>
 
       <Card className="bg-muted/50 dark:bg-muted/10">
-        <CardContent className="p-4 sm:p-8">
+        <CardContent className="p-3 sm:p-4 md:p-8">
           {/* Barra de progreso */}
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
@@ -245,28 +245,28 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
               >
                 {/* Título y descripción de la fase */}
                 <div className="text-center space-y-2">
-                  <h3 className="text-xl font-semibold sm:text-2xl">
+                  <h3 className="text-lg font-semibold sm:text-xl md:text-2xl">
                     {currentPhaseData.title}
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     {currentPhaseData.description}
                   </p>
                 </div>
 
                 {/* Opciones */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                   {displayedOptions.map((option) => (
                     <button
                       key={option.value}
                       onClick={() => handleOptionSelect(option.value)}
-                      className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${
+                      className={`p-3 sm:p-4 rounded-lg border-2 transition-all duration-200 text-left ${
                         preferences[currentPhaseData.key as keyof KitchenPreferences] === option.value
                           ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/20 text-blue-900 dark:text-blue-100'
                           : 'border-border hover:border-blue-300 hover:bg-muted/50'
                       }`}
                     >
-                      <div className="font-medium">{option.label}</div>
-                      <div className="text-sm text-muted-foreground mt-1">
+                      <div className="font-medium text-sm sm:text-base">{option.label}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground mt-1">
                         {option.description}
                       </div>
                     </button>
@@ -275,11 +275,11 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
 
                 {/* Botón mostrar más/menos */}
                 {hasMoreOptions && (
-                  <div className="flex justify-center mt-4">
+                  <div className="flex justify-center mt-3 sm:mt-4">
                     <Button
                       variant="outline"
                       onClick={showAllForCurrentPhase ? handleShowLess : handleShowMore}
-                      className="text-sm rounded-full"
+                      className="text-xs sm:text-sm rounded-full"
                     >
                       {showAllForCurrentPhase ? "Mostrar menos" : "Mostrar más"}
                     </Button>
@@ -287,24 +287,24 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
                 )}
 
                 {/* Botones de navegación */}
-                <div className="flex justify-between items-center pt-4">
-                  <div className="flex gap-2">
+                <div className="flex justify-between items-center pt-3 sm:pt-4">
+                  <div className="flex gap-1 sm:gap-2">
                     {currentPhase > 0 && (
                       <Button
                         variant="outline"
                         onClick={handleBack}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
                       >
-                        <ArrowLeft className="h-4 w-4" />
+                        <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
                         Anterior
                       </Button>
                     )}
                     <Button
                       variant="outline"
                       onClick={handleReset}
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
                     >
-                      <RotateCcw className="h-4 w-4" />
+                      <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
                       Reiniciar
                     </Button>
                   </div>
@@ -312,17 +312,17 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
                   <Button
                     onClick={handleNext}
                     disabled={!canProceed}
-                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
                   >
                     {isLastPhase ? (
                       <>
-                        <Loader2 className="h-4 w-4" />
+                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4" />
                         Generar
                       </>
                     ) : (
                       <>
                         Siguiente
-                        <ArrowRight className="h-4 w-4" />
+                        <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
                       </>
                     )}
                   </Button>
@@ -382,15 +382,15 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <div className="text-center space-y-4">
-                  <p className="text-base sm:text-lg text-muted-foreground max-w-lg sm:max-w-2xl">
+                <div className="text-center space-y-3 sm:space-y-4">
+                  <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-lg sm:max-w-2xl">
                     ¡Esta es tu cocina soñada! Si te gusta lo que ves, podemos hacerla realidad. Nuestro equipo de expertos está listo para transformar tu espacio.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
                     <Button 
                       onClick={handleInterest}
                       size="lg"
-                      className="bg-green-600 hover:bg-green-700 text-white"
+                      className="bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base"
                     >
                       ¡Me interesa!
                     </Button>
@@ -398,6 +398,7 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
                       onClick={handleReset}
                       variant="outline"
                       size="lg"
+                      className="text-sm sm:text-base"
                     >
                       Generar otra cocina
                     </Button>
