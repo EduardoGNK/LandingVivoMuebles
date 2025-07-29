@@ -107,7 +107,7 @@ export default function PricingPage() {
   }, [searchParams])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background text-foreground py-20 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background text-foreground py-10 px-2 sm:py-16 sm:px-4">
       {/* Alerta de resultado de PatPass */}
       {showAlert && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 max-w-md w-full">
@@ -134,34 +134,70 @@ export default function PricingPage() {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto space-y-16">
-        <div className="text-center space-y-6">
-          <h1 className="text-5xl md:text-2l font-bold bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent">
-            Planes de recolección de basura sustentable
+      <div className="max-w-6xl mx-auto space-y-12 sm:space-y-16">
+        <div className="text-center space-y-4 sm:space-y-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent leading-tight">
+            Plan de suscripción para recolección de basura sustentable
           </h1>
-          <p className="text-l text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Nuestros planes están diseñados para ofrecerte un servicio de recolección de basura sustentable que se adapte a tus necesidades y contribuya al cuidado del medio ambiente.
           </p>
-          
           {/* Información sobre PatPass */}
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 max-w-2xl mx-auto">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 sm:p-4 max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="text-blue-800 dark:text-blue-200">
               <strong>💳 Pago Seguro:</strong> Utilizamos PatPass by Webpay de Transbank para procesar tus pagos de forma segura. 
               Al suscribirte, se creará un mandato digital que permitirá cobros automáticos según tu plan seleccionado.
             </p>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
           {plans.map((plan) => (
-            <PricingCard key={plan.name} {...plan} />
+            <div key={plan.name} className="w-full max-w-md mx-auto">
+              <PricingCard {...plan} compact />
+            </div>
           ))}
         </div>
 
         {/* Sección de Preguntas Frecuentes */}
+        <div className="space-y-8">
+          <div className="text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent">
+              Preguntas Frecuentes
+            </h2>
+            <p className="text-base sm:text-lg text-muted-foreground mt-2 sm:mt-4 max-w-2xl mx-auto">
+              Resolvemos las dudas más comunes sobre nuestros servicios y el sistema de pagos
+            </p>
+          </div>
+
+          <div className="max-w-2xl sm:max-w-3xl mx-auto">
+            <Accordion type="single" collapsible className="w-full space-y-2 sm:space-y-4">
+              {faqs.map((faq, index) => (
+                <AccordionItem 
+                  key={index} 
+                  value={`item-${index}`}
+                  className="border border-border rounded-lg px-3 sm:px-6 bg-card/50 backdrop-blur-sm"
+                >
+                  <AccordionTrigger className="text-left hover:no-underline py-4 sm:py-6">
+                    <span className="text-base sm:text-lg font-semibold text-foreground">
+                      {faq.question}
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-4 sm:pb-6">
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+
         <div className="text-center space-y-4">
-          
-          
+          <p className="text-muted-foreground/70 text-sm text-center">
+            ¿Necesitas un plan personalizado? <span className="text-muted-foreground hover:text-foreground cursor-pointer underline">Contáctanos</span>
+          </p>
           {/* Información adicional sobre PatPass */}
           <div className="text-xs text-muted-foreground/60 max-w-2xl mx-auto">
             <p>
@@ -170,41 +206,6 @@ export default function PricingPage() {
             </p>
           </div>
         </div>
-        <div className="space-y-8">
-          <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent">
-              Preguntas Frecuentes
-            </h2>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <Accordion type="single" collapsible className="w-full space-y-4">
-              {faqs.map((faq, index) => (
-                <AccordionItem 
-                  key={index} 
-                  value={`item-${index}`}
-                  className="border border-border rounded-lg px-6 bg-card/50 backdrop-blur-sm"
-                >
-                  <AccordionTrigger className="text-left hover:no-underline py-6">
-                    <span className="text-lg font-semibold text-foreground">
-                      {faq.question}
-                    </span>
-                  </AccordionTrigger>
-                  <AccordionContent className="pb-6">
-                    <p className="text-muted-foreground leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-          <p className="text-muted-foreground/70 text-sm text-center">
-            ¿Necesitas un plan personalizado? <span className="text-muted-foreground hover:text-foreground cursor-pointer underline">Contáctanos</span>
-          </p>
-        </div>
-
-      
       </div>
     </div>
   )

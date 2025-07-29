@@ -12,9 +12,10 @@ interface PricingCardProps {
   period: string
   features: string[]
   featured?: boolean
+  compact?: boolean
 }
 
-export function PricingCard({ name, price, period, features, featured }: PricingCardProps) {
+export function PricingCard({ name, price, period, features, featured, compact = false }: PricingCardProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   // Función para formatear el precio en pesos chilenos
@@ -62,7 +63,7 @@ export function PricingCard({ name, price, period, features, featured }: Pricing
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       whileHover={{ y: -5 }}
-      className={`relative p-8 rounded-2xl border transition-all duration-300 ${
+      className={`relative ${compact ? 'p-4 sm:p-6' : 'p-8'} rounded-2xl border transition-all duration-300 ${
         featured
           ? "bg-gradient-to-br from-card via-card/80 to-card border-2 border-blue-500/50 shadow-2xl shadow-blue-500/20 ring-2 ring-blue-500/20"
           : "bg-gradient-to-br from-card to-card/90 border-border hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5"
@@ -82,20 +83,20 @@ export function PricingCard({ name, price, period, features, featured }: Pricing
         </motion.div>
       )}
       
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         <div className="text-center">
-          <h3 className={`text-2xl font-bold mb-2 ${
+          <h3 className={`${compact ? 'text-lg sm:text-xl' : 'text-2xl'} font-bold mb-2 ${
             featured ? "bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent" : "text-foreground"
           }`}>
             {name}
           </h3>
           <div className="flex items-baseline justify-center">
-            <span className={`text-5xl font-bold tracking-tight ${
+            <span className={`${compact ? 'text-3xl sm:text-4xl' : 'text-5xl'} font-bold tracking-tight ${
               featured ? "bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent" : "text-foreground"
             }`}>
               {formatPrice(price)}
             </span>
-            <span className="ml-2 text-lg font-medium text-muted-foreground">/{period}</span>
+            <span className="ml-2 text-base sm:text-lg font-medium text-muted-foreground">/{period}</span>
           </div>
         </div>
         
@@ -105,7 +106,7 @@ export function PricingCard({ name, price, period, features, featured }: Pricing
         >
           <Button 
             disabled={isLoading}
-            className={`w-full h-12 text-lg font-semibold transition-all duration-300 ${
+            className={`w-full h-11 sm:h-12 text-base sm:text-lg font-semibold transition-all duration-300 ${
               featured
                 ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl disabled:opacity-50"
                 : "bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground border border-primary/20 hover:border-primary/30 disabled:opacity-50"
@@ -123,18 +124,18 @@ export function PricingCard({ name, price, period, features, featured }: Pricing
           </Button>
         </motion.div>
         
-        <div className="space-y-4">
-          <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+        <div className="space-y-3 sm:space-y-4">
+          <h4 className="text-xs sm:text-sm font-semibold text-muted-foreground uppercase tracking-wide">
             Incluye:
           </h4>
-          <ul className="space-y-3">
+          <ul className="space-y-2 sm:space-y-3">
             {features.map((feature, index) => (
               <motion.li
                 key={index}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="flex items-start gap-3"
+                className="flex items-start gap-2 sm:gap-3"
               >
                 <div className={`flex-shrink-0 mt-0.5 p-1 rounded-full ${
                   featured ? "bg-blue-500/20" : "bg-muted"
@@ -143,7 +144,7 @@ export function PricingCard({ name, price, period, features, featured }: Pricing
                     featured ? "text-blue-500" : "text-muted-foreground"
                   }`} />
                 </div>
-                <span className="text-sm text-muted-foreground leading-relaxed">{feature}</span>
+                <span className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{feature}</span>
               </motion.li>
             ))}
           </ul>
