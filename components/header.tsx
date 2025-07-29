@@ -17,7 +17,7 @@ const navigation = [
   { name: "Inicio", href: "/" },
   { name: "Nuestros Proyectos", href: "/gallery" },
   { name: "Exhibitions", href: "/exhibitions" },
-  { name: "Servicios", href: "/Artist" },
+  { name: "Servicios", href: "/Services" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
 ]

@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Check } from "lucide-react"
-import { PaymentModal } from "./payment-modal"
+import { Check, Sparkles, Loader2 } from "lucide-react"
+import { motion } from "framer-motion"
+import { simulatePatPassFlow, PatPassPlan } from "@/lib/patpass"
 
 interface PricingCardProps {
   name: string
@@ -14,43 +15,140 @@ interface PricingCardProps {
 }
 
 export function PricingCard({ name, price, period, features, featured }: PricingCardProps) {
-  const [showPaymentModal, setShowPaymentModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  // Función para formatear el precio en pesos chilenos
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price)
+  }
+
+  // Manejar suscripción a PatPass (simulación completa)
+  const handleSubscription = async () => {
+    setIsLoading(true)
+    
+    try {
+      // Crear objeto plan para PatPass
+      const plan: PatPassPlan = {
+        name,
+        price,
+        period,
+        features,
+        featured,
+      }
+
+      console.log('🎯 Iniciando suscripción PatPass para plan:', plan)
+
+      // Simular el flujo completo de PatPass
+      await simulatePatPassFlow(plan)
+
+    } catch (error) {
+      console.error('❌ Error iniciando suscripción PatPass:', error)
+      
+      // Mostrar error al usuario
+      alert(`Error iniciando la suscripción: ${error instanceof Error ? error.message : 'Error desconocido'}`)
+      
+      setIsLoading(false)
+    }
+  }
 
   return (
-    <>
-      <div className="relative p-6 bg-zinc-900 rounded-lg border border-zinc-800">
-        {featured && (
-          <div className="absolute -top-2 right-4 bg-white text-black px-3 py-1 rounded-full text-sm font-medium">
-            Featured
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ y: -5 }}
+      className={`relative p-8 rounded-2xl border transition-all duration-300 ${
+        featured
+          ? "bg-gradient-to-br from-card via-card/80 to-card border-2 border-blue-500/50 shadow-2xl shadow-blue-500/20 ring-2 ring-blue-500/20"
+          : "bg-gradient-to-br from-card to-card/90 border-border hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5"
+      }`}
+    >
+      {featured && (
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.3 }}
+          className="absolute -top-3 left-1/2 -translate-x-1/2"
+        >
+          <div className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+            <Sparkles className="h-4 w-4" />
+            Más Popular
           </div>
-        )}
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-lg font-medium text-white">{name}</h3>
-            <div className="mt-2 flex items-baseline">
-              <span className="text-5xl font-bold tracking-tight text-white">€{price}</span>
-              <span className="ml-1 text-sm font-medium text-zinc-400">/{period}</span>
-            </div>
+        </motion.div>
+      )}
+      
+      <div className="space-y-8">
+        <div className="text-center">
+          <h3 className={`text-2xl font-bold mb-2 ${
+            featured ? "bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent" : "text-foreground"
+          }`}>
+            {name}
+          </h3>
+          <div className="flex items-baseline justify-center">
+            <span className={`text-5xl font-bold tracking-tight ${
+              featured ? "bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent" : "text-foreground"
+            }`}>
+              {formatPrice(price)}
+            </span>
+            <span className="ml-2 text-lg font-medium text-muted-foreground">/{period}</span>
           </div>
-          <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => setShowPaymentModal(true)}>
-            Get {name}
+        </div>
+        
+        <motion.div
+          whileHover={{ scale: isLoading ? 1 : 1.02 }}
+          whileTap={{ scale: isLoading ? 1 : 0.98 }}
+        >
+          <Button 
+            disabled={isLoading}
+            className={`w-full h-12 text-lg font-semibold transition-all duration-300 ${
+              featured
+                ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl disabled:opacity-50"
+                : "bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground border border-primary/20 hover:border-primary/30 disabled:opacity-50"
+            }`}
+            onClick={handleSubscription}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Procesando PatPass...
+              </>
+            ) : (
+              `Suscribirse a ${name}`
+            )}
           </Button>
+        </motion.div>
+        
+        <div className="space-y-4">
+          <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Incluye:
+          </h4>
           <ul className="space-y-3">
             {features.map((feature, index) => (
-              <li key={index} className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-zinc-400" />
-                <span className="text-sm text-zinc-300">{feature}</span>
-              </li>
+              <motion.li
+                key={index}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="flex items-start gap-3"
+              >
+                <div className={`flex-shrink-0 mt-0.5 p-1 rounded-full ${
+                  featured ? "bg-blue-500/20" : "bg-muted"
+                }`}>
+                  <Check className={`h-3 w-3 ${
+                    featured ? "text-blue-500" : "text-muted-foreground"
+                  }`} />
+                </div>
+                <span className="text-sm text-muted-foreground leading-relaxed">{feature}</span>
+              </motion.li>
             ))}
           </ul>
         </div>
       </div>
-
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        plan={{ name, price, period }}
-      />
-    </>
+    </motion.div>
   )
 }

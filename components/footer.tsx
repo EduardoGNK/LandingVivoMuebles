@@ -33,7 +33,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/Artist" className="text-muted-foreground hover:text-foreground">
+                <Link href="/Services" className="text-muted-foreground hover:text-foreground">
                   Servicios
                 </Link>
               </li>
