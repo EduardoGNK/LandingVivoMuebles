@@ -325,12 +325,34 @@ export default function Home() {
             </div>
           </section>
 
+          
           {/* Newsletter Section */}
           <section className="py-16 sm:py-20 md:py-24">
             <div className="container px-4">
-              <Card className="bg-muted/50 dark:bg-muted/10">
-                <CardContent className="flex flex-col items-center gap-4 sm:gap-6 p-6 sm:p-8 md:p-12 text-center">
-                  <h2 className="text-xl font-bold sm:text-2xl md:text-3xl">Cotiza con Nuestro Equipo </h2>
+              <Card className="bg-muted/50 dark:bg-muted/10 relative overflow-hidden">
+                {/* Imagen decorativa esquina superior izquierda */}
+                <div className="absolute top-[-48px] left-[-48px] w-[416px] h-[416px] opacity-20 pointer-events-none z-0">
+                  <img
+                    src="icono-solo-izquierda.png"
+                    alt=""
+                    className="w-full h-full object-contain"
+                    style={{filter: 'brightness(0.89)'}}
+                  />
+                </div>
+
+                {/* Imagen decorativa esquina inferior derecha */}
+                <div className="absolute bottom-[-48px] right-[-48px] w-[440px] h-[440px] opacity-20 pointer-events-none z-0">
+                  <img
+                    src="icono-solo-form-derecha.png"
+                    alt=""
+                    className="w-full h-full object-contain"
+                    style={{filter: 'brightness(0.86)'}}
+                  />
+                </div>
+
+                {/* Contenido principal del formulario */}
+                <CardContent className="flex flex-col items-center gap-4 sm:gap-6 p-6 sm:p-8 md:p-12 text-center relative z-10">
+                  <h2 className="text-xl font-bold sm:text-2xl md:text-3xl">Cotiza con Nuestro Equipo</h2>
                   <p className="max-w-[600px] text-sm sm:text-base text-muted-foreground">
                     Completa el siguiente formulario de cotización y nuestro equipo te responderá a la brevedad. No te olvides de describir tu idea y/o duda sobre tu proyecto.
                   </p>
