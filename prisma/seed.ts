@@ -20,11 +20,15 @@ async function main() {
       title: 'Cocina Moderna Las Condes',
       description: 'Remodelación completa de cocina con estilo moderno, gabinetes blancos, encimera de mármol e isla central. Proyecto realizado en Las Condes, Santiago.',
       location: 'Las Condes, Santiago',
-      images: [
+      gallery: [
         '/fotos/modern-kitchen.jpg',
         '/fotos/modern-kitchen-2.jpg',
         '/fotos/modern-kitchen-3.jpg'
       ],
+      startDate: '2025-06-01',
+      endDate: '2025-07-15',
+      workType: 'Remodelación de cocina',
+      propertyType: 'Departamento',
       status: 'published',
       metadata: {
         area: '25m²',
