@@ -24,10 +24,78 @@ export function NewsletterForm() {
   const [errorMsg, setErrorMsg] = useState("")
   const [showSuccessPopup, setShowSuccessPopup] = useState(false)
 
+  // Función para validar el formato del email
+  const isValidEmail = (email: string): boolean => {
+    // Regex básico para formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/
+    
+    if (!emailRegex.test(email)) return false
+    
+    const domain = email.split('@')[1]?.toLowerCase()
+    if (!domain) return false
+    
+    // Lista de dominios populares conocidos
+    const validDomains = [
+      'gmail.com', 'outlook.com', 'hotmail.com', 'yahoo.com', 'icloud.com',
+      'protonmail.com', 'aol.com', 'live.com', 'msn.com', 'yandex.com',
+      'mail.com', 'zoho.com', 'tutanota.com', 'fastmail.com', 'yahoo.es',
+      'hotmail.es', 'outlook.es', 'terra.com', 'uc.cl', 'puc.cl'
+    ]
+    
+    // Si está en la lista de dominios conocidos, es válido
+    if (validDomains.includes(domain)) return true
+    
+    // Para otros dominios, validar que tengan extensiones reales de al menos 2 caracteres
+    // y que no sean dominios claramente falsos
+    const domainParts = domain.split('.')
+    if (domainParts.length < 2) return false
+    
+    const extension = domainParts[domainParts.length - 1]
+    const validExtensions = [
+      'com', 'org', 'net', 'edu', 'gov', 'mil', 'int', 'info', 'biz', 'name',
+      'cl', 'mx', 'ar', 'co', 'pe', 've', 'ec', 'uy', 'py', 'bo',
+      'es', 'fr', 'de', 'it', 'uk', 'ca', 'au', 'jp', 'cn', 'in', 'br'
+    ]
+    
+    // La extensión debe estar en la lista de extensiones válidas
+    if (!validExtensions.includes(extension)) return false
+    
+    // Para dominios .co, debe tener al menos 3 partes (ej: algo.co.uk)
+    if (extension === 'co' && domainParts.length < 3) return false
+    
+    // El dominio debe tener al menos 4 caracteres antes de la extensión
+    const mainDomain = domainParts[domainParts.length - 2]
+    if (mainDomain.length < 2) return false
+    
+    return true
+  }
+
+  // Función para reproducir el sonido de éxito
+  const playSuccessSound = () => {
+    try {
+      const audio = new Audio('mixkit-software-interface-remove-2576.mp3')
+      audio.volume = 0.7 // Ajusta el volumen (0.0 a 1.0)
+      audio.play().catch(error => {
+        console.log('No se pudo reproducir el sonido:', error)
+      })
+    } catch (error) {
+      console.log('Error al crear el audio:', error)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus("loading")
     setErrorMsg("")
+
+    // Validar el email antes de enviar
+    if (!isValidEmail(email)) {
+      setStatus("error")
+      setErrorMsg("❌ Por favor ingresa un email válido con un dominio real")
+      setTimeout(() => setStatus("idle"), 4000)
+      return
+    }
+
     try {
       const res = await fetch("/api/send-message", {
         method: "POST",
@@ -43,6 +111,7 @@ export function NewsletterForm() {
         setDireccion("")
         setMensaje("")
         setShowSuccessPopup(true)
+        playSuccessSound() // Reproduce el sonido cuando se muestra el popup
         setTimeout(() => setStatus("idle"), 4000)
       } else if (res.status === 429 || data.error?.includes("espera")) {
         setStatus("ratelimit")
@@ -106,8 +175,13 @@ export function NewsletterForm() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 disabled={status === "loading"}
-                className="bg-background/90"
+                className={`bg-background/90 ${email && !isValidEmail(email) ? 'border-red-500 focus:border-red-500' : ''}`}
               />
+              {email && !isValidEmail(email) && (
+                <span className="text-red-500 text-sm">
+                  Ingresa un email con un dominio válido
+                </span>
+              )}
             </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="telefono" className="font-medium">Teléfono</label>

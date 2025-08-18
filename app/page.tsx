@@ -279,7 +279,7 @@ export default function Home() {
             <div className="container px-4">
               <div className="flex flex-col gap-6 sm:gap-8">
                 <div className="flex flex-col items-center gap-3 sm:gap-4 text-center">
-                  <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">Revisa nuestros últimos proyectos</h2>
+                  <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">Revisa nuestros proyectos</h2>
                   <p className="max-w-[800px] text-sm sm:text-base md:text-lg text-muted-foreground">
                     Si aún no te convences de renovar tu hogar, te invitamos a revisar nuestros últimos proyectos y ver cómo podemos ayudarte a transformar tu hogar.
                   </p>
