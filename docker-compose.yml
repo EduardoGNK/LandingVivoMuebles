@@ -45,12 +45,22 @@ services:
       PATPASS_SECRET_KEY: ${PATPASS_SECRET_KEY}
       PATPASS_ENVIRONMENT: ${PATPASS_ENVIRONMENT}
       
-      # Email (opcional)
+      # Email - Brevo (SMTP)
+      BREVO_SMTP_USER: ${BREVO_SMTP_USER}
+      BREVO_SMTP_KEY: ${BREVO_SMTP_KEY}
+      EMAIL_1: ${EMAIL_1}
+      EMAIL_2: ${EMAIL_2}
+      
+      # Email (opcional - configuración alternativa)
       EMAIL_SERVER_HOST: ${EMAIL_SERVER_HOST}
       EMAIL_SERVER_PORT: ${EMAIL_SERVER_PORT}
       EMAIL_SERVER_USER: ${EMAIL_SERVER_USER}
       EMAIL_SERVER_PASSWORD: ${EMAIL_SERVER_PASSWORD}
       EMAIL_FROM: ${EMAIL_FROM}
+      
+      # Google OAuth
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       
       # Otros
       NODE_ENV: production
