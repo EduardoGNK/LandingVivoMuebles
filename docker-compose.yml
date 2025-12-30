@@ -31,7 +31,7 @@ services:
       - "3000:3000"
     environment:
       # Base de datos
-      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+      DATABASE_URL: mysql://vivomue1_adminVM:Js7Eh9+B@200.35.157.39:3306/vivomue1_aeserviciosdb
       
       # NextAuth
       NEXTAUTH_URL: ${NEXTAUTH_URL}
@@ -40,11 +40,6 @@ services:
       # Hugging Face
       HF_TOKEN: ${HF_TOKEN}
       
-      # PatPass/Transbank
-      PATPASS_API_KEY: ${PATPASS_API_KEY}
-      PATPASS_SECRET_KEY: ${PATPASS_SECRET_KEY}
-      PATPASS_ENVIRONMENT: ${PATPASS_ENVIRONMENT}
-      
       # Email - Brevo (SMTP)
       BREVO_SMTP_USER: ${BREVO_SMTP_USER}
       BREVO_SMTP_KEY: ${BREVO_SMTP_KEY}
@@ -52,11 +47,6 @@ services:
       EMAIL_2: ${EMAIL_2}
       
       # Email (opcional - configuración alternativa)
-      EMAIL_SERVER_HOST: ${EMAIL_SERVER_HOST}
-      EMAIL_SERVER_PORT: ${EMAIL_SERVER_PORT}
-      EMAIL_SERVER_USER: ${EMAIL_SERVER_USER}
-      EMAIL_SERVER_PASSWORD: ${EMAIL_SERVER_PASSWORD}
-      EMAIL_FROM: ${EMAIL_FROM}
       
       # Google OAuth
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
