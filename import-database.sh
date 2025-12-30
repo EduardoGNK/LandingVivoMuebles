@@ -116,3 +116,4 @@ echo "   3. Regenera el cliente de Prisma:"
 echo "      docker-compose exec app npx prisma generate"
 echo ""
 
+

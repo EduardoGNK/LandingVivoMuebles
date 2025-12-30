@@ -78,3 +78,4 @@ echo "   1. Transfiere este archivo al VPS (usando SCP, SFTP, o Bitvise)"
 echo "   2. En el VPS, ejecuta: ./import-database.sh ${BACKUP_FILE_GZ}"
 echo ""
 
+

@@ -176,3 +176,4 @@ Si el backup es muy grande (>100MB):
 - En producción (VPS) usa solo `.env`
 - Los archivos `.env` y `.env.local` **NUNCA** se suben a Git (están en `.gitignore`)
 
+

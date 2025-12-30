@@ -107,3 +107,4 @@ echo "   2. Ejecuta: ./deploy.sh"
 echo "   3. O manualmente: docker-compose up -d"
 echo ""
 
+
