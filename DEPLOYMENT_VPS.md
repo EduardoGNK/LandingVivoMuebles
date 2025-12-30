@@ -72,14 +72,47 @@ docker-compose build
 docker-compose up -d
 ```
 
-### 5. Ejecutar Migraciones de Base de Datos
+### 5. Migrar Base de Datos Local al VPS
+
+Si tienes datos en tu base de datos local que quieres migrar:
+
+#### En tu máquina local:
 
 ```bash
-# Ejecutar migraciones de Prisma
+# Exportar la base de datos local
+./export-database.sh
+```
+
+Esto creará un archivo `backup_database_YYYYMMDD_HHMMSS.sql.gz`
+
+#### Transferir el backup al VPS:
+
+**Opción A: Usando SCP (desde tu máquina local)**
+```bash
+scp backup_database_*.sql.gz usuario@tu-vps:/ruta/del/proyecto/
+```
+
+**Opción B: Usando Bitvise SFTP**
+1. Conecta con Bitvise SSH
+2. Abre la pestaña "SFTP"
+3. Navega a la carpeta del proyecto en el VPS
+4. Arrastra el archivo de backup
+
+#### En el VPS:
+
+```bash
+# Importar la base de datos
+./import-database.sh backup_database_YYYYMMDD_HHMMSS.sql.gz
+```
+
+### 6. Ejecutar Migraciones de Base de Datos
+
+```bash
+# Ejecutar migraciones de Prisma (si hay cambios en el esquema)
 docker-compose exec app npx prisma migrate deploy
 
-# (Opcional) Ejecutar seed si es necesario
-docker-compose exec app npx prisma db seed
+# Regenerar el cliente de Prisma
+docker-compose exec app npx prisma generate
 ```
 
 ### 6. Verificar que Todo Funciona
@@ -197,6 +230,9 @@ docker-compose restart app
 - [ ] Repositorio clonado en el VPS
 - [ ] Archivo `.env` creado en el servidor con todas las variables
 - [ ] Permisos del `.env` configurados (chmod 600)
+- [ ] Base de datos local exportada (si aplica)
+- [ ] Backup de base de datos transferido al VPS (si aplica)
+- [ ] Base de datos importada en el VPS (si aplica)
 - [ ] Contenedores construidos y corriendo
 - [ ] Migraciones de base de datos ejecutadas
 - [ ] Dominio configurado y apuntando al VPS
