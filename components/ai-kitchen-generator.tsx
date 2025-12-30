@@ -163,6 +163,8 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
 
     try {
       const prompt = generatePrompt()
+      console.log('Sending request to generate kitchen with prompt:', prompt)
+      
       const response = await fetch('/api/generate-kitchen', {
         method: 'POST',
         headers: {
@@ -171,14 +173,21 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
         body: JSON.stringify({ prompt }),
       })
 
+      console.log('Response status:', response.status)
       const data = await response.json()
+      console.log('Response data:', data)
 
       if (!response.ok) {
         throw new Error(data.error || 'Error al generar la imagen')
       }
 
-      setGeneratedImage(data.image)
+      if (data.success && data.image) {
+        setGeneratedImage(data.image)
+      } else {
+        throw new Error('No se recibió una imagen válida del servidor')
+      }
     } catch (err) {
+      console.error('Error in handleGenerate:', err)
       setError(err instanceof Error ? err.message : 'Error al generar la imagen')
     } finally {
       setIsGenerating(false)
@@ -194,6 +203,7 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
       }
     }
   }
+
 
   const progressPercentage = ((currentPhase + 1) / phases.length) * 100
 
@@ -361,9 +371,40 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-red-500 text-center p-4 bg-red-50 dark:bg-red-950/20 rounded-lg"
+                className="text-center p-6 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800"
               >
-                {error}
+                <div className="text-red-600 dark:text-red-400 font-medium mb-2">
+                  ⚠️ Error al generar la imagen
+                </div>
+                <div className="text-red-500 dark:text-red-300 text-sm mb-4">
+                  {error}
+                </div>
+                <div className="text-xs text-muted-foreground mb-4">
+                  Posibles soluciones:
+                </div>
+                <ul className="text-xs text-muted-foreground text-left space-y-1 mb-4">
+                  <li>• Verifica tu conexión a internet</li>
+                  <li>• Intenta nuevamente en unos minutos</li>
+                  <li>• Si el problema persiste, contacta al administrador</li>
+                </ul>
+                <div className="flex gap-2 justify-center">
+                  <Button
+                    onClick={handleGenerate}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                  >
+                    Reintentar
+                  </Button>
+                  <Button
+                    onClick={handleReset}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                  >
+                    Empezar de nuevo
+                  </Button>
+                </div>
               </motion.div>
             )}
 

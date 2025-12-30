@@ -1,11 +1,39 @@
+"use client"
+
 import Link from "next/link"
 import { Facebook, Instagram } from "lucide-react"
 import { SiTiktok } from "react-icons/si"
 import { FaXTwitter } from "react-icons/fa6"
+import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 export function Footer() {
+  const [isContactHighlighted, setIsContactHighlighted] = useState(false)
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#footer') {
+        setIsContactHighlighted(true)
+        // Reset the animation after 3 seconds
+        setTimeout(() => {
+          setIsContactHighlighted(false)
+        }, 3000)
+      }
+    }
+
+    // Check on mount
+    handleHashChange()
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange)
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [])
+
   return (
-    <footer className="border-t bg-background">
+    <footer id="footer" className="border-t bg-background">
       <div className="container px-4 py-12 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4">
@@ -27,37 +55,41 @@ export function Footer() {
                   Nuestros proyectos
                 </Link>
               </li>
-              <li>
-                <Link href="/exhibitions" className="text-muted-foreground hover:text-foreground">
-                  Exhibitions
-                </Link>
-              </li>
-              <li>
-                <Link href="/Services" className="text-muted-foreground hover:text-foreground">
-                  Servicios
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-muted-foreground hover:text-foreground">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-foreground">
-                  Contact
-                </Link>
-              </li>
             </ul>
           </div>
-          <div>
-            <h3 className="mb-4 text-sm font-medium">Contacto</h3>
+          <motion.div
+            animate={isContactHighlighted ? {
+              scale: [1, 1.05, 1],
+              backgroundColor: ["transparent", "rgba(59, 130, 246, 0.1)", "transparent"],
+              borderRadius: ["0px", "12px", "0px"],
+              boxShadow: ["none", "0 0 20px rgba(59, 130, 246, 0.3)", "none"]
+            } : {}}
+            transition={{
+              duration: 1.5,
+              ease: "easeInOut",
+              times: [0, 0.5, 1]
+            }}
+            className="p-4 rounded-lg"
+          >
+            <motion.h3 
+              className="mb-4 text-sm font-medium"
+              animate={isContactHighlighted ? {
+                color: ["inherit", "#3b82f6", "inherit"]
+              } : {}}
+              transition={{
+                duration: 1.5,
+                ease: "easeInOut"
+              }}
+            >
+              Contacto
+            </motion.h3>
             <address className="space-y-2 text-sm not-italic text-muted-foreground">
               <p>Santiago, Chile </p>
               <p>vivomueblescl@gmail.com</p>
               <p>aeservicioshogar@gmail.com</p>
               <p>+56 9 8418 7065</p>
             </address>
-          </div>
+          </motion.div>
           <div>
             <h3 className="mb-4 text-sm font-medium">Nuestras redes sociales</h3>
             <div className="flex gap-6">

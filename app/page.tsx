@@ -70,6 +70,19 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [])
 
+  const scrollToContactForm = () => {
+    const contactForm = document.querySelector('[data-contact-form]')
+    if (contactForm) {
+      const elementPosition = contactForm.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - 200 // 200px de offset hacia arriba
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
+  }
+
   const fetchProjects = async () => {
     try {
       const res = await fetch("/api/projects")
@@ -159,8 +172,8 @@ export default function Home() {
                       <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                     </Link>
                   </Button>
-                  <Button variant="outline" size="lg" className="text-xs sm:text-sm md:text-base lg:text-lg w-[48.75%] sm:w-auto">
-                    <Link href="/exhibitions">Cotiza con nosotros</Link>
+                  <Button variant="outline" size="lg" className="text-xs sm:text-sm md:text-base lg:text-lg w-[48.75%] sm:w-auto" onClick={scrollToContactForm}>
+                    Cotiza con nosotros
                   </Button>
                 </motion.div>
               </motion.div>
@@ -327,7 +340,7 @@ export default function Home() {
 
           
           {/* Newsletter Section */}
-          <section className="py-16 sm:py-20 md:py-24">
+          <section className="pt-24 pb-16 sm:pt-28 sm:pb-20 md:pt-32 md:pb-24">
             <div className="container px-4">
               <Card className="bg-muted/50 dark:bg-muted/10 relative overflow-hidden">
                 {/* Imagen decorativa esquina superior izquierda */}
@@ -351,12 +364,12 @@ export default function Home() {
                 </div>
 
                 {/* Contenido principal del formulario */}
-                <CardContent className="flex flex-col items-center gap-4 sm:gap-6 p-6 sm:p-8 md:p-12 text-center relative z-10">
-                  <h2 className="text-xl font-bold sm:text-2xl md:text-3xl">Cotiza con Nuestro Equipo</h2>
+                <CardContent className="flex flex-col items-center gap-6 sm:gap-8 pt-12 pb-6 px-6 sm:pt-16 sm:pb-8 sm:px-8 md:pt-20 md:pb-12 md:px-12 text-center relative z-10">
+                  <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">Cotiza con Nuestro Equipo</h2>
                   <p className="max-w-[600px] text-sm sm:text-base text-muted-foreground">
                     Completa el siguiente formulario de cotización y nuestro equipo te responderá a la brevedad. No te olvides de describir tu idea y/o duda sobre tu proyecto.
                   </p>
-                  <div className="w-full max-w-md" ref={contactFormRef}>
+                  <div className="w-full max-w-md mt-4" ref={contactFormRef} data-contact-form>
                     <NewsletterForm />
                   </div>
                 </CardContent>

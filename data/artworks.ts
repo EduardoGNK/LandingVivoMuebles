@@ -1,208 +1,127 @@
-export const artworks = [
-  {
-    id: "1",
-    title: "Cocina Moderna Minimalista",
-    artist: "Vivo Muebles",
-    year: "2023",
-    medium: "Cocina completa",
-    dimensions: "4.5 × 3.2 m",
-    description:
-      "Cocina moderna con gabinetes blancos mate, encimera de cuarzo blanco, isla central con barra de desayuno y electrodomésticos integrados. Diseño limpio y funcional que maximiza el espacio disponible.",
-    price: "$15,800",
-    image: "/fotos/modern-kitchen.jpg",
-    gallery: [
-      "/fotos/modern-kitchen.jpg",
-      "/fotos/modern-kitchen-2.jpg",
-      "/fotos/modern-kitchen-3.jpg",
-      "/fotos/modern-kitchen-4.jpg",
-    ],
-  },
-  {
-    id: "2",
-    title: "Cocina Rústica Contemporánea",
-    artist: "Vivo Muebles",
-    year: "2023",
-    medium: "Remodelación completa",
-    dimensions: "5.2 × 3.8 m",
-    description:
-      "Cocina que combina elementos rústicos con toques modernos. Gabinetes de madera natural, encimera de granito, alacenas abiertas y una hermosa chimenea como punto focal. Perfecta para familias que aman cocinar juntas.",
-    price: "$22,500",
-    image: "/fotos/2-rustic.jpg",
-    gallery: [
-      "/fotos/2-rustic.jpg",
-      "/fotos/2-rustic-2.jpeg",
-      "/fotos/2-rustic-3.jpg",
-    ],
-  },
-  {
-    id: "3",
-    title: "Cocina Industrial Elegante",
-    artist: "Vivo Muebles",
-    year: "2022",
-    medium: "Diseño personalizado",
-    dimensions: "6.0 × 4.0 m",
-    description:
-      "Cocina con estilo industrial que incorpora metal, madera y concreto. Gabinetes negros mate, encimera de concreto pulido, estanterías metálicas y una gran isla central que sirve como área de trabajo y comedor.",
-    price: "$28,900",
-    image: "/fotos/3-industrial.png",
-    gallery: [
-      "/fotos/3-industrial.png",
-      "/fotos/3-industrial-2.jpg",
-      "/fotos/3-industrial-3.jpg",
-      
-    ],
-  },
-  {
-    id: "4",
-    title: "Cocina Escandinava",
-    artist: "Vivo Muebles",
-    year: "2023",
-    medium: "Cocina completa",
-    dimensions: "4.0 × 3.5 m",
-    description:
-      "Cocina inspirada en el diseño escandinavo con gabinetes blancos, detalles en madera clara, encimera de mármol blanco y mucha luz natural. Diseño funcional y acogedor que prioriza la simplicidad y la eficiencia.",
-    price: "$18,200",
-    image: "/fotos/4-escandinava.jpg",
-    gallery: [
-      "/fotos/4-escandinava.jpg",
-      "/fotos/4-escandinava-2.jpg",
-      "/fotos/4-escandinava-3.jpg",
-    ],
-  },
-  {
-    id: "5",
-    title: "Cocina Mediterránea",
-    artist: "Vivo Muebles",
-    year: "2022",
-    medium: "Remodelación integral",
-    dimensions: "5.5 × 4.2 m",
-    description:
-      "Cocina con influencias mediterráneas que combina colores cálidos, texturas naturales y elementos artesanales. Gabinetes de madera teñida, encimera de travertino, alacenas con puertas de cristal y detalles en azulejo.",
-    price: "$25,600",
-    image: "/fotos/rustic-kitchen.jpg",
-    gallery: [
-      "/fotos/rustic-kitchen.jpg",
-      "/fotos/rustic-kitchen-2.jpg",
-      "/fotos/rustic-kitchen-3.jpeg",
-    ],
-  },
-  {
-    id: "6",
-    title: "Celestial Bodies",
-    artist: "Hiroshi Tanaka",
-    year: "2023",
-    medium: "Watercolor",
-    dimensions: "22 × 30 in",
-    description:
-      "Tanaka's delicate watercolor technique creates luminous representations of cosmic phenomena, blending scientific observation with artistic interpretation.",
-    price: "$2,400",
-    image: "https://images.unsplash.com/photo-1541512416146-3cf58d6b27cc?q=80&w=800&auto=format&fit=crop",
-    gallery: [
-      "https://images.unsplash.com/photo-1541512416146-3cf58d6b27cc?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1541512416146-3cf58d6b27cc?q=80&w=800&auto=format&fit=crop",
-    ],
-  },
-  {
-    id: "7",
-    title: "Structural Tension",
-    artist: "Alexandra Reed",
-    year: "2022",
-    medium: "Steel and Glass",
-    dimensions: "24 × 18 × 12 in",
-    description:
-      "Reed's sculptural work explores the relationship between industrial materials and organic forms, creating a dynamic tension between strength and fragility.",
-    price: "$6,200",
-    image: "https://images.unsplash.com/photo-1554188248-986adbb73be4?q=80&w=800&auto=format&fit=crop",
-    gallery: [
-      "https://images.unsplash.com/photo-1554188248-986adbb73be4?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1554188248-986adbb73be4?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1554188248-986adbb73be4?q=80&w=800&auto=format&fit=crop",
-    ],
-  },
-  {
-    id: "8",
-    title: "Chromatic Rhythm",
-    artist: "Julian Vega",
-    year: "2023",
-    medium: "Acrylic on Panel",
-    dimensions: "36 × 36 in",
-    description:
-      "Vega's exploration of color relationships creates visual rhythms that seem to pulse with energy. His precise technique highlights the interaction between adjacent hues.",
-    price: "$3,900",
-    image: "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&w=800&auto=format&fit=crop",
-    gallery: [
-      "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&w=800&auto=format&fit=crop",
-    ],
-  },
-  {
-    id: "9",
-    title: "Ephemeral Moment",
-    artist: "Nadia Ibrahim",
-    year: "2021",
-    medium: "Photography",
-    dimensions: "30 × 40 in",
-    description:
-      "Ibrahim's photographic work captures fleeting moments of light and shadow in urban environments. This limited edition print is one of only 15.",
-    price: "$1,800",
-    image: "https://images.unsplash.com/photo-1581343109297-b0723170dc33?q=80&w=800&auto=format&fit=crop",
-    gallery: [
-      "https://images.unsplash.com/photo-1581343109297-b0723170dc33?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1581343109297-b0723170dc33?q=80&w=800&auto=format&fit=crop",
-    ],
-  },
-  {
-    id: "10",
-    title: "Textural Study #7",
-    artist: "Thomas Wright",
-    year: "2022",
-    medium: "Mixed Media on Paper",
-    dimensions: "22 × 30 in",
-    description:
-      "Wright's ongoing series explores the tactile qualities of various materials applied to paper. This piece incorporates sand, fabric, and metallic elements.",
-    price: "$2,100",
-    image: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=800&auto=format&fit=crop",
-    gallery: [
-      "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=800&auto=format&fit=crop",
-    ],
-  },
-  {
-    id: "11",
-    title: "Botanical Abstraction",
-    artist: "Mei Lin",
-    year: "2023",
-    medium: "Ink on Rice Paper",
-    dimensions: "40 × 28 in",
-    description:
-      "Lin's work bridges traditional East Asian ink techniques with contemporary abstract approaches, creating delicate yet powerful botanical forms.",
-    price: "$3,400",
-    image: "https://images.unsplash.com/photo-1574182245530-967d9b3831af?q=80&w=800&auto=format&fit=crop",
-    gallery: [
-      "https://images.unsplash.com/photo-1574182245530-967d9b3831af?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1574182245530-967d9b3831af?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1574182245530-967d9b3831af?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1574182245530-967d9b3831af?q=80&w=800&auto=format&fit=crop",
-    ],
-  },
-  {
-    id: "12",
-    title: "Quantum Field",
-    artist: "Gabriel Santos",
-    year: "2022",
-    medium: "Oil on Canvas",
-    dimensions: "48 × 60 in",
-    description:
-      "Santos' large-scale painting explores concepts from quantum physics through abstract visual language, suggesting energy fields and particle interactions.",
-    price: "$7,500",
-    image: "https://images.unsplash.com/photo-1515405295579-ba7b45403062?q=80&w=800&auto=format&fit=crop",
-    gallery: [
-      "https://images.unsplash.com/photo-1515405295579-ba7b45403062?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1515405295579-ba7b45403062?q=80&w=800&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1515405295579-ba7b45403062?q=80&w=800&auto=format&fit=crop",
-    ],
-  },
-]
+// Función para obtener proyectos de la base de datos
+export async function getArtworksFromDatabase() {
+  try {
+    const response = await fetch('/api/projects', {
+      cache: 'no-store' // Para obtener datos frescos
+    });
+    
+    if (!response.ok) {
+      throw new Error('Error al obtener proyectos');
+    }
+    
+    const projects = await response.json();
+    
+    // Transformar los proyectos de la base de datos al formato de artworks
+    return projects.map((project: any) => ({
+      id: project.id,
+      title: project.title,
+      artist: project.comuna || "Vivo Muebles", // Usar comuna como artista
+      year: project.startDate || "2023",
+      medium: project.workType || "Cocina completa",
+      dimensions: project.propertyType || "4.0 × 3.0 m",
+      description: project.description || "Proyecto de cocina personalizado por Vivo Muebles.",
+      price: project.location || "Consultar precio",
+      image: project.gallery && project.gallery.length > 0 ? project.gallery[0] : "/placeholder.jpg",
+      gallery: project.gallery || ["/placeholder.jpg"],
+    }));
+  } catch (error) {
+    console.error('Error fetching projects from database:', error);
+    // Fallback a datos estáticos si hay error
+    return getStaticArtworks();
+  }
+}
+
+// Datos estáticos como fallback
+function getStaticArtworks() {
+  return [
+    {
+      id: "1",
+      title: "Cocina Moderna Minimalista",
+      artist: "Vivo Muebles",
+      year: "2023",
+      medium: "Cocina completa",
+      dimensions: "4.5 × 3.2 m",
+      description:
+        "Cocina moderna con gabinetes blancos mate, encimera de cuarzo blanco, isla central con barra de desayuno y electrodomésticos integrados. Diseño limpio y funcional que maximiza el espacio disponible.",
+      price: "$15,800",
+      image: "/fotos/modern-kitchen.jpg",
+      gallery: [
+        "/fotos/modern-kitchen.jpg",
+        "/fotos/modern-kitchen-2.jpg",
+        "/fotos/modern-kitchen-3.jpg",
+        "/fotos/modern-kitchen-4.jpg",
+      ],
+    },
+    {
+      id: "2",
+      title: "Cocina Rústica Contemporánea",
+      artist: "Vivo Muebles",
+      year: "2023",
+      medium: "Remodelación completa",
+      dimensions: "5.2 × 3.8 m",
+      description:
+        "Cocina que combina elementos rústicos con toques modernos. Gabinetes de madera natural, encimera de granito, alacenas abiertas y una hermosa chimenea como punto focal. Perfecta para familias que aman cocinar juntas.",
+      price: "$22,500",
+      image: "/fotos/2-rustic.jpg",
+      gallery: [
+        "/fotos/2-rustic.jpg",
+        "/fotos/2-rustic-2.jpeg",
+        "/fotos/2-rustic-3.jpg",
+      ],
+    },
+    {
+      id: "3",
+      title: "Cocina Industrial Elegante",
+      artist: "Vivo Muebles",
+      year: "2022",
+      medium: "Diseño personalizado",
+      dimensions: "6.0 × 4.0 m",
+      description:
+        "Cocina con estilo industrial que incorpora metal, madera y concreto. Gabinetes negros mate, encimera de concreto pulido, estanterías metálicas y una gran isla central que sirve como área de trabajo y comedor.",
+      price: "$28,900",
+      image: "/fotos/3-industrial.png",
+      gallery: [
+        "/fotos/3-industrial.png",
+        "/fotos/3-industrial-2.jpg",
+        "/fotos/3-industrial-3.jpg",
+      ],
+    },
+    {
+      id: "4",
+      title: "Cocina Escandinava",
+      artist: "Vivo Muebles",
+      year: "2023",
+      medium: "Cocina completa",
+      dimensions: "4.0 × 3.5 m",
+      description:
+        "Cocina inspirada en el diseño escandinavo con gabinetes blancos, detalles en madera clara, encimera de mármol blanco y mucha luz natural. Diseño funcional y acogedor que prioriza la simplicidad y la eficiencia.",
+      price: "$18,200",
+      image: "/fotos/4-escandinava.jpg",
+      gallery: [
+        "/fotos/4-escandinava.jpg",
+        "/fotos/4-escandinava-2.jpg",
+        "/fotos/4-escandinava-3.jpg",
+      ],
+    },
+    {
+      id: "5",
+      title: "Cocina Mediterránea",
+      artist: "Vivo Muebles",
+      year: "2022",
+      medium: "Remodelación integral",
+      dimensions: "5.5 × 4.2 m",
+      description:
+        "Cocina con influencias mediterráneas que combina colores cálidos, texturas naturales y elementos artesanales. Gabinetes de madera teñida, encimera de travertino, alacenas con puertas de cristal y detalles en azulejo.",
+      price: "$25,600",
+      image: "/fotos/rustic-kitchen.jpg",
+      gallery: [
+        "/fotos/rustic-kitchen.jpg",
+        "/fotos/rustic-kitchen-2.jpg",
+        "/fotos/rustic-kitchen-3.jpeg",
+      ],
+    },
+  ];
+}
+
+// Exportar la función principal
+export const artworks = getStaticArtworks();

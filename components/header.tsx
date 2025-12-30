@@ -16,10 +16,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 const navigation = [
   { name: "Inicio", href: "/" },
   { name: "Nuestros Proyectos", href: "/gallery" },
-  { name: "Exhibitions", href: "/exhibitions" },
-  { name: "Servicios", href: "/Services" },
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contact" },
+  { name: "Contact", href: "#footer" },
 ]
 
 export function Header() {
@@ -30,6 +27,42 @@ export function Header() {
 
   const handleLogout = () => {
     signOut({ callbackUrl: "/" })
+  }
+
+  const scrollToContactForm = () => {
+    if (pathname === "/") {
+      // Si estamos en la página principal, hacer scroll al formulario con offset
+      const contactForm = document.querySelector('[data-contact-form]')
+      if (contactForm) {
+        const elementPosition = contactForm.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - 200 // 100px de offset hacia arriba
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    } else {
+      // Si estamos en otra página, navegar a la página principal con scroll
+      window.location.href = "/#contact-form"
+    }
+  }
+
+  const scrollToFooter = () => {
+    if (pathname === "/") {
+      // Si estamos en la página principal, hacer scroll al footer
+      const footer = document.querySelector('#footer')
+      if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth' })
+        // Trigger the animation by setting the hash
+        window.history.pushState(null, '', '#footer')
+        // Dispatch a hashchange event to trigger the animation
+        window.dispatchEvent(new HashChangeEvent('hashchange'))
+      }
+    } else {
+      // Si estamos en otra página, navegar a la página principal con hash
+      window.location.href = "/#footer"
+    }
   }
 
   return (
@@ -55,24 +88,45 @@ export function Header() {
           </Link>
           <nav className="hidden gap-6 md:flex">
             {navigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="relative flex items-center text-sm font-medium transition-colors hover:text-foreground/80"
-                onMouseOver={() => setHoveredPath(item.href)}
-                onMouseLeave={() => setHoveredPath(pathname)}
-              >
-                <span>{item.name}</span>
-                {(hoveredPath === item.href || pathname === item.href) && (
-                  <motion.span
-                    layoutId="navbar-indicator"
-                    className="absolute -bottom-[1px] left-0 h-[2px] w-full bg-foreground"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                  />
-                )}
-              </Link>
+              item.name === "Contact" ? (
+                <button
+                  key={item.href}
+                  onClick={scrollToFooter}
+                  className="relative flex items-center text-sm font-medium transition-colors hover:text-foreground/80"
+                  onMouseOver={() => setHoveredPath(item.href)}
+                  onMouseLeave={() => setHoveredPath(pathname)}
+                >
+                  <span>{item.name}</span>
+                  {(hoveredPath === item.href || pathname === item.href) && (
+                    <motion.span
+                      layoutId="navbar-indicator"
+                      className="absolute -bottom-[1px] left-0 h-[2px] w-full bg-foreground"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
+                </button>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="relative flex items-center text-sm font-medium transition-colors hover:text-foreground/80"
+                  onMouseOver={() => setHoveredPath(item.href)}
+                  onMouseLeave={() => setHoveredPath(pathname)}
+                >
+                  <span>{item.name}</span>
+                  {(hoveredPath === item.href || pathname === item.href) && (
+                    <motion.span
+                      layoutId="navbar-indicator"
+                      className="absolute -bottom-[1px] left-0 h-[2px] w-full bg-foreground"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
+                </Link>
+              )
             ))}
           </nav>
         </div>
@@ -88,7 +142,7 @@ export function Header() {
               </Button>
             </>
           )}
-          <Button size="sm" className="hidden md:flex">
+          <Button size="sm" className="hidden md:flex" onClick={scrollToContactForm}>
             Cotizar
           </Button>
           <Sheet>
@@ -103,15 +157,27 @@ export function Header() {
               <div className="flex flex-col gap-6">
                 <nav className="flex flex-col gap-4">
                   {navigation.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`text-lg font-medium ${
-                        pathname === item.href ? "text-foreground" : "text-muted-foreground"
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
+                    item.name === "Contact" ? (
+                      <button
+                        key={item.href}
+                        onClick={scrollToFooter}
+                        className={`text-lg font-medium text-left ${
+                          pathname === item.href ? "text-foreground" : "text-muted-foreground"
+                        }`}
+                      >
+                        {item.name}
+                      </button>
+                    ) : (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`text-lg font-medium ${
+                          pathname === item.href ? "text-foreground" : "text-muted-foreground"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    )
                   ))}
                 </nav>
                 <div className="flex flex-col gap-2">
@@ -125,7 +191,7 @@ export function Header() {
                       </Button>
                     </>
                   )}
-                  <Button className="w-full">Contact Gallery</Button>
+                  <Button className="w-full" onClick={scrollToContactForm}>Cotizar</Button>
                 </div>
               </div>
             </SheetContent>

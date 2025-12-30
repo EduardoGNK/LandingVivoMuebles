@@ -24,16 +24,42 @@ declare module "next-auth/jwt" {
   }
 }
 
+// Validar variables de entorno requeridas
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+  console.error("❌ ERROR: GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET deben estar configurados en las variables de entorno")
+}
+
+if (!process.env.NEXTAUTH_SECRET) {
+  console.error("❌ ERROR: NEXTAUTH_SECRET debe estar configurado en las variables de entorno")
+}
+
+if (!process.env.NEXTAUTH_URL) {
+  console.warn("⚠️  ADVERTENCIA: NEXTAUTH_URL no está configurado. Usando valor por defecto.")
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     }),
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
       console.log("SignIn callback triggered:", { user: user.email, account: account?.provider })
+      
+      // Validar que las credenciales de Google estén configuradas
+      if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+        console.error("❌ GOOGLE_CLIENT_ID o GOOGLE_CLIENT_SECRET no están configurados")
+        return false
+      }
       
       // Permitir acceso a todos los usuarios de Google por ahora
       return true

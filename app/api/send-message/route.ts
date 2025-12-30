@@ -47,6 +47,11 @@ export async function POST(request: NextRequest) {
       port: 587,
       secure: false,
       auth: { user, pass },
+      tls: {
+        // En desarrollo local, permitir certificados autofirmados
+        // En producción, esto debería ser true para mayor seguridad
+        rejectUnauthorized: process.env.NODE_ENV === 'production',
+      },
     })
 
     const mailOptions: nodemailer.SendMailOptions = {

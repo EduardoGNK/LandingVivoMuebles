@@ -25,17 +25,40 @@ export default function LoginPage() {
     setError("")
     
     try {
+      // Usar redirect: true para permitir que NextAuth maneje la redirección OAuth correctamente
       const result = await signIn("google", { 
         callbackUrl: "/admin",
-        redirect: false 
+        redirect: true 
       })
       
+      // Si llegamos aquí, significa que no hubo redirección (no debería pasar con redirect: true)
       if (result?.error) {
-        setError("Acceso denegado. Solo emails autorizados pueden acceder.")
+        if (result.error === "OAuthSignin") {
+          setError("Error de configuración OAuth. Verifica las credenciales de Google.")
+        } else if (result.error === "OAuthCallback") {
+          setError("Error en el callback de OAuth. Intenta de nuevo.")
+        } else if (result.error === "OAuthCreateAccount") {
+          setError("No se pudo crear la cuenta. Intenta de nuevo.")
+        } else if (result.error === "EmailCreateAccount") {
+          setError("No se pudo crear la cuenta con este email.")
+        } else if (result.error === "Callback") {
+          setError("Error en el callback. Intenta de nuevo.")
+        } else if (result.error === "OAuthAccountNotLinked") {
+          setError("Esta cuenta ya está vinculada a otro usuario.")
+        } else if (result.error === "EmailSignin") {
+          setError("Error al enviar el email. Intenta de nuevo.")
+        } else if (result.error === "CredentialsSignin") {
+          setError("Credenciales inválidas.")
+        } else if (result.error === "SessionRequired") {
+          setError("Debes iniciar sesión para acceder.")
+        } else {
+          setError(`Error al iniciar sesión: ${result.error}`)
+        }
+        setLoading(false)
       }
     } catch (err) {
+      console.error("Error en handleGoogleSignIn:", err)
       setError("Error al iniciar sesión. Intenta de nuevo.")
-    } finally {
       setLoading(false)
     }
   }

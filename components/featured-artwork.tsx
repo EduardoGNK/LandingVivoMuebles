@@ -7,16 +7,36 @@ import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { artworks } from "@/data/artworks"
+import { getArtworksFromDatabase } from "@/data/artworks"
 
 export default function FeaturedArtwork() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const featuredArtworks = artworks.slice(0, 5)
-  const currentArtwork = featuredArtworks[currentIndex]
+  const [featuredArtworks, setFeaturedArtworks] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   
   // Estado para la galería de imágenes del artwork actual
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const currentImages = currentArtwork.gallery || [currentArtwork.image]
+  
+  // Cargar proyectos de la base de datos
+  useEffect(() => {
+    const loadArtworks = async () => {
+      try {
+        const artworks = await getArtworksFromDatabase()
+        setFeaturedArtworks(artworks.slice(0, 5))
+      } catch (error) {
+        console.error('Error loading artworks:', error)
+        // Fallback a datos estáticos si hay error
+        setFeaturedArtworks([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    loadArtworks()
+  }, [])
+  
+  const currentArtwork = featuredArtworks[currentIndex]
+  const currentImages = currentArtwork?.gallery || [currentArtwork?.image]
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev === currentImages.length - 1 ? 0 : prev + 1))
@@ -33,13 +53,31 @@ export default function FeaturedArtwork() {
   // Resetear índice de imagen cuando cambia el artwork
   useEffect(() => {
     setCurrentImageIndex(0)
-  }, [currentArtwork.id])
+  }, [currentArtwork?.id])
+
+  // Mostrar loading mientras se cargan los datos
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
+  // Mostrar mensaje si no hay proyectos
+  if (featuredArtworks.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-muted-foreground">No hay proyectos disponibles en este momento.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="relative overflow-hidden rounded-lg bg-background">
       <div className="grid gap-8 md:grid-cols-2">
         <motion.div
-          key={currentArtwork.id}
+          key={currentArtwork?.id}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -49,8 +87,8 @@ export default function FeaturedArtwork() {
           <div className="relative">
             <div className="relative aspect-[14/9] max-h-[400px] overflow-hidden rounded-lg bg-muted">
               <Image
-                src={currentImages[currentImageIndex]}
-                alt={`${currentArtwork.title} - Imagen ${currentImageIndex + 1}`}
+                src={currentImages[currentImageIndex] || "/placeholder.jpg"}
+                alt={`${currentArtwork?.title || "Proyecto"} - Imagen ${currentImageIndex + 1}`}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -79,7 +117,7 @@ export default function FeaturedArtwork() {
               {currentImages.length > 1 && (
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
                   <div className="flex gap-2">
-                    {currentImages.map((_, index) => (
+                    {currentImages.map((_: any, index: number) => (
                       <button
                         key={index}
                         onClick={() => goToImage(index)}
@@ -96,7 +134,7 @@ export default function FeaturedArtwork() {
             {/* Thumbnails - miniaturas debajo de la imagen principal */}
             {currentImages.length > 1 && (
               <div className="mt-4 flex gap-2 overflow-x-auto">
-                {currentImages.map((image, index) => (
+                {currentImages.map((image: any, index: number) => (
                   <button
                     key={index}
                     onClick={() => goToImage(index)}
@@ -108,7 +146,7 @@ export default function FeaturedArtwork() {
                   >
                     <Image
                       src={image}
-                      alt={`${currentArtwork.title} - Miniatura ${index + 1}`}
+                      alt={`${currentArtwork?.title || "Proyecto"} - Miniatura ${index + 1}`}
                       fill
                       className="object-cover"
                       sizes="64px"
@@ -124,20 +162,20 @@ export default function FeaturedArtwork() {
         </motion.div>
         <div className="flex flex-col justify-between p-6">
           <motion.div
-            key={currentArtwork.id + "-info"}
+            key={currentArtwork?.id + "-info"}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="space-y-4"
           >
             <div>
-              <h3 className="text-2xl font-bold">{currentArtwork.title}</h3>
-              <p className="text-lg text-muted-foreground">{currentArtwork.artist}</p>
+              <h3 className="text-2xl font-bold">{currentArtwork?.title || "Proyecto"}</h3>
+              <p className="text-lg text-muted-foreground">{currentArtwork?.artist || "Vivo Muebles"}</p>
             </div>
-            <p>{currentArtwork.description}</p>
+            <p>{currentArtwork?.description || "Descripción del proyecto no disponible."}</p>
             <div className="flex gap-4 text-sm text-muted-foreground">
-              <div>{currentArtwork.year}</div>
-              <div>{currentArtwork.medium}</div>
+              <div>{currentArtwork?.year || "2023"}</div>
+              <div>{currentArtwork?.medium || "Cocina completa"}</div>
             </div>
           </motion.div>
 
@@ -183,7 +221,7 @@ export default function FeaturedArtwork() {
               </button>
             </div>
             <Link
-              href={`/artwork/${currentArtwork.id}`}
+              href={`/project/${currentArtwork?.id}`}
               className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
             >
               Ver Detalles del Proyecto
