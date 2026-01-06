@@ -117,3 +117,4 @@ echo "      docker-compose exec app npx prisma generate"
 echo ""
 
 
+
