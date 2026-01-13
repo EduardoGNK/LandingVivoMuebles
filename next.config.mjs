@@ -9,11 +9,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Configuración para Docker
-  output: 'standalone',
-  experimental: {
-    outputFileTracingRoot: undefined,
-  },
   // Configuración de seguridad
   async headers() {
     return [
