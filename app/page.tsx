@@ -131,7 +131,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent from-30% via-background/60 to-background" /* Cambia fade de foto fondo *//> 
               </div>
             </div>
-            <div className="container relative z-10 flex min-h-[63vh] sm:min-h-[90vh] flex-col items-center justify-center px-4 py-6 sm:py-8 md:py-12 lg:py-32 text-center">
+            <div className="container relative z-10 flex min-h-[63vh] sm:min-h-[90vh] flex-col items-center justify-center px-4 pt-6 pb-20 sm:pt-8 sm:pb-40 md:pt-12 md:pb-48 lg:pt-32 lg:pb-56 text-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
