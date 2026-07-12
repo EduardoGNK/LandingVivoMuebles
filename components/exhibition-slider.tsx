@@ -111,7 +111,7 @@ export function ExhibitionSlider() {
                   <p className="text-muted-foreground">{exhibitions[currentIndex].description}</p>
                   <div className="mt-4">
                     <Button asChild>
-                      <Link href="/exhibitions">Ver Proyectos</Link>
+                      <Link href="/gallery">Ver Proyectos</Link>
                     </Button>
                   </div>
                 </CardContent>
