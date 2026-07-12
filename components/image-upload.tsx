@@ -21,13 +21,20 @@ export function ImageUpload({ images, onImagesChange, disabled = false }: ImageU
       const uploadedUrls: string[] = []
       
       for (const file of acceptedFiles) {
-        // Por ahora, convertimos a base64 para simular subida
-        // En producción, aquí subirías a un servicio como Cloudinary o AWS S3
-        const reader = new FileReader()
-        const url = await new Promise<string>((resolve) => {
-          reader.onload = () => resolve(reader.result as string)
-          reader.readAsDataURL(file)
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
         })
+
+        if (!response.ok) {
+          const err = await response.json()
+          throw new Error(err.error || 'Error al subir imagen')
+        }
+
+        const { url } = await response.json()
         uploadedUrls.push(url)
       }
       
