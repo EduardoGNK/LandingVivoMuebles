@@ -46,8 +46,60 @@ export default function FeaturedArtwork() {
     setCurrentImageIndex((prev) => (prev === 0 ? currentImages.length - 1 : prev - 1))
   }
 
+  const nextProject = () => {
+    setCurrentIndex((prev) => (prev === featuredArtworks.length - 1 ? 0 : prev + 1))
+  }
+
+  const prevProject = () => {
+    setCurrentIndex((prev) => (prev === 0 ? featuredArtworks.length - 1 : prev - 1))
+  }
+
   const goToImage = (index: number) => {
     setCurrentImageIndex(index)
+  }
+
+  // Touch handlers para las imágenes (gallery)
+  const [imgTouchStart, setImgTouchStart] = useState<number | null>(null)
+  const [imgTouchEnd, setImgTouchEnd] = useState<number | null>(null)
+
+  const handleImgTouchStart = (e: React.TouchEvent) => {
+    setImgTouchEnd(null)
+    setImgTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleImgTouchMove = (e: React.TouchEvent) => {
+    setImgTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleImgTouchEnd = () => {
+    if (!imgTouchStart || !imgTouchEnd) return
+    const distance = imgTouchStart - imgTouchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+    if (isLeftSwipe) nextImage()
+    else if (isRightSwipe) prevImage()
+  }
+
+  // Touch handlers para los proyectos (main projects)
+  const [projTouchStart, setProjTouchStart] = useState<number | null>(null)
+  const [projTouchEnd, setProjTouchEnd] = useState<number | null>(null)
+
+  const handleProjTouchStart = (e: React.TouchEvent) => {
+    setProjTouchEnd(null)
+    setProjTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleProjTouchMove = (e: React.TouchEvent) => {
+    setProjTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleProjTouchEnd = () => {
+    if (!projTouchStart || !projTouchEnd) return
+    const distance = projTouchStart - projTouchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+    if (isLeftSwipe) nextProject()
+    else if (isRightSwipe) prevProject()
   }
 
   // Resetear índice de imagen cuando cambia el artwork
@@ -74,7 +126,12 @@ export default function FeaturedArtwork() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-lg bg-background">
+    <div 
+      className="relative overflow-hidden rounded-lg bg-background"
+      onTouchStart={handleProjTouchStart}
+      onTouchMove={handleProjTouchMove}
+      onTouchEnd={handleProjTouchEnd}
+    >
       <div className="grid gap-8 md:grid-cols-2">
         <motion.div
           key={currentArtwork?.id}
@@ -85,7 +142,12 @@ export default function FeaturedArtwork() {
         >
           {/* Galería compacta para Featured Artwork */}
           <div className="relative">
-            <div className="relative aspect-[14/9] max-h-[400px] overflow-hidden rounded-lg bg-muted">
+            <div 
+              className="relative aspect-[14/9] max-h-[400px] overflow-hidden rounded-lg bg-muted"
+              onTouchStart={handleImgTouchStart}
+              onTouchMove={handleImgTouchMove}
+              onTouchEnd={handleImgTouchEnd}
+            >
               <Image
                 src={currentImages[currentImageIndex] || "/placeholder.jpg"}
                 alt={`${currentArtwork?.title || "Proyecto"} - Imagen ${currentImageIndex + 1}`}

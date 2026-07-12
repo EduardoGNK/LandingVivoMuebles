@@ -94,9 +94,9 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
   const isLastPhase = currentPhase === phases.length - 1
   const canProceed = preferences[currentPhaseData.key as keyof KitchenPreferences] !== ""
   const currentPhaseKey = currentPhaseData.key
-  const showAllForCurrentPhase = showAllOptions[currentPhaseKey]
-  const displayedOptions = showAllForCurrentPhase ? currentOptions : currentOptions.slice(0, 6)
-  const hasMoreOptions = currentOptions.length > 6
+  const limit = currentPhaseKey === "style" ? 4 : 6
+  const displayedOptions = showAllForCurrentPhase ? currentOptions : currentOptions.slice(0, limit)
+  const hasMoreOptions = currentOptions.length > limit
 
   const generatePrompt = () => {
     return `Crea una cocina ${preferences.style} con muebles de color ${preferences.color}, encimera de ${preferences.countertop} y ${preferences.island}.`

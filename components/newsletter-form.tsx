@@ -146,7 +146,7 @@ export function NewsletterForm() {
         </div>
       )}
       
-      <div className="flex-1 min-w-[320px] max-w-lg mx-auto md:mx-0 md:pl-4">
+      <div className="flex-1 w-full min-w-0 max-w-lg mx-auto md:mx-0 md:pl-4">
         {/* Contenedor con fondo translúcido para el formulario */}
         <div className="bg-background/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 border border-border/50 shadow-sm">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
