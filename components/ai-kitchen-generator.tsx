@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Loader2, ArrowLeft, ArrowRight, RotateCcw } from "lucide-react"
 
@@ -88,6 +88,16 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
     island: false
   })
   const { setIaImage } = useAIImage()
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768) // breakpoint de md en Tailwind
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   const currentPhaseData = phases[currentPhase]
   const currentOptions = kitchenOptions[currentPhaseData.key as keyof typeof kitchenOptions]
@@ -95,7 +105,7 @@ export function AIKitchenGenerator({ contactFormRef }: AIKitchenGeneratorProps) 
   const canProceed = preferences[currentPhaseData.key as keyof KitchenPreferences] !== ""
   const currentPhaseKey = currentPhaseData.key
   const showAllForCurrentPhase = showAllOptions[currentPhaseKey]
-  const limit = currentPhaseKey === "style" ? 4 : 6
+  const limit = (currentPhaseKey === "style" && isMobile) ? 4 : 6
   const displayedOptions = showAllForCurrentPhase ? currentOptions : currentOptions.slice(0, limit)
   const hasMoreOptions = currentOptions.length > limit
 
