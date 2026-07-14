@@ -37,17 +37,51 @@ export function ImageGallery({ images, alt, compact = false }: ImageGalleryProps
     setIsFullscreen(false)
   }
 
+  // Touch handlers para swipe en galería
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    // Evitamos cerrar el modal en evento táctil simple
+    e.stopPropagation()
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    e.stopPropagation()
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.stopPropagation()
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+    if (isLeftSwipe) {
+      nextImage()
+    } else if (isRightSwipe) {
+      prevImage()
+    }
+  }
+
   if (images.length === 0) return null
 
   return (
     <>
       {/* Main Gallery */}
       <div className="relative">
-        <div className={`relative overflow-hidden rounded-lg bg-muted ${
-          compact 
-            ? "aspect-[4/3] max-h-[400px]" // Modo compacto: altura limitada
-            : "aspect-square" // Modo normal: cuadrado
-        }`}>
+        <div 
+          className={`relative overflow-hidden rounded-lg bg-muted ${
+            compact 
+              ? "aspect-[4/3] max-h-[400px]" // Modo compacto: altura limitada
+              : "aspect-square" // Modo normal: cuadrado
+          }`}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <Image
             src={images[currentIndex]}
             alt={`${alt} - Imagen ${currentIndex + 1}`}
@@ -129,6 +163,9 @@ export function ImageGallery({ images, alt, compact = false }: ImageGalleryProps
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
             onClick={closeFullscreen}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             <div className="relative max-h-full max-w-full p-4">
               <Button
@@ -140,7 +177,7 @@ export function ImageGallery({ images, alt, compact = false }: ImageGalleryProps
                 <X className="h-4 w-4" />
               </Button>
               
-              <div className="relative aspect-square max-h-[80vh] max-w-[80vw] overflow-hidden rounded-lg">
+              <div className="relative w-[80vw] h-[60vh] sm:h-[80vh] overflow-hidden rounded-lg">
                 <Image
                   src={images[currentIndex]}
                   alt={`${alt} - Imagen ${currentIndex + 1}`}
