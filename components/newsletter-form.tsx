@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -23,6 +23,24 @@ export function NewsletterForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "ratelimit">("idle")
   const [errorMsg, setErrorMsg] = useState("")
   const [showSuccessPopup, setShowSuccessPopup] = useState(false)
+  const [isGlowActive, setIsGlowActive] = useState(false)
+
+  useEffect(() => {
+    const handleGlow = () => {
+      setIsGlowActive(true)
+    }
+    window.addEventListener("trigger-form-glow", handleGlow)
+    return () => window.removeEventListener("trigger-form-glow", handleGlow)
+  }, [])
+
+  useEffect(() => {
+    if (isGlowActive) {
+      const timer = setTimeout(() => {
+        setIsGlowActive(false)
+      }, 2200)
+      return () => clearTimeout(timer)
+    }
+  }, [isGlowActive])
 
   // Función para validar el formato del email
   const isValidEmail = (email: string): boolean => {
@@ -148,7 +166,9 @@ export function NewsletterForm() {
       
       <div className="flex-1 w-full min-w-0 sm:min-w-[320px] max-w-lg mx-auto md:mx-0 md:pl-4">
         {/* Contenedor con fondo translúcido para el formulario */}
-        <div className="bg-background/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 border border-border/50 shadow-sm">
+        <div className={`bg-background/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 border border-border/50 shadow-sm transition-all duration-300 ${
+          isGlowActive ? "highlight-glow-active" : ""
+        }`}>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <label htmlFor="nombre" className="font-medium">Nombre completo</label>

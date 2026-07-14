@@ -33,18 +33,23 @@ export function Header() {
   const scrollToContactForm = () => {
     if (pathname === "/") {
       // Si estamos en la página principal, hacer scroll al formulario con offset
-      const contactForm = document.querySelector('[data-contact-form]')
-      if (contactForm) {
-        const elementPosition = contactForm.getBoundingClientRect().top
-        const offsetPosition = elementPosition + window.pageYOffset - 200 // 100px de offset hacia arriba
+      const contactCard = document.querySelector('#contact-form')
+      if (contactCard) {
+        const elementPosition = contactCard.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - 96 // 96px offset para que no tape el header
         
         window.scrollTo({
           top: offsetPosition,
           behavior: 'smooth'
         })
+
+        // Disparar la animación de resplandor
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent("trigger-form-glow"))
+        }, 850)
       }
     } else {
-      // Si estamos en otra página, navegar a la página principal con scroll
+      // Si estamos en otra página, navegar a la página principal con hash
       router.push("/#contact-form")
     }
   }

@@ -16,7 +16,7 @@ const exhibitions = [
     artist: "Antofagasta",
     date: "mayo 15 - Julio 28, 2025",
     description: "Remodelación de interior dentro del mall Antofagasta para la empresa Infinity Padel. ",
-    image: "masque/cancha-padel.jpg",
+    image: "/masque/cancha-padel.jpg",
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const exhibitions = [
     artist: "Providencia - Santiago",
     date: "Septiembre 25 - Octubre 20, 2024",
     description: "Remodelación de oficina abierta ajustando a la medida mesas y muebles ubicada en oficinas de Costanera Center.",
-    image: "masque/oficina-abierta.jpg",
+    image: "/masque/oficina-abierta.jpg",
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ const exhibitions = [
     artist: "La Reina - Santiago",
     date: "Abril 1 - Mayo 20, 2024",
     description: "Terraza con trabajos en madera y piedra, integración de estufa y diseño de iluminación para un particular de La Reina.",
-    image: "masque/terraza.jpg",
+    image: "/masque/terraza.jpg",
   },
 ]
 

@@ -80,30 +80,27 @@ export default function Home() {
   useEffect(() => {
     if (!isLoading && window.location.hash === "#contact-form") {
       const timer = setTimeout(() => {
-        const contactForm = document.querySelector('[data-contact-form]')
-        if (contactForm) {
-          const elementPosition = contactForm.getBoundingClientRect().top
-          const offsetPosition = elementPosition + window.pageYOffset - 220 // offset de navbar
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          })
-        }
-      }, 300)
+        window.dispatchEvent(new CustomEvent("trigger-form-glow"))
+      }, 500)
       return () => clearTimeout(timer)
     }
   }, [isLoading])
 
   const scrollToContactForm = () => {
-    const contactForm = document.querySelector('[data-contact-form]')
-    if (contactForm) {
-      const elementPosition = contactForm.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - 200 // 200px de offset hacia arriba
+    const contactCard = document.querySelector('#contact-form')
+    if (contactCard) {
+      const elementPosition = contactCard.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - 96 // 96px offset (coincide con scroll-mt-24)
       
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth'
       })
+
+      // Disparar la animación de resplandor después de que finalice el scroll
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("trigger-form-glow"))
+      }, 850)
     }
   }
 
@@ -151,8 +148,8 @@ export default function Home() {
                   fill
                   priority
                   className="object-cover opacity-50 dark:opacity-20" /* Cambia foto fondo*/
-                /> 
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent from-30% via-background/60 to-background" /* Cambia fade de foto fondo *//> 
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent from-30% via-background/60 to-background" /* Cambia fade de foto fondo */ />
               </div>
             </div>
             <div className="container relative z-10 flex min-h-[63vh] sm:min-h-[90vh] flex-col items-center justify-center px-4 pt-6 pb-20 sm:pt-8 sm:pb-40 md:pt-12 md:pb-48 lg:pt-32 lg:pb-56 text-center">
@@ -273,7 +270,7 @@ export default function Home() {
                     </p>
                   </div>
                 </motion.div>
-                
+
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -334,12 +331,13 @@ export default function Home() {
           {/* Logos Row Section */}
           <section className="py-8 sm:py-10 md:py-12 bg-muted/50 dark:bg-muted/10">
             <div className="container px-4">
-              <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-20 lg:gap-28">
+              <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16">
                 {[
                   { src: "/logos/creattiva.png", alt: "Creattiva", href: "https://www.creattiva.cl/" },
-                  { src: "/logos/infinity-padel.png", alt: "Infinity Padel", href: "https://talca.infinitypadel.cl/" },
+                  { src: "/logos/infinity-padel.png", alt: "Infinity Padel", href: "https://playinfinityclub.com/" },
                   { src: "/logos/xinergy.png", alt: "Xinergy", href: "https://xinergy.cl/" },
                   { src: "/logos/matrix.png", alt: "Matrix Consulting", href: "https://www.matrixconsulting.com/" },
+                  { src: "/logos/eterna.png", alt: "Eterna", href: "https://www.eterna.cl/" },
                 ].map((logo, i) => (
                   <a
                     key={i}
@@ -362,18 +360,18 @@ export default function Home() {
             </div>
           </section>
 
-          
+
           {/* Newsletter Section */}
           <section className="pt-24 pb-16 sm:pt-28 sm:pb-20 md:pt-32 md:pb-24">
             <div className="container px-4">
-              <Card className="bg-muted/50 dark:bg-muted/10 relative overflow-hidden">
+              <Card className="bg-muted/50 dark:bg-muted/10 relative overflow-hidden scroll-mt-24" id="contact-form">
                 {/* Imagen decorativa esquina superior izquierda */}
                 <div className="absolute top-[-48px] left-[-48px] w-[416px] h-[416px] opacity-20 pointer-events-none z-0">
                   <img
                     src="icono-solo-izquierda.png"
                     alt=""
                     className="w-full h-full object-contain"
-                    style={{filter: 'brightness(0.89)'}}
+                    style={{ filter: 'brightness(0.89)' }}
                   />
                 </div>
 
@@ -383,7 +381,7 @@ export default function Home() {
                     src="icono-solo-form-derecha.png"
                     alt=""
                     className="w-full h-full object-contain"
-                    style={{filter: 'brightness(0.86)'}}
+                    style={{ filter: 'brightness(0.86)' }}
                   />
                 </div>
 
@@ -393,7 +391,7 @@ export default function Home() {
                   <p className="max-w-[600px] text-sm sm:text-base text-muted-foreground">
                     Completa el siguiente formulario de cotización y nuestro equipo te responderá a la brevedad. No te olvides de describir tu idea y/o duda sobre tu proyecto.
                   </p>
-                  <div className="w-full max-w-md mt-4" ref={contactFormRef} data-contact-form id="contact-form">
+                  <div className="w-full max-w-md mt-4" ref={contactFormRef} data-contact-form>
                     <NewsletterForm />
                   </div>
                 </CardContent>
