@@ -124,9 +124,11 @@ export default function ProjectPage() {
           </div>
 
           <div className="mt-auto pt-8">
-            <Button size="lg" className="w-full">
-              Solicitar Cotización
-            </Button>
+            <Link href="/#contact-form" passHref className="w-full">
+              <Button size="lg" className="w-full">
+                Solicitar Cotización
+              </Button>
+            </Link>
           </div>
         </motion.div>
       </div>

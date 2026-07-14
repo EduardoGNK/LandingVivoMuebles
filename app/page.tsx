@@ -70,6 +70,23 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [])
 
+  useEffect(() => {
+    if (!isLoading && window.location.hash === "#contact-form") {
+      const timer = setTimeout(() => {
+        const contactForm = document.querySelector('[data-contact-form]')
+        if (contactForm) {
+          const elementPosition = contactForm.getBoundingClientRect().top
+          const offsetPosition = elementPosition + window.pageYOffset - 220 // offset de navbar
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        }
+      }, 300)
+      return () => clearTimeout(timer)
+    }
+  }, [isLoading])
+
   const scrollToContactForm = () => {
     const contactForm = document.querySelector('[data-contact-form]')
     if (contactForm) {
@@ -369,7 +386,7 @@ export default function Home() {
                   <p className="max-w-[600px] text-sm sm:text-base text-muted-foreground">
                     Completa el siguiente formulario de cotización y nuestro equipo te responderá a la brevedad. No te olvides de describir tu idea y/o duda sobre tu proyecto.
                   </p>
-                  <div className="w-full max-w-md mt-4" ref={contactFormRef} data-contact-form>
+                  <div className="w-full max-w-md mt-4" ref={contactFormRef} data-contact-form id="contact-form">
                     <NewsletterForm />
                   </div>
                 </CardContent>
