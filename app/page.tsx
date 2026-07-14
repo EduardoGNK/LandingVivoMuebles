@@ -55,19 +55,26 @@ const stats = [
 
 export default function Home() {
   const contactFormRef = useRef<HTMLDivElement>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !sessionStorage.getItem("hasLoadedBefore")
+    }
+    return true
+  })
   const [projects, setProjects] = useState<Project[]>([])
 
   useEffect(() => {
-    // Simular tiempo de carga mínima para mostrar el preloader
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
-
-    // Cargar proyectos
+    // Cargar proyectos siempre
     fetchProjects()
 
-    return () => clearTimeout(timer)
+    // Solo si el preloader está activo, quitamos la pantalla después de 2 segundos
+    if (isLoading) {
+      const timer = setTimeout(() => {
+        setIsLoading(false)
+        sessionStorage.setItem("hasLoadedBefore", "true")
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
   }, [])
 
   useEffect(() => {

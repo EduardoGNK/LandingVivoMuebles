@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Menu } from "lucide-react"
 import { motion } from "framer-motion"
 import { useState } from "react"
@@ -21,6 +21,7 @@ const navigation = [
 
 export function Header() {
   const pathname = usePathname()
+  const router = useRouter()
   const [hoveredPath, setHoveredPath] = useState(pathname)
   const { theme } = useTheme()
   const { data: session } = useSession()
@@ -44,7 +45,7 @@ export function Header() {
       }
     } else {
       // Si estamos en otra página, navegar a la página principal con scroll
-      window.location.href = "/#contact-form"
+      router.push("/#contact-form")
     }
   }
 
@@ -61,7 +62,7 @@ export function Header() {
       }
     } else {
       // Si estamos en otra página, navegar a la página principal con hash
-      window.location.href = "/#footer"
+      router.push("/#footer")
     }
   }
 
