@@ -20,6 +20,7 @@ interface Project {
   propertyType: string
   location: string
   gallery: string[]
+  videos: string[]
   status: string
   createdAt: string
 }
@@ -87,9 +88,11 @@ export default function ProjectPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
+          className="flex flex-col gap-6"
         >
           <ImageGallery 
             images={project.gallery || []} 
+            videos={project.videos || []}
             alt={project.title}
           />
         </motion.div>

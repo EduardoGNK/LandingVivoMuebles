@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Plus, LogOut, Eye, Edit, Trash2, X, Save } from "lucide-react"
 import { AuthGuard } from "@/components/auth-guard"
 import { ImageUpload } from "@/components/image-upload"
+import { VideoUpload } from "@/components/video-upload"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Project {
@@ -22,6 +23,7 @@ interface Project {
   propertyType: string
   location: string
   gallery: string[]
+  videos: string[]
   status: string
   createdAt: string
 }
@@ -58,7 +60,8 @@ export default function AdminPanel() {
     description: "",
     propertyType: "",
     location: "",
-    gallery: [] as string[]
+    gallery: [] as string[],
+    videos: [] as string[]
   })
   const [submitting, setSubmitting] = useState(false)
 
@@ -101,7 +104,8 @@ export default function AdminPanel() {
           description: "",
           propertyType: "",
           location: "",
-          gallery: []
+          gallery: [],
+          videos: []
         })
         fetchProjects()
       }
@@ -123,7 +127,8 @@ export default function AdminPanel() {
       description: project.description,
       propertyType: project.propertyType,
       location: project.location,
-      gallery: project.gallery || []
+      gallery: project.gallery || [],
+      videos: project.videos || []
     })
   }
 
@@ -151,7 +156,8 @@ export default function AdminPanel() {
           description: "",
           propertyType: "",
           location: "",
-          gallery: []
+          gallery: [],
+          videos: []
         })
         fetchProjects()
       }
@@ -186,6 +192,10 @@ export default function AdminPanel() {
     setFormData({ ...formData, gallery: images })
   }
 
+  const handleVideosChange = (videos: string[]) => {
+    setFormData({ ...formData, videos })
+  }
+
   const cancelEdit = () => {
     setEditingProject(null)
     setFormData({
@@ -197,7 +207,8 @@ export default function AdminPanel() {
       description: "",
       propertyType: "",
       location: "",
-      gallery: []
+      gallery: [],
+      videos: []
     })
   }
 
@@ -367,6 +378,13 @@ export default function AdminPanel() {
                   disabled={submitting}
                 />
 
+                {/* Subida de videos */}
+                <VideoUpload
+                  videos={formData.videos}
+                  onVideosChange={handleVideosChange}
+                  disabled={submitting}
+                />
+
                 <div className="flex gap-2">
                   <Button type="submit" disabled={submitting} className="flex-1">
                     {submitting ? (
@@ -471,6 +489,30 @@ export default function AdminPanel() {
                               </span>
                             </div>
                           )}
+                        </div>
+                      )}
+
+                      {/* Preview de videos del proyecto */}
+                      {project.videos && project.videos.length > 0 && (
+                        <div className="flex gap-2 items-center">
+                          <span className="text-xs text-muted-foreground font-medium">
+                            🎬 {project.videos.length} video{project.videos.length > 1 ? "s" : ""}
+                          </span>
+                          <div className="flex gap-2 overflow-x-auto">
+                            {project.videos.slice(0, 2).map((video, index) => (
+                              <div key={index} className="flex-shrink-0 relative w-16 h-12 rounded-md overflow-hidden border bg-black">
+                                <video
+                                  src={video}
+                                  className="w-full h-full object-cover"
+                                  preload="metadata"
+                                  muted
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                                  <svg className="h-4 w-4 text-white fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>

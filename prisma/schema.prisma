@@ -66,6 +66,7 @@ model Project {
   propertyType String
   location    String
   gallery     Json     @default("[]")
+  videos      Json     @default("[]")
   status      String   @default("published")
   metadata    Json     @default("{}")
   createdAt   DateTime @default(now())
