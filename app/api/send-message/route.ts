@@ -36,9 +36,14 @@ export async function POST(request: NextRequest) {
     // SMTP config from env
     const user = process.env.BREVO_SMTP_USER
     const pass = process.env.BREVO_SMTP_KEY
-    const to1 = process.env.EMAIL_1
-    const to2 = process.env.EMAIL_2
-    if (!user || !pass || !to1 || !to2) {
+    const recipients = [
+      process.env.EMAIL_1,
+      process.env.EMAIL_2,
+      process.env.EMAIL_3,
+      process.env.EMAIL_4,
+    ].filter((e): e is string => Boolean(e && e.trim()))
+
+    if (!user || !pass || recipients.length === 0) {
       return NextResponse.json({ error: 'Configuración de correo incompleta' }, { status: 500 })
     }
 
@@ -56,7 +61,7 @@ export async function POST(request: NextRequest) {
 
     const mailOptions: nodemailer.SendMailOptions = {
       from: 'eduardo9escalona@gmail.com',
-      to: [to1, to2],
+      to: recipients,
       subject: 'Nuevo mensaje de contacto desde el sitio web',
       text: `Nombre: ${nombre}\nEmail: ${email}\nTeléfono: ${telefono}\nDirección: ${direccion}\nMensaje: ${mensaje}`,
       html: `<p><b>Nombre:</b> ${nombre}</p><p><b>Email:</b> ${email}</p><p><b>Teléfono:</b> ${telefono}</p><p><b>Dirección:</b> ${direccion}</p><p><b>Mensaje:</b><br/>${mensaje.replace(/\n/g, '<br/>')}</p>`,

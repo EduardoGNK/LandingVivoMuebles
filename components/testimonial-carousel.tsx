@@ -35,10 +35,20 @@ const testimonials = [
   },
 ]
 
+export function TestimonialCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
 
   const minSwipeDistance = 50
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length)
+  }
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length)
+  }
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null)
