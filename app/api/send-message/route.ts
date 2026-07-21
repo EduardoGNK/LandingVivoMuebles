@@ -37,10 +37,10 @@ export async function POST(request: NextRequest) {
     const user = process.env.BREVO_SMTP_USER
     const pass = process.env.BREVO_SMTP_KEY
     const recipients = [
-      process.env.EMAIL_1,
-      process.env.EMAIL_2,
-      process.env.EMAIL_3,
-      process.env.EMAIL_4,
+      process.env.EMAIL_1 || 'eduardo.escalona1@mail.udp.cl',
+      process.env.EMAIL_2 || 'aeservicios@gmail.com',
+      process.env.EMAIL_3 || 'alvaro.escalona@vivomuebles.cl',
+      process.env.EMAIL_4 || 'contacto@vivomuebles.cl',
     ].filter((e): e is string => Boolean(e && e.trim()))
 
     if (!user || !pass || recipients.length === 0) {
