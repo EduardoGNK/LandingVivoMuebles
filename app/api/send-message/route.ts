@@ -59,9 +59,11 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    console.log('Destinatarios configurados:', recipients.join(', '))
+
     const mailOptions: nodemailer.SendMailOptions = {
       from: 'eduardo9escalona@gmail.com',
-      to: recipients,
+      to: recipients.join(', '),
       subject: 'Nuevo mensaje de contacto desde el sitio web',
       text: `Nombre: ${nombre}\nEmail: ${email}\nTeléfono: ${telefono}\nDirección: ${direccion}\nMensaje: ${mensaje}`,
       html: `<p><b>Nombre:</b> ${nombre}</p><p><b>Email:</b> ${email}</p><p><b>Teléfono:</b> ${telefono}</p><p><b>Dirección:</b> ${direccion}</p><p><b>Mensaje:</b><br/>${mensaje.replace(/\n/g, '<br/>')}</p>`,
@@ -84,9 +86,7 @@ export async function POST(request: NextRequest) {
     await transporter.sendMail(mailOptions)
     return NextResponse.json({ success: true })
   } catch (error: any) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.error('Error enviando mensaje:', error)
-    }
+    console.error('Error enviando mensaje:', error)
     return NextResponse.json({ error: '❌ Hubo un error, intenta más tarde' }, { status: 500 })
   }
 } 
