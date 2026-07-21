@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     const results = await Promise.allSettled(
       recipients.map((to) =>
         transporter.sendMail({
-          from: 'eduardo9escalona@gmail.com',
+          from: process.env.EMAIL_FROM || '"Vivo Muebles - Cotizaciones" <eduardo9escalona@gmail.com>',
           to,
           subject: 'Nuevo mensaje de contacto desde el sitio web',
           text: `Nombre: ${nombre}\nEmail: ${email}\nTeléfono: ${telefono}\nDirección: ${direccion}\nMensaje: ${mensaje}`,
