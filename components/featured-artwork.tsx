@@ -1,22 +1,18 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { getArtworksFromDatabase } from "@/data/artworks"
+import { ImageGallery } from "@/components/image-gallery"
 
 export default function FeaturedArtwork() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [featuredArtworks, setFeaturedArtworks] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  
-  // Estado para la galería de imágenes del artwork actual
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  
+
   // Cargar proyectos de la base de datos
   useEffect(() => {
     const loadArtworks = async () => {
@@ -25,26 +21,16 @@ export default function FeaturedArtwork() {
         setFeaturedArtworks(artworks.slice(0, 5))
       } catch (error) {
         console.error('Error loading artworks:', error)
-        // Fallback a datos estáticos si hay error
         setFeaturedArtworks([])
       } finally {
         setLoading(false)
       }
     }
-    
+
     loadArtworks()
   }, [])
-  
+
   const currentArtwork = featuredArtworks[currentIndex]
-  const currentImages = currentArtwork?.gallery || [currentArtwork?.image]
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev === currentImages.length - 1 ? 0 : prev + 1))
-  }
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev === 0 ? currentImages.length - 1 : prev - 1))
-  }
 
   const nextProject = () => {
     setCurrentIndex((prev) => (prev === featuredArtworks.length - 1 ? 0 : prev + 1))
@@ -54,33 +40,7 @@ export default function FeaturedArtwork() {
     setCurrentIndex((prev) => (prev === 0 ? featuredArtworks.length - 1 : prev - 1))
   }
 
-  const goToImage = (index: number) => {
-    setCurrentImageIndex(index)
-  }
-
-  // Touch handlers para las imágenes (gallery)
-  const [imgTouchStart, setImgTouchStart] = useState<number | null>(null)
-  const [imgTouchEnd, setImgTouchEnd] = useState<number | null>(null)
-
-  const handleImgTouchStart = (e: React.TouchEvent) => {
-    setImgTouchEnd(null)
-    setImgTouchStart(e.targetTouches[0].clientX)
-  }
-
-  const handleImgTouchMove = (e: React.TouchEvent) => {
-    setImgTouchEnd(e.targetTouches[0].clientX)
-  }
-
-  const handleImgTouchEnd = () => {
-    if (!imgTouchStart || !imgTouchEnd) return
-    const distance = imgTouchStart - imgTouchEnd
-    const isLeftSwipe = distance > 50
-    const isRightSwipe = distance < -50
-    if (isLeftSwipe) nextImage()
-    else if (isRightSwipe) prevImage()
-  }
-
-  // Touch handlers para los proyectos (main projects)
+  // Touch handlers para cambiar de proyecto en móvil
   const [projTouchStart, setProjTouchStart] = useState<number | null>(null)
   const [projTouchEnd, setProjTouchEnd] = useState<number | null>(null)
 
@@ -102,11 +62,6 @@ export default function FeaturedArtwork() {
     else if (isRightSwipe) prevProject()
   }
 
-  // Resetear índice de imagen cuando cambia el artwork
-  useEffect(() => {
-    setCurrentImageIndex(0)
-  }, [currentArtwork?.id])
-
   // Mostrar loading mientras se cargan los datos
   if (loading) {
     return (
@@ -126,165 +81,77 @@ export default function FeaturedArtwork() {
   }
 
   return (
-    <div 
-      className="relative overflow-hidden rounded-lg bg-background"
-      onTouchStart={handleProjTouchStart}
-      onTouchMove={handleProjTouchMove}
-      onTouchEnd={handleProjTouchEnd}
-    >
-      <div className="grid gap-8 md:grid-cols-2">
+    <div className="relative rounded-xl bg-card border border-border/50 shadow-sm overflow-hidden">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2 md:gap-8">
         <motion.div
           key={currentArtwork?.id}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
+          className="w-full overflow-hidden"
         >
-          {/* Galería compacta para Featured Artwork */}
-          <div className="relative">
-            <div 
-              className="relative aspect-[14/9] max-h-[400px] overflow-hidden rounded-lg bg-muted"
-              onTouchStart={handleImgTouchStart}
-              onTouchMove={handleImgTouchMove}
-              onTouchEnd={handleImgTouchEnd}
-            >
-              <Image
-                src={currentImages[currentImageIndex] || "/placeholder.jpg"}
-                alt={`${currentArtwork?.title || "Proyecto"} - Imagen ${currentImageIndex + 1}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority
-              />
-              {currentImages.length > 1 && (
-                <div className="absolute inset-0 flex items-center justify-between p-4">
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={prevImage}
-                    className="h-8 w-8 rounded-full bg-black/50 text-white hover:bg-black/70"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={nextImage}
-                    className="h-8 w-8 rounded-full bg-black/50 text-white hover:bg-black/70"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              )}
-              {currentImages.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-                  <div className="flex gap-2">
-                    {currentImages.map((_: any, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => goToImage(index)}
-                        className={`h-2 w-2 rounded-full transition-colors ${
-                          index === currentImageIndex ? "bg-white" : "bg-white/50"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Thumbnails - miniaturas debajo de la imagen principal */}
-            {currentImages.length > 1 && (
-              <div className="mt-4 flex gap-2 overflow-x-auto">
-                {currentImages.map((image: any, index: number) => (
-                  <button
-                    key={index}
-                    onClick={() => goToImage(index)}
-                    className={`relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border-2 transition-colors ${
-                      index === currentImageIndex
-                        ? "border-primary ring-2 ring-primary/20"
-                        : "border-transparent hover:border-muted-foreground/50"
-                    }`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${currentArtwork?.title || "Proyecto"} - Miniatura ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="64px"
-                    />
-                    {index === currentImageIndex && (
-                      <div className="absolute inset-0 bg-primary/20" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Galería interactiva con soporte de imágenes y videos */}
+          <ImageGallery
+            key={currentArtwork?.id}
+            images={currentArtwork?.gallery || []}
+            videos={currentArtwork?.videos || []}
+            alt={currentArtwork?.title || "Proyecto"}
+            compact={true}
+          />
         </motion.div>
-        <div className="flex flex-col justify-between p-6">
+        <div className="flex flex-col justify-between p-4 sm:p-6">
           <motion.div
             key={currentArtwork?.id + "-info"}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-4"
+            transition={{ duration: 0.4 }}
+            className="space-y-3"
           >
             <div>
-              <h3 className="text-2xl font-bold">{currentArtwork?.title || "Proyecto"}</h3>
-              <p className="text-lg text-muted-foreground">{currentArtwork?.artist || "Vivo Muebles"}</p>
+              <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground break-words">{currentArtwork?.title || "Proyecto"}</h3>
+              <p className="text-sm sm:text-base text-muted-foreground break-words mt-0.5">{currentArtwork?.artist || "Vivo Muebles"}</p>
             </div>
-            <p>{currentArtwork?.description || "Descripción del proyecto no disponible."}</p>
-            <div className="flex gap-4 text-sm text-muted-foreground">
-              <div>{currentArtwork?.year || "2023"}</div>
-              <div>{currentArtwork?.medium || "Cocina completa"}</div>
+
+            <p className="text-xs sm:text-sm md:text-base text-muted-foreground dark:text-gray-300 leading-relaxed break-words">
+              {currentArtwork?.description || "Descripción del proyecto no disponible."}
+            </p>
+
+            <div className="flex flex-wrap gap-2 text-xs pt-1">
+              {currentArtwork?.year && (
+                <span className="rounded-full bg-muted px-3 py-1 font-medium text-muted-foreground">{currentArtwork.year}</span>
+              )}
+              {currentArtwork?.medium && (
+                <span className="rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 px-3 py-1 font-medium">{currentArtwork.medium}</span>
+              )}
             </div>
           </motion.div>
 
-          <div className="mt-8 flex flex-col gap-4">
-            <div className="flex justify-between">
-              <button
-                onClick={() => setCurrentIndex((prev) => (prev === 0 ? featuredArtworks.length - 1 : prev - 1))}
-                className="rounded-full bg-muted p-2 text-muted-foreground hover:bg-muted/80"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
+          <div className="mt-6 flex flex-col gap-3">
+            <div className="flex items-center justify-between pt-2 border-t border-border/40">
+              <span className="text-xs text-muted-foreground font-medium">
+                Proyecto {currentIndex + 1} de {featuredArtworks.length}
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={prevProject}
+                  className="rounded-full bg-muted p-2 text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+                  aria-label="Proyecto anterior"
                 >
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-              </button>
-              <button
-                onClick={() => setCurrentIndex((prev) => (prev === featuredArtworks.length - 1 ? 0 : prev + 1))}
-                className="rounded-full bg-muted p-2 text-muted-foreground hover:bg-muted/80"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
+                  <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+                <button
+                  onClick={nextProject}
+                  className="rounded-full bg-muted p-2 text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+                  aria-label="Siguiente proyecto"
                 >
-                  <path d="m9 18 6-6-6-6" />
-                </svg>
-              </button>
+                  <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+              </div>
             </div>
             <Link
               href={`/project/${currentArtwork?.id}`}
-              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              className="w-full inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground hover:bg-primary/90 text-center shadow transition-colors"
             >
               Ver Detalles del Proyecto
             </Link>

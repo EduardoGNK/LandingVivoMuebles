@@ -35,15 +35,12 @@ const workTypes = [
   "Construcción de terrazas",
   "Instalación de pisos flotantes o cerámicos",
   "Cambio de techumbre",
-  "Renovación de fachadas",
   "Pintura interior y exterior",
-  "Instalación de ventanales y termopaneles",
   "Construcción de quinchos o áreas de BBQ",
   "Habilitación de oficinas o espacios comerciales",
   "Remodelación de dormitorios",
-  "Instalación de muebles a medida",
-  "Aislamiento térmico y acústico",
-  "Revestimientos decorativos en muros"
+  "Remodelación de Closets",
+  "Construcción de muebles a medida"
 ]
 
 export default function AdminPanel() {

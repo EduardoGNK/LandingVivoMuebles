@@ -23,6 +23,7 @@ export async function getArtworksFromDatabase() {
       price: project.location || "Consultar precio",
       image: project.gallery && project.gallery.length > 0 ? project.gallery[0] : "/placeholder.jpg",
       gallery: project.gallery || ["/placeholder.jpg"],
+      videos: project.videos || [],
     }));
   } catch (error) {
     console.error('Error fetching projects from database:', error);

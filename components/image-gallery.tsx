@@ -82,29 +82,30 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
   return (
     <>
       {/* Main Gallery */}
-      <div className="relative">
+      <div className="relative w-full max-w-full overflow-hidden">
         <div 
-          className={`relative overflow-hidden rounded-lg bg-muted ${
+          className={`relative w-full overflow-hidden rounded-xl bg-slate-950/90 dark:bg-black/90 shadow-md ${
             compact 
-              ? "aspect-[4/3] max-h-[400px]" // Modo compacto: altura limitada
-              : "aspect-square" // Modo normal: cuadrado
+              ? "aspect-[4/3] max-h-[340px] sm:max-h-[420px]" 
+              : "aspect-[4/3] sm:aspect-square max-h-[380px] sm:max-h-[520px]"
           }`}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
           {mediaItems[currentIndex].type === "image" ? (
-            <Image
-              src={mediaItems[currentIndex].url}
-              alt={`${alt} - Imagen ${currentIndex + 1}`}
-              fill
-              className="object-cover cursor-pointer transition-transform hover:scale-105"
-              onClick={openFullscreen}
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority
-            />
+            <div className="relative w-full h-full cursor-pointer overflow-hidden" onClick={openFullscreen}>
+              <Image
+                src={mediaItems[currentIndex].url}
+                alt={`${alt} - Imagen ${currentIndex + 1}`}
+                fill
+                className="object-cover transition-transform duration-500 hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
+              />
+            </div>
           ) : (
-            <div className="relative w-full h-full bg-black flex items-center justify-center">
+            <div className="relative w-full h-full bg-black flex items-center justify-center overflow-hidden">
               {isVideoPlaying ? (
                 <video
                   src={mediaItems[currentIndex].url}
@@ -116,7 +117,7 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
                 />
               ) : (
                 <div 
-                  className="relative w-full h-full cursor-pointer flex items-center justify-center"
+                  className="relative w-full h-full cursor-pointer flex items-center justify-center overflow-hidden"
                   onClick={() => setIsVideoPlaying(true)}
                 >
                   <video
@@ -125,9 +126,9 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
                     preload="metadata"
                     muted
                   />
-                  <div className="absolute inset-0 bg-black/35 hover:bg-black/45 transition-colors flex items-center justify-center">
-                    <div className="bg-black/60 backdrop-blur-sm rounded-full p-5 shadow-2xl transition-transform hover:scale-110">
-                      <Play className="h-10 w-10 text-white fill-white" />
+                  <div className="absolute inset-0 bg-black/30 hover:bg-black/40 transition-colors flex items-center justify-center z-10">
+                    <div className="bg-black/60 backdrop-blur-md rounded-full p-4 sm:p-5 shadow-2xl transition-transform hover:scale-110 border border-white/20">
+                      <Play className="h-8 w-8 sm:h-10 sm:w-10 text-white fill-white ml-0.5" />
                     </div>
                   </div>
                 </div>
@@ -136,7 +137,7 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
           )}
 
           {mediaItems.length > 1 && !isVideoPlaying && (
-            <div className="absolute inset-0 flex items-center justify-between p-4 pointer-events-none">
+            <div className="absolute inset-0 flex items-center justify-between p-2 sm:p-4 pointer-events-none">
               <Button
                 variant="secondary"
                 size="icon"
@@ -144,9 +145,10 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
                   e.stopPropagation()
                   prevImage()
                 }}
-                className="h-8 w-8 rounded-full bg-black/50 text-white hover:bg-black/70 pointer-events-auto"
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-black/60 text-white hover:bg-black/80 pointer-events-auto border border-white/10 shadow"
+                aria-label="Anterior"
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
               <Button
                 variant="secondary"
@@ -155,22 +157,24 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
                   e.stopPropagation()
                   nextImage()
                 }}
-                className="h-8 w-8 rounded-full bg-black/50 text-white hover:bg-black/70 pointer-events-auto"
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-black/60 text-white hover:bg-black/80 pointer-events-auto border border-white/10 shadow"
+                aria-label="Siguiente"
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </div>
           )}
           {mediaItems.length > 1 && !isVideoPlaying && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-              <div className="flex gap-2">
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 pointer-events-none">
+              <div className="flex gap-1.5 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full">
                 {mediaItems.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => goToImage(index)}
-                    className={`h-2 w-2 rounded-full transition-colors ${
-                      index === currentIndex ? "bg-white" : "bg-white/50"
+                    className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full transition-colors pointer-events-auto ${
+                      index === currentIndex ? "bg-white scale-125" : "bg-white/50"
                     }`}
+                    aria-label={`Ir a elemento ${index + 1}`}
                   />
                 ))}
               </div>
@@ -178,17 +182,17 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
           )}
         </div>
 
-        {/* Thumbnails - solo mostrar en modo no compacto */}
-        {mediaItems.length > 1 && !compact && (
-          <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+        {/* Thumbnails */}
+        {mediaItems.length > 1 && (
+          <div className="mt-3 flex gap-2 overflow-x-auto pb-1 max-w-full scrollbar-thin">
             {mediaItems.map((item, index) => (
               <button
                 key={index}
                 onClick={() => goToImage(index)}
-                className={`relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border-2 transition-colors ${
+                className={`relative h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all ${
                   index === currentIndex
-                    ? "border-primary"
-                    : "border-transparent hover:border-muted-foreground/50"
+                    ? "border-primary ring-2 ring-primary/20 scale-105"
+                    : "border-transparent opacity-75 hover:opacity-100 hover:border-muted-foreground/50"
                 }`}
               >
                 {item.type === "image" ? (
@@ -203,11 +207,11 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
                   <div className="relative w-full h-full bg-black flex items-center justify-center">
                     <video
                       src={item.url}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover opacity-60"
                       preload="metadata"
                       muted
                     />
-                    <div className="absolute inset-0 bg-black/45 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                       <Play className="h-4 w-4 text-white fill-white" />
                     </div>
                   </div>
@@ -225,30 +229,31 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-3 sm:p-6"
             onClick={closeFullscreen}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <div className="relative max-h-full max-w-full p-4" onClick={(e) => e.stopPropagation()}>
+            <div className="relative w-full max-w-5xl h-[80vh] sm:h-[85vh] rounded-xl overflow-hidden bg-black flex flex-col items-center justify-center p-2" onClick={(e) => e.stopPropagation()}>
               <Button
                 variant="secondary"
                 size="icon"
                 onClick={closeFullscreen}
-                className="absolute -top-4 -right-4 h-8 w-8 rounded-full bg-black/50 text-white hover:bg-black/70 z-10"
+                className="absolute top-3 right-3 h-9 w-9 rounded-full bg-black/70 text-white hover:bg-black z-30 border border-white/20 shadow-lg"
+                aria-label="Cerrar"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </Button>
               
-              <div className="relative w-[80vw] h-[60vh] sm:h-[80vh] overflow-hidden rounded-lg bg-black flex items-center justify-center">
+              <div className="relative w-full h-full overflow-hidden flex items-center justify-center">
                 {mediaItems[currentIndex].type === "image" ? (
                   <Image
                     src={mediaItems[currentIndex].url}
                     alt={`${alt} - Imagen ${currentIndex + 1}`}
                     fill
-                    className="object-contain"
-                    sizes="80vw"
+                    className="object-contain p-2"
+                    sizes="100vw"
                     priority
                   />
                 ) : (
@@ -271,9 +276,10 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
                       e.stopPropagation()
                       prevImage()
                     }}
-                    className="absolute left-4 top-1/2 h-12 w-12 -translate-y-1/2 rounded-full bg-black/50 text-white hover:bg-black/70"
+                    className="absolute left-3 top-1/2 h-10 w-10 sm:h-12 sm:w-12 -translate-y-1/2 rounded-full bg-black/60 text-white hover:bg-black/90 border border-white/20 z-20"
+                    aria-label="Anterior"
                   >
-                    <ChevronLeft className="h-6 w-6" />
+                    <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                   </Button>
                   <Button
                     variant="secondary"
@@ -282,15 +288,14 @@ export function ImageGallery({ images, videos = [], alt, compact = false }: Imag
                       e.stopPropagation()
                       nextImage()
                     }}
-                    className="absolute right-4 top-1/2 h-12 w-12 -translate-y-1/2 rounded-full bg-black/50 text-white hover:bg-black/70"
+                    className="absolute right-3 top-1/2 h-10 w-10 sm:h-12 sm:w-12 -translate-y-1/2 rounded-full bg-black/60 text-white hover:bg-black/90 border border-white/20 z-20"
+                    aria-label="Siguiente"
                   >
-                    <ChevronRight className="h-6 w-6" />
+                    <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
                   </Button>
                   
-                  <div className="mt-4 text-center text-white">
-                    <span className="text-sm">
-                      {currentIndex + 1} de {mediaItems.length}
-                    </span>
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs sm:text-sm border border-white/10 z-20">
+                    {currentIndex + 1} / {mediaItems.length}
                   </div>
                 </>
               )}

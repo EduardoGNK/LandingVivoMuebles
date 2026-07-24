@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, Calendar, Recycle, Frame, House, Sun } from "lucide-react"
+import { ArrowRight, Calendar, Recycle, Frame, HardHat, House, Sun } from "lucide-react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { useState, useEffect } from "react"
@@ -40,16 +40,16 @@ const stats = [
     icon: Calendar,
   },
   {
-    name: "CO₂ evitado al año",
-    value: "~175 kg",
-    description: "Promedio de reducción en el impacto ambiental estimado por familia en un año.",
-    icon: Recycle,
+    name: "Proyectos Realizados",
+    value: "+100",
+    description: "Mobiliario y construcción adaptados a cada hogar u oficina.",
+    icon: House,
   },
   {
-    name: "Clientes satisfechos",
-    value: "+200",
-    description: "Cocinas únicas adaptadas a cada hogar u oficina.",
-    icon: House,
+    name: "Experienca laboral",
+    value: "20 años",
+    description: "Equipo conformado por expertos en el rubro.",
+    icon: HardHat,
   },
 ]
 
@@ -91,7 +91,7 @@ export default function Home() {
     if (contactCard) {
       const elementPosition = contactCard.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - 96 // 96px offset (coincide con scroll-mt-24)
-      
+
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth'
@@ -143,7 +143,7 @@ export default function Home() {
             <div className="absolute inset-0 z-0">
               <div className="relative h-full w-full">
                 <Image
-                  src="/cocina_home.jpeg"
+                  src="/cocina_home_5_1.png"
                   alt="Cocina home"
                   fill
                   priority
