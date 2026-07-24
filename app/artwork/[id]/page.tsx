@@ -16,7 +16,7 @@ export default function ArtworkPage() {
   const artwork = artworks.find((art) => art.id === id) || artworks[0]
 
   return (
-    <div className="container px-4 py-4 sm:py-8 md:py-16 max-w-full overflow-x-hidden">
+    <div className="container px-4 py-4 sm:py-8 md:py-12 lg:py-16 max-w-full lg:max-w-[80%] lg:mx-auto overflow-x-hidden">
       <Button variant="ghost" asChild className="mb-4 sm:mb-6">
         <Link href="/gallery" className="flex items-center gap-2 text-xs sm:text-sm">
           <ArrowLeft className="h-4 w-4" />
