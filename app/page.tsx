@@ -165,7 +165,7 @@ export default function Home() {
                   transition={{ delay: 0.2, duration: 0.5 }}
                   className="space-y-1.5 sm:space-y-2"
                 >
-                  <h2 className="text-xs font-medium text-muted-foreground sm:text-sm md:text-base lg:text-lg">Remodelaciones y cocina sustentable</h2>
+                  <h2 className="text-xs font-medium text-muted-foreground sm:text-sm md:text-base lg:text-lg">Remodelación y Renovación de tus espacios</h2>
                   <h1 className="text-3xl font-extrabold tracking-tight sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
                     Transforma tu hogar con
                     <span className="relative ml-1.5 sm:ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
@@ -179,7 +179,7 @@ export default function Home() {
                   transition={{ delay: 0.4, duration: 0.5 }}
                   className="mx-auto max-w-2xl text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-muted-foreground leading-relaxed px-1 sm:px-0"
                 >
-                  Conoce nuestro trabajo y anímate a transformar tu hogar con nuestro equipo de expertos en remodelación en interiores y sustentabilidad.
+                  Conoce nuestro trabajo y anímate a transformar tu hogar u oficina con nuestro equipo de expertos en arquitectura, diseño y construcción con orientación sustentable.
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -329,9 +329,22 @@ export default function Home() {
           </section>
 
           {/* Logos Row Section */}
-          <section className="py-8 sm:py-10 md:py-12 bg-muted/50 dark:bg-muted/10">
+          <section className="py-8 sm:py-10 md:py-12 bg-muted/50 dark:bg-muted/10 overflow-hidden">
             <div className="container px-4">
-              <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16">
+              <motion.div
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={{
+                  hidden: {},
+                  show: {
+                    transition: {
+                      staggerChildren: 0.18,
+                    },
+                  },
+                }}
+                className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16"
+              >
                 {[
                   { src: "/logos/creattiva.png", alt: "Creattiva", href: "https://www.creattiva.cl/" },
                   { src: "/logos/infinity-padel.png", alt: "Infinity Padel", href: "https://playinfinityclub.com/" },
@@ -339,21 +352,33 @@ export default function Home() {
                   { src: "/logos/matrix.png", alt: "Matrix Consulting", href: "https://www.matrixconsulting.com/" },
                   { src: "/logos/eterna.png", alt: "Eterna", href: "https://www.eterna.cl/" },
                 ].map((logo, i) => (
-                  <a
+                  <motion.a
                     key={i}
                     href={logo.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center h-16 w-20 p-2 sm:h-18 sm:w-24 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48 transition-transform duration-300 hover:scale-110"
+                    variants={{
+                      hidden: { opacity: 0.7, scale: 1 },
+                      show: {
+                        opacity: 1,
+                        scale: [1, 1.25, 1],
+                        transition: {
+                          duration: 0.7,
+                          ease: "easeInOut",
+                        },
+                      },
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    className="flex items-center justify-center h-16 w-20 p-2 sm:h-18 sm:w-24 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48 transition-transform duration-300"
                   >
                     <img
                       src={logo.src}
                       alt={logo.alt}
                       className="object-contain h-full w-full filter grayscale brightness-0 dark:invert transition-all duration-300"
                     />
-                  </a>
+                  </motion.a>
                 ))}
-              </div>
+              </motion.div>
               <div className="mt-3 sm:mt-4 text-center">
                 <h3 className="text-sm sm:text-base font-semibold text-muted-foreground tracking-wide">AEservicios remodelando más allá de tu casa.</h3>
               </div>
