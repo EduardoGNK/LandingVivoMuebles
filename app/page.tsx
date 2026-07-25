@@ -333,13 +333,13 @@ export default function Home() {
             <div className="container px-4">
               <motion.div
                 initial="hidden"
-                whileInView="show"
+                whileInView="visible"
                 viewport={{ once: true, amount: 0.3 }}
                 variants={{
                   hidden: {},
-                  show: {
+                  visible: {
                     transition: {
-                      staggerChildren: 0.18,
+                      staggerChildren: 0.2, // Remarcado secuencial de izquierda a derecha
                     },
                   },
                 }}
@@ -358,18 +358,25 @@ export default function Home() {
                     target="_blank"
                     rel="noopener noreferrer"
                     variants={{
-                      hidden: { opacity: 0.7, scale: 1 },
-                      show: {
-                        opacity: 1,
-                        scale: [1, 1.25, 1],
+                      hidden: {
+                        scale: 1,
+                        filter: "brightness(0.7) opacity(0.5)",
+                      },
+                      visible: {
+                        scale: [1, 1.25, 1], // Crece suavemente y regresa a su tamaño real
+                        filter: [
+                          "brightness(0.7) opacity(0.5)",
+                          "brightness(1.3) opacity(1)", // Se remarca en el punto máximo
+                          "brightness(1) opacity(0.85)", // Vuelve a su estado real
+                        ],
                         transition: {
                           duration: 0.7,
                           ease: "easeInOut",
                         },
                       },
                     }}
-                    whileHover={{ scale: 1.1 }}
-                    className="flex items-center justify-center h-16 w-20 p-2 sm:h-18 sm:w-24 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48 transition-transform duration-300"
+                    whileHover={{ scale: 1.15, filter: "brightness(1.2) opacity(1)" }}
+                    className="flex items-center justify-center h-16 w-20 p-2 sm:h-18 sm:w-24 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48 transition-all duration-300"
                   >
                     <img
                       src={logo.src}
