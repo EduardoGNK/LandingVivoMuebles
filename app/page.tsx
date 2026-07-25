@@ -139,7 +139,7 @@ export default function Home() {
       <div className="flex min-h-screen flex-col">
         <main className="flex-1">
           {/* Hero Section */}
-          <section className="relative min-h-[63vh] sm:min-h-[90vh] overflow-hidden">
+          <section className="relative min-h-[45vh] sm:min-h-[90vh] overflow-hidden">
             <div className="absolute inset-0 z-0">
               <div className="relative h-full w-full">
                 <Image
@@ -152,23 +152,23 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent from-30% via-background/60 to-background" /* Cambia fade de foto fondo */ />
               </div>
             </div>
-            <div className="container relative z-10 flex min-h-[63vh] sm:min-h-[90vh] flex-col items-center justify-center px-4 pt-6 pb-20 sm:pt-8 sm:pb-40 md:pt-12 md:pb-48 lg:pt-32 lg:pb-56 text-center">
+            <div className="container relative z-10 flex min-h-[45vh] sm:min-h-[90vh] flex-col items-center justify-center px-4 pt-6 pb-4 sm:pt-8 sm:pb-40 md:pt-12 md:pb-48 lg:pt-32 lg:pb-56 text-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="max-w-4xl space-y-4 sm:space-y-6 md:space-y-7"
+                className="max-w-4xl space-y-3.5 sm:space-y-6 md:space-y-7"
               >
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
-                  className="space-y-2"
+                  className="space-y-1.5 sm:space-y-2"
                 >
                   <h2 className="text-xs font-medium text-muted-foreground sm:text-sm md:text-base lg:text-lg">Remodelaciones y cocina sustentable</h2>
-                  <h1 className="text-2xl font-bold tracking-tighter sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+                  <h1 className="text-3xl font-extrabold tracking-tight sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
                     Transforma tu hogar con
-                    <span className="relative ml-1 sm:ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
+                    <span className="relative ml-1.5 sm:ml-2 inline-block bg-gradient-to-r from-blue-600 from-10% to-green-600 to-100% bg-clip-text text-transparent">
                       Vivo Muebles
                     </span>
                   </h1>
@@ -177,23 +177,23 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
-                  className="mx-auto max-w-2xl text-xs text-muted-foreground sm:text-sm md:text-base lg:text-lg xl:text-xl"
+                  className="mx-auto max-w-2xl text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-muted-foreground leading-relaxed px-1 sm:px-0"
                 >
-                  Conoce nuesto trabajo y anímate a transformar tu hogar con nuestro equipo de expertos en remodelación en interiores y sustentabilidad.
+                  Conoce nuestro trabajo y anímate a transformar tu hogar con nuestro equipo de expertos en remodelación en interiores y sustentabilidad.
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.5 }}
-                  className="flex flex-col items-center justify-center gap-2 sm:gap-3 md:flex-row md:gap-4 lg:gap-5"
+                  className="flex flex-row items-center justify-center gap-2.5 sm:gap-3 md:flex-row md:gap-4 lg:gap-5 pt-1 sm:pt-0"
                 >
-                  <Button asChild size="lg" className="text-xs bg-blue-600 hover:bg-blue-700 text-white sm:text-sm md:text-base lg:text-lg w-[48.75%] sm:w-auto">
+                  <Button asChild className="h-10 sm:h-11 px-4 sm:px-6 text-xs sm:text-sm md:text-base lg:text-lg bg-blue-600 hover:bg-blue-700 text-white rounded-full sm:rounded-md shadow-md sm:shadow-none font-semibold transition-all">
                     <Link href="/gallery">
                       Nuestros Proyectos
-                      <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+                      <ArrowRight className="ml-1.5 h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                     </Link>
                   </Button>
-                  <Button variant="outline" size="lg" className="text-xs sm:text-sm md:text-base lg:text-lg w-[48.75%] sm:w-auto" onClick={scrollToContactForm}>
+                  <Button variant="outline" className="h-10 sm:h-11 px-4 sm:px-6 text-xs sm:text-sm md:text-base lg:text-lg rounded-full sm:rounded-md border-primary/20 bg-background/80 backdrop-blur-sm hover:bg-muted font-semibold transition-all" onClick={scrollToContactForm}>
                     Cotiza con nosotros
                   </Button>
                 </motion.div>
@@ -222,7 +222,7 @@ export default function Home() {
           </section>
 
           {/* Featured Artwork Section */}
-          <section className="py-16 sm:py-20 md:py-24">
+          <section className="py-6 sm:py-20 md:py-24">
             <div className="container px-4">
               <div className="flex flex-col gap-6 sm:gap-8">
                 <div className="flex flex-col items-center gap-3 sm:gap-4 text-center">
