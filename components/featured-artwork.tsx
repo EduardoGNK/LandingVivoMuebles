@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -12,6 +12,9 @@ export default function FeaturedArtwork() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [featuredArtworks, setFeaturedArtworks] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [canTruncate, setCanTruncate] = useState(false)
+  const descriptionRef = useRef<HTMLParagraphElement>(null)
 
   // Cargar proyectos de la base de datos
   useEffect(() => {
@@ -32,11 +35,21 @@ export default function FeaturedArtwork() {
 
   const currentArtwork = featuredArtworks[currentIndex]
 
+  // Detectar si el texto realmente desborda el límite de líneas
+  useEffect(() => {
+    if (!isExpanded && descriptionRef.current) {
+      const el = descriptionRef.current
+      setCanTruncate(el.scrollHeight > el.clientHeight + 2)
+    }
+  }, [currentArtwork?.id, currentArtwork?.description, isExpanded])
+
   const nextProject = () => {
+    setIsExpanded(false)
     setCurrentIndex((prev) => (prev === featuredArtworks.length - 1 ? 0 : prev + 1))
   }
 
   const prevProject = () => {
+    setIsExpanded(false)
     setCurrentIndex((prev) => (prev === 0 ? featuredArtworks.length - 1 : prev - 1))
   }
 
@@ -100,7 +113,12 @@ export default function FeaturedArtwork() {
             compact={true}
           />
         </motion.div>
-        <div className="flex flex-col justify-between p-4 sm:p-6">
+        <div 
+          className="flex flex-col justify-between p-4 sm:p-6"
+          onTouchStart={handleProjTouchStart}
+          onTouchMove={handleProjTouchMove}
+          onTouchEnd={handleProjTouchEnd}
+        >
           <motion.div
             key={currentArtwork?.id + "-info"}
             initial={{ opacity: 0, y: 15 }}
@@ -113,9 +131,23 @@ export default function FeaturedArtwork() {
               <p className="text-sm sm:text-base text-muted-foreground break-words mt-0.5">{currentArtwork?.artist || "Vivo Muebles"}</p>
             </div>
 
-            <p className="text-xs sm:text-sm md:text-base text-muted-foreground dark:text-gray-300 leading-relaxed break-words">
-              {currentArtwork?.description || "Descripción del proyecto no disponible."}
-            </p>
+            <div>
+              <p 
+                ref={descriptionRef}
+                className={`text-xs sm:text-sm md:text-base text-muted-foreground dark:text-gray-300 leading-relaxed break-words ${!isExpanded ? "line-clamp-4 sm:line-clamp-5" : ""}`}
+              >
+                {currentArtwork?.description || "Descripción del proyecto no disponible."}
+              </p>
+              {(canTruncate || isExpanded) && (
+                <button
+                  type="button"
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="mt-1 inline-block text-xs font-semibold text-primary underline underline-offset-2 hover:text-primary/80 transition-colors cursor-pointer"
+                >
+                  {isExpanded ? "Ver menos" : "Ver más"}
+                </button>
+              )}
+            </div>
 
             <div className="flex flex-wrap gap-2 text-xs pt-1">
               {currentArtwork?.year && (

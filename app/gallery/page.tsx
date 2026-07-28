@@ -61,7 +61,7 @@ export default function GalleryPage() {
           <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
             Nuestros Proyectos
           </h1>
-          <p className="max-w-[800px] text-lg text-muted-foreground">
+          <p className="max-w-[800px] text-sm sm:text-base text-muted-foreground">
             Explora nuestra colección de proyectos de remodelación y cocinas sustentables. 
             Cada proyecto es único y diseñado específicamente para las necesidades de nuestros clientes.
           </p>

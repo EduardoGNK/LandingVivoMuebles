@@ -40,7 +40,7 @@ export async function POST() {
         location: "Santiago, Chile",
         gallery: ["/placeholder.jpg"],
         status: 'published',
-      }
+      } as any
     })
     
     return NextResponse.json({

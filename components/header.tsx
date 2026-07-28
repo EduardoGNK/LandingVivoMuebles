@@ -16,7 +16,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 const navigation = [
   { name: "Inicio", href: "/" },
   { name: "Nuestros Proyectos", href: "/gallery" },
-  { name: "Contact", href: "#footer" },
+  { name: "Contactar", href: "#footer" },
 ]
 
 export function Header() {
@@ -94,7 +94,7 @@ export function Header() {
           </Link>
           <nav className="hidden gap-6 md:flex">
             {navigation.map((item) => (
-              item.name === "Contact" ? (
+              item.href === "#footer" ? (
                 <button
                   key={item.href}
                   onClick={scrollToFooter}
@@ -159,11 +159,11 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <SheetTitle className="text-2xl font-bold tracking-tight mb-6">ARTISTRY</SheetTitle>
+              <SheetTitle className="text-2xl font-bold tracking-tight mb-6">VivoMuebles</SheetTitle>
               <div className="flex flex-col gap-6">
                 <nav className="flex flex-col gap-4">
                   {navigation.map((item) => (
-                    item.name === "Contact" ? (
+                    item.href === "#footer" ? (
                       <button
                         key={item.href}
                         onClick={scrollToFooter}

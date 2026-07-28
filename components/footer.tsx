@@ -26,7 +26,7 @@ export function Footer() {
 
     // Listen for hash changes
     window.addEventListener('hashchange', handleHashChange)
-    
+
     return () => {
       window.removeEventListener('hashchange', handleHashChange)
     }
@@ -37,13 +37,13 @@ export function Footer() {
       <div className="container px-4 py-12 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-4">
-            <div className="font-serif text-2xl font-bold tracking-tight">AEservicos</div>
+            <div className="font-serif text-2xl font-bold tracking-tight">Vivo Muebles</div>
             <p className="text-justify text-muted-foreground max-w-[300px] text-sm">
-              Una empresa con más de 10 años de experiencia en el rubro de redodelación de interiores y exteriores, ofreciendo servicios de alta calidad y atención personalizada a nuestros clientes.
+              Una empresa con más de 20 años de experiencia en el rubro de redodelación de interiores y exteriores, ofreciendo servicios de alta calidad y atención personalizada a nuestros clientes.
             </p>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-medium">Navigation</h3>
+            <h3 className="font-serif font-bold tracking-tight">Navegación</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/" className="text-muted-foreground hover:text-foreground">
@@ -71,7 +71,7 @@ export function Footer() {
             }}
             className="p-4 rounded-lg"
           >
-            <motion.h3 
+            <motion.h3
               className="mb-4 text-sm font-medium"
               animate={isContactHighlighted ? {
                 color: ["inherit", "#3b82f6", "inherit"]
@@ -81,12 +81,12 @@ export function Footer() {
                 ease: "easeInOut"
               }}
             >
-              Contacto
+              <h3 className="font-serif text-lg font-bold tracking-tight">Contacto</h3>
             </motion.h3>
             <address className="space-y-2 text-sm not-italic text-muted-foreground">
               <p>Santiago, Chile </p>
-              <p>vivomueblescl@gmail.com</p>
-              <p>aeservicioshogar@gmail.com</p>
+              <p>alvaro.escalona@vivomuebles.cl</p>
+              <p>contacto@vivomuebles.cl</p>
               <p>+56 9 8418 7065</p>
             </address>
           </motion.div>
@@ -113,7 +113,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-6 text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} AEservicios. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} Vivo Muebles. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

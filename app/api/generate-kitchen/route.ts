@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     // Usar la biblioteca oficial de HuggingFace que maneja el router automáticamente
     const modelsToTry = [MODEL_ID, FALLBACK_MODEL_ID]
-    let imageBlob: Blob | null = null;
+    let imageBlob: any = null;
     let lastError: any = null;
     const maxAttempts = 3;
     
