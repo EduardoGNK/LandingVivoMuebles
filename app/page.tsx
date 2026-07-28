@@ -179,7 +179,7 @@ export default function Home() {
                   transition={{ delay: 0.4, duration: 0.5 }}
                   className="mx-auto max-w-2xl text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-muted-foreground leading-relaxed px-1 sm:px-0"
                 >
-                  Conoce nuestro trabajo y anímate a transformar tu hogar u oficina con nuestro equipo de expertos en arquitectura, diseño y construcción con orientación sustentable.
+                  Conoce nuestro trabajo y anímate a transformar tu hogar u oficina con nuestro equipo de expertos en arquitectura, diseño y construcción.
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -339,32 +339,23 @@ export default function Home() {
                   { src: "/logos/matrix.png", alt: "Matrix Consulting", href: "https://www.matrixconsulting.com/" },
                   { src: "/logos/eterna.png", alt: "Eterna", href: "https://www.eterna.cl/" },
                 ].map((logo, i) => (
-                  <motion.a
+                  <a
                     key={i}
                     href={logo.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    initial={{ scale: 1 }}
-                    whileInView={{ scale: [1, 1.2, 1] }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{
-                      duration: 0.6,
-                      delay: i * 0.18,
-                      ease: "easeInOut"
-                    }}
-                    whileHover={{ scale: 1.10 }}
-                    className="flex items-center justify-center h-16 w-20 p-2 sm:h-18 sm:w-24 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48 transition-transform duration-300"
+                    className="flex items-center justify-center h-16 w-20 p-2 sm:h-18 sm:w-24 md:h-20 md:w-36 md:p-0 lg:h-28 lg:w-48 transition-transform duration-300 hover:scale-110"
                   >
                     <img
                       src={logo.src}
                       alt={logo.alt}
                       className="object-contain h-full w-full filter grayscale brightness-0 dark:invert transition-all duration-300"
                     />
-                  </motion.a>
+                  </a>
                 ))}
               </div>
               <div className="mt-3 sm:mt-4 text-center">
-                <h3 className="text-sm sm:text-base font-semibold text-muted-foreground tracking-wide">AEservicios remodelando más allá de tu casa.</h3>
+                <h3 className="text-sm sm:text-base font-semibold text-muted-foreground tracking-wide">Vivo Muebles remodelando más allá de tu casa.</h3>
               </div>
             </div>
           </section>
