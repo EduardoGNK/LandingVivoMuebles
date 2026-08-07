@@ -47,10 +47,19 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.role = "admin"
-        token.email = user.email
-        token.name = user.name
-        token.picture = user.image
+        // Lista blanca de emails con acceso de administrador
+        const adminEmails = [
+          process.env.EMAIL_1,
+          process.env.EMAIL_2,
+          'eduardo.escalona1@mail.udp.cl',
+          'aeservicios@gmail.com'
+        ].filter(Boolean);
+
+        const isAdmin = user.email && adminEmails.includes(user.email.toLowerCase());
+        token.role = isAdmin ? "admin" : "user";
+        token.email = user.email;
+        token.name = user.name;
+        token.picture = user.image;
       }
       return token
     },

@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
 export async function GET() {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Endpoint no disponible en producción' }, { status: 403 })
+  }
   try {
-    // Prueba simple de conexión
     const projectCount = await prisma.project.count()
-    
     return NextResponse.json({
       success: true,
       message: 'Conexión exitosa',
@@ -26,8 +29,16 @@ export async function GET() {
 }
 
 export async function POST() {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Endpoint no disponible en producción' }, { status: 403 })
+  }
+  
+  const session = await getServerSession(authOptions)
+  if (!session || (session.user as any)?.role !== 'admin') {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
+
   try {
-    // Crear un proyecto de prueba
     const testProject = await prisma.project.create({
       data: {
         title: "Proyecto de Prueba",
