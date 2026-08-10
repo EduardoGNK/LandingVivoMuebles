@@ -1,13 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
+// SECURITY: HTML escaping to prevent HTML injection in email body (CWE-80)
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+}
+
 // Simple in-memory rate limiter
 const rateLimitMap = new Map<string, { count: number; last: number }>()
 const RATE_LIMIT = 3
 const WINDOW_MS = 2 * 60 * 1000 // 2 minutos
 
+// Input validation constants
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MAX_FIELD_LENGTH = 500
+const MAX_MESSAGE_LENGTH = 2000
+
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get('x-forwarded-for') || 'unknown'
+  // Use first IP from x-forwarded-for (not the full chain, to avoid header spoofing)
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown'
   const now = Date.now()
 
   // Rate limiting
@@ -29,8 +45,25 @@ export async function POST(request: NextRequest) {
 
   try {
     const { nombre, email, telefono, direccion, mensaje, imagenIA } = await request.json()
+
     if (!nombre || !email || !telefono || !direccion || !mensaje) {
       return NextResponse.json({ error: 'Todos los campos son obligatorios' }, { status: 400 })
+    }
+
+    // SECURITY: Validate email format to prevent header injection
+    if (!EMAIL_REGEX.test(email)) {
+      return NextResponse.json({ error: 'Formato de email inválido' }, { status: 400 })
+    }
+
+    // SECURITY: Enforce field length limits to prevent payload abuse
+    if (
+      nombre.length > MAX_FIELD_LENGTH ||
+      email.length > MAX_FIELD_LENGTH ||
+      telefono.length > MAX_FIELD_LENGTH ||
+      direccion.length > MAX_FIELD_LENGTH ||
+      mensaje.length > MAX_MESSAGE_LENGTH
+    ) {
+      return NextResponse.json({ error: 'Uno o más campos exceden el límite permitido' }, { status: 400 })
     }
 
     // SMTP config from env
@@ -53,18 +86,21 @@ export async function POST(request: NextRequest) {
       secure: false,
       auth: { user, pass },
       tls: {
-        // En desarrollo local, permitir certificados autofirmados
-        // En producción, esto debería ser true para mayor seguridad
         rejectUnauthorized: process.env.NODE_ENV === 'production',
       },
     })
 
-    console.log('Enviando correos individuales a destinatarios:', recipients.join(', '))
+    // SECURITY: Escape all user-supplied values before injecting in HTML (CWE-80)
+    const safeNombre = escapeHtml(String(nombre))
+    const safeEmail = escapeHtml(String(email))
+    const safeTelefono = escapeHtml(String(telefono))
+    const safeDireccion = escapeHtml(String(direccion))
+    const safeMensaje = escapeHtml(String(mensaje)).replace(/\n/g, '<br/>')
 
     let attachments: nodemailer.SendMailOptions['attachments'] = undefined
-    // Adjuntar imagen si viene
-    if (imagenIA && typeof imagenIA === 'string' && imagenIA.startsWith('data:')) {
-      const matches = imagenIA.match(/^data:(.+);base64,(.+)$/)
+    // SECURITY: Strictly validate MIME type and base64 charset for image attachments
+    if (imagenIA && typeof imagenIA === 'string' && imagenIA.startsWith('data:image/')) {
+      const matches = imagenIA.match(/^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/)
       if (matches) {
         attachments = [
           {
@@ -76,14 +112,18 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    console.log(`Enviando correos a ${recipients.length} destinatario(s)`)
+
     const results = await Promise.allSettled(
       recipients.map((to) =>
         transporter.sendMail({
           from: process.env.EMAIL_FROM || '"Vivo Muebles - Cotizaciones" <eduardo9escalona@gmail.com>',
           to,
           subject: 'Nuevo mensaje de contacto desde el sitio web',
+          // Plain text version (no HTML injection risk)
           text: `Nombre: ${nombre}\nEmail: ${email}\nTeléfono: ${telefono}\nDirección: ${direccion}\nMensaje: ${mensaje}`,
-          html: `<p><b>Nombre:</b> ${nombre}</p><p><b>Email:</b> ${email}</p><p><b>Teléfono:</b> ${telefono}</p><p><b>Dirección:</b> ${direccion}</p><p><b>Mensaje:</b><br/>${mensaje.replace(/\n/g, '<br/>')}</p>`,
+          // HTML version with properly escaped values
+          html: `<p><b>Nombre:</b> ${safeNombre}</p><p><b>Email:</b> ${safeEmail}</p><p><b>Teléfono:</b> ${safeTelefono}</p><p><b>Dirección:</b> ${safeDireccion}</p><p><b>Mensaje:</b><br/>${safeMensaje}</p>`,
           attachments,
         })
       )
@@ -91,9 +131,9 @@ export async function POST(request: NextRequest) {
 
     results.forEach((res, i) => {
       if (res.status === 'rejected') {
-        console.error(`Error enviando a ${recipients[i]}:`, res.reason)
+        console.error(`Error enviando a destinatario ${i + 1}:`, res.reason)
       } else {
-        console.log(`Enviado con éxito a ${recipients[i]}`)
+        console.log(`Enviado con éxito a destinatario ${i + 1}`)
       }
     })
 
@@ -102,4 +142,4 @@ export async function POST(request: NextRequest) {
     console.error('Error procesando envío de mensaje:', error)
     return NextResponse.json({ error: '❌ Hubo un error, intenta más tarde' }, { status: 500 })
   }
-} 
+}

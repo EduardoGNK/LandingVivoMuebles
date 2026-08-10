@@ -17,14 +17,24 @@ export async function POST(request: NextRequest) {
   try {
     const { prompt } = await request.json()
 
-    if (!prompt) {
+    if (!prompt || typeof prompt !== 'string') {
       return NextResponse.json(
         { error: 'Prompt is required' },
         { status: 400 }
       )
     }
 
-    console.log('Generating kitchen with prompt:', prompt)
+    // SECURITY: Limit prompt length to prevent abuse and excessive API costs
+    const MAX_PROMPT_LENGTH = 500
+    if (prompt.length > MAX_PROMPT_LENGTH) {
+      return NextResponse.json(
+        { error: `El prompt no puede superar ${MAX_PROMPT_LENGTH} caracteres` },
+        { status: 400 }
+      )
+    }
+
+    // SECURITY: Don't log the full prompt — could contain PII or injection attempts
+    console.log('Generating kitchen image, prompt length:', prompt.length)
     console.log('Using model:', MODEL_ID)
 
     // Usar la biblioteca oficial de HuggingFace que maneja el router automáticamente
