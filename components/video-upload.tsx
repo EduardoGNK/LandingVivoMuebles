@@ -207,19 +207,24 @@ export function VideoUpload({
               </div>
 
               {/* Etiqueta y botón eliminar */}
-              <div className="absolute top-2 left-2 right-2 flex justify-between items-start">
-                <span className="bg-black/70 text-white text-xs px-2 py-1 rounded-md">
+              <div className="absolute top-2 left-2 right-2 flex justify-between items-start z-10">
+                <span className="bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded-md">
                   Video {index + 1}
                 </span>
                 <Button
                   type="button"
                   variant="destructive"
                   size="icon"
-                  className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => removeVideo(index)}
+                  className="h-7 w-7 opacity-100 shadow-md cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    removeVideo(index)
+                  }}
                   disabled={disabled}
+                  title="Eliminar video"
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-4 w-4" />
                 </Button>
               </div>
             </div>
