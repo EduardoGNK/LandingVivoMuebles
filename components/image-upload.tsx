@@ -13,9 +13,11 @@ interface ImageUploadProps {
 
 export function ImageUpload({ images, onImagesChange, disabled = false }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setUploading(true)
+    setError(null)
     
     try {
       const uploadedUrls: string[] = []
@@ -39,8 +41,9 @@ export function ImageUpload({ images, onImagesChange, disabled = false }: ImageU
       }
       
       onImagesChange([...images, ...uploadedUrls])
-    } catch (error) {
-      console.error("Error uploading images:", error)
+    } catch (err: any) {
+      console.error("Error uploading images:", err)
+      setError(err.message || "Error al subir la imagen. Inténtalo de nuevo.")
     } finally {
       setUploading(false)
     }
@@ -88,6 +91,12 @@ export function ImageUpload({ images, onImagesChange, disabled = false }: ImageU
             </div>
           )}
         </div>
+        {error && (
+          <p className="text-sm text-destructive flex items-center gap-1 mt-2">
+            <X className="h-3 w-3" />
+            {error}
+          </p>
+        )}
       </div>
 
       {/* Preview de imágenes */}

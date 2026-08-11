@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2, Plus, LogOut, Eye, Edit, Trash2, X, Save } from "lucide-react"
+import { Loader2, Plus, LogOut, Eye, Edit, Trash2, X, Save, Star, ArrowUp, ArrowDown } from "lucide-react"
 import { AuthGuard } from "@/components/auth-guard"
 import { ImageUpload } from "@/components/image-upload"
 import { VideoUpload } from "@/components/video-upload"
@@ -25,6 +25,8 @@ interface Project {
   gallery: string[]
   videos: string[]
   status: string
+  isFeatured?: boolean
+  featuredOrder?: number
   createdAt: string
 }
 
@@ -57,10 +59,14 @@ export default function AdminPanel() {
     description: "",
     propertyType: "",
     location: "",
+    isFeatured: false,
+    featuredOrder: 0,
     gallery: [] as string[],
     videos: [] as string[]
   })
   const [submitting, setSubmitting] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [formSuccess, setFormSuccess] = useState<string | null>(null)
 
   useEffect(() => {
     fetchProjects()
@@ -83,6 +89,8 @@ export default function AdminPanel() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitting(true)
+    setFormError(null)
+    setFormSuccess(null)
     
     try {
       const res = await fetch("/api/projects", {
@@ -91,7 +99,10 @@ export default function AdminPanel() {
         body: JSON.stringify(formData)
       })
 
+      const data = await res.json().catch(() => ({}))
+
       if (res.ok) {
+        setFormSuccess("Proyecto creado exitosamente.")
         setFormData({
           title: "",
           comuna: "Santiago",
@@ -101,13 +112,18 @@ export default function AdminPanel() {
           description: "",
           propertyType: "",
           location: "",
+          isFeatured: false,
+          featuredOrder: 0,
           gallery: [],
           videos: []
         })
         fetchProjects()
+      } else {
+        setFormError(data.error || `Error ${res.status}: No se pudo crear el proyecto`)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating project:", error)
+      setFormError(error.message || "Error de red al crear el proyecto")
     } finally {
       setSubmitting(false)
     }
@@ -115,6 +131,8 @@ export default function AdminPanel() {
 
   const handleEdit = (project: Project) => {
     setEditingProject(project.id)
+    setFormError(null)
+    setFormSuccess(null)
     setFormData({
       title: project.title,
       comuna: project.comuna,
@@ -124,6 +142,8 @@ export default function AdminPanel() {
       description: project.description,
       propertyType: project.propertyType,
       location: project.location,
+      isFeatured: project.isFeatured ?? false,
+      featuredOrder: project.featuredOrder ?? 0,
       gallery: project.gallery || [],
       videos: project.videos || []
     })
@@ -134,6 +154,8 @@ export default function AdminPanel() {
     if (!editingProject) return
     
     setSubmitting(true)
+    setFormError(null)
+    setFormSuccess(null)
     
     try {
       const res = await fetch(`/api/projects/${editingProject}`, {
@@ -142,8 +164,11 @@ export default function AdminPanel() {
         body: JSON.stringify(formData)
       })
 
+      const data = await res.json().catch(() => ({}))
+
       if (res.ok) {
         setEditingProject(null)
+        setFormSuccess("Proyecto actualizado exitosamente.")
         setFormData({
           title: "",
           comuna: "Santiago",
@@ -153,15 +178,61 @@ export default function AdminPanel() {
           description: "",
           propertyType: "",
           location: "",
+          isFeatured: false,
+          featuredOrder: 0,
           gallery: [],
           videos: []
         })
         fetchProjects()
+      } else {
+        setFormError(data.error || `Error ${res.status}: No se pudo actualizar el proyecto`)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating project:", error)
+      setFormError(error.message || "Error de red al actualizar el proyecto")
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const handleQuickToggleFeatured = async (project: Project) => {
+    try {
+      const nextFeatured = !project.isFeatured
+      const featuredCount = projects.filter(p => p.isFeatured).length
+      const res = await fetch("/api/projects/reorder", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: project.id,
+          isFeatured: nextFeatured,
+          featuredOrder: nextFeatured ? (project.featuredOrder || featuredCount + 1) : 0
+        })
+      })
+      if (res.ok) {
+        fetchProjects()
+      }
+    } catch (error) {
+      console.error("Error toggling featured status:", error)
+    }
+  }
+
+  const handleQuickOrderChange = async (project: Project, newOrder: number) => {
+    if (newOrder < 1) return
+    try {
+      const res = await fetch("/api/projects/reorder", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: project.id,
+          isFeatured: true,
+          featuredOrder: newOrder
+        })
+      })
+      if (res.ok) {
+        fetchProjects()
+      }
+    } catch (error) {
+      console.error("Error updating order:", error)
     }
   }
 
@@ -204,6 +275,8 @@ export default function AdminPanel() {
       description: "",
       propertyType: "",
       location: "",
+      isFeatured: false,
+      featuredOrder: 0,
       gallery: [],
       videos: []
     })
@@ -245,6 +318,17 @@ export default function AdminPanel() {
             </CardHeader>
             <CardContent>
               <form onSubmit={editingProject ? handleUpdate : handleSubmit} className="space-y-6">
+                {formError && (
+                  <div className="p-3 text-sm rounded-md bg-destructive/15 text-destructive font-medium border border-destructive/30">
+                    ❌ {formError}
+                  </div>
+                )}
+                {formSuccess && (
+                  <div className="p-3 text-sm rounded-md bg-green-500/15 text-green-700 dark:text-green-400 font-medium border border-green-500/30">
+                    ✅ {formSuccess}
+                  </div>
+                )}
+
                 <div className="space-y-2">
                   <label htmlFor="title" className="text-sm font-medium">
                     Título del proyecto *
@@ -368,6 +452,45 @@ export default function AdminPanel() {
                   />
                 </div>
 
+                {/* Sección de Configuración Destacada */}
+                <div className="p-4 border rounded-lg bg-amber-500/10 border-amber-500/30 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label htmlFor="isFeatured" className="text-sm font-semibold cursor-pointer flex items-center gap-2 text-amber-700 dark:text-amber-400">
+                        <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                        Destacar en "Algunos de nuestros proyectos"
+                      </label>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Muestra este proyecto en el carrusel de la página de inicio (máx 6 recomendados).
+                      </p>
+                    </div>
+                    <input
+                      id="isFeatured"
+                      type="checkbox"
+                      checked={formData.isFeatured}
+                      onChange={(e) => setFormData({...formData, isFeatured: e.target.checked})}
+                      className="h-5 w-5 rounded border-amber-400 text-amber-600 focus:ring-amber-500 cursor-pointer"
+                      disabled={submitting}
+                    />
+                  </div>
+                  {formData.isFeatured && (
+                    <div className="space-y-2 pt-3 border-t border-amber-500/20">
+                      <label htmlFor="featuredOrder" className="text-sm font-medium">
+                        Orden de aparición (1 = Primero, 2 = Segundo, etc.)
+                      </label>
+                      <Input
+                        id="featuredOrder"
+                        type="number"
+                        min="1"
+                        value={formData.featuredOrder || 1}
+                        onChange={(e) => setFormData({...formData, featuredOrder: parseInt(e.target.value) || 1})}
+                        disabled={submitting}
+                        placeholder="Ej: 1"
+                      />
+                    </div>
+                  )}
+                </div>
+
                 {/* Subida de imágenes */}
                 <ImageUpload
                   images={formData.gallery}
@@ -430,21 +553,68 @@ export default function AdminPanel() {
               ) : (
                 <div className="space-y-4">
                   {projects.map((project) => (
-                    <div key={project.id} className="border rounded-lg p-4 space-y-3">
+                    <div key={project.id} className={`border rounded-lg p-4 space-y-3 transition-colors ${project.isFeatured ? "border-amber-400/60 bg-amber-500/5 dark:bg-amber-500/10" : ""}`}>
                       <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-semibold">{project.title}</h3>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="font-semibold">{project.title}</h3>
+                            {project.isFeatured && (
+                              <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+                                <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                                Destacado #{project.featuredOrder || 1}
+                              </span>
+                            )}
+                          </div>
                           <p className="text-sm text-muted-foreground">{project.comuna} • {project.propertyType}</p>
                           <p className="text-sm text-muted-foreground">{project.workType}</p>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Fecha: {project.startDate} - {project.endDate}
-                          </p>
                           <p className="text-sm text-muted-foreground">
-                            Ubicación: {project.location}
+                            Fecha: {project.startDate} - {project.endDate} | Ubicación: {project.location}
                           </p>
-                          <p className="text-sm text-muted-foreground">
-                            Estado: <span className="capitalize">{project.status}</span>
-                          </p>
+                          
+                          {/* Controles de ordenamiento rápido */}
+                          <div className="flex items-center gap-2 pt-2">
+                            <Button
+                              type="button"
+                              variant={project.isFeatured ? "default" : "outline"}
+                              size="sm"
+                              className={project.isFeatured ? "bg-amber-500 hover:bg-amber-600 text-white" : ""}
+                              onClick={() => handleQuickToggleFeatured(project)}
+                            >
+                              <Star className={`h-3.5 w-3.5 mr-1 ${project.isFeatured ? "fill-white" : ""}`} />
+                              {project.isFeatured ? "Destacado" : "Destacar"}
+                            </Button>
+
+                            {project.isFeatured && (
+                              <div className="flex items-center gap-1 border rounded-md px-2 py-0.5 bg-background">
+                                <span className="text-xs text-muted-foreground font-medium">Orden:</span>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  value={project.featuredOrder || 1}
+                                  onChange={(e) => handleQuickOrderChange(project, parseInt(e.target.value) || 1)}
+                                  className="w-12 text-xs font-bold text-center bg-transparent border-0 focus:outline-none focus:ring-0"
+                                />
+                                <div className="flex flex-col">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleQuickOrderChange(project, Math.max(1, (project.featuredOrder || 1) - 1))}
+                                    className="text-muted-foreground hover:text-foreground text-[10px] leading-none"
+                                    title="Subir posición"
+                                  >
+                                    ▲
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleQuickOrderChange(project, (project.featuredOrder || 1) + 1)}
+                                    className="text-muted-foreground hover:text-foreground text-[10px] leading-none"
+                                    title="Bajar posición"
+                                  >
+                                    ▼
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         </div>
                         <div className="flex gap-2">
                           <Button 
@@ -452,6 +622,7 @@ export default function AdminPanel() {
                             size="sm"
                             onClick={() => handleEdit(project)}
                             disabled={editingProject === project.id}
+                            title="Editar proyecto"
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
@@ -459,6 +630,7 @@ export default function AdminPanel() {
                             variant="ghost" 
                             size="sm"
                             onClick={() => handleDelete(project.id)}
+                            title="Eliminar proyecto"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

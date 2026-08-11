@@ -16,12 +16,27 @@ export default function FeaturedArtwork() {
   const [canTruncate, setCanTruncate] = useState(false)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
 
-  // Cargar proyectos de la base de datos
+  // Cargar proyectos de la base de datos y filtrar/ordenar destacados
   useEffect(() => {
     const loadArtworks = async () => {
       try {
         const artworks = await getArtworksFromDatabase()
-        setFeaturedArtworks(artworks.slice(0, 5))
+        
+        // Separar proyectos destacados y no destacados
+        const markedFeatured = artworks
+          .filter((a: any) => a.isFeatured)
+          .sort((a: any, b: any) => (a.featuredOrder || 0) - (b.featuredOrder || 0))
+
+        const nonFeatured = artworks.filter((a: any) => !a.isFeatured)
+
+        // Si hay menos de 6 destacados marcados, autocompletar con los no destacados
+        let finalFeatured = [...markedFeatured]
+        if (finalFeatured.length < 6) {
+          const needed = 6 - finalFeatured.length
+          finalFeatured = [...finalFeatured, ...nonFeatured.slice(0, needed)]
+        }
+
+        setFeaturedArtworks(finalFeatured.slice(0, 6))
       } catch (error) {
         console.error('Error loading artworks:', error)
         setFeaturedArtworks([])

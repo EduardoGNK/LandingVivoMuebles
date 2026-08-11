@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { title, comuna, startDate, endDate, workType, description, propertyType, location, gallery, videos } = await request.json()
+    const { title, comuna, startDate, endDate, workType, description, propertyType, location, gallery, videos, isFeatured, featuredOrder } = await request.json()
 
     if (!title || !description || !location || !startDate || !endDate || !workType || !propertyType) {
       return NextResponse.json(
@@ -61,7 +61,8 @@ export async function POST(request: NextRequest) {
         gallery: gallery || [],
         videos: videos || [],
         status: 'published',
-        // userId es opcional ahora, así que no lo incluimos
+        isFeatured: Boolean(isFeatured),
+        featuredOrder: typeof featuredOrder === 'number' ? featuredOrder : (Number(featuredOrder) || 0),
       }
     })
 

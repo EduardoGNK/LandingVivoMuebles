@@ -67,8 +67,10 @@ model Project {
   location    String
   gallery     Json     @default("[]")
   videos      Json     @default("[]")
-  status      String   @default("published")
-  metadata    Json     @default("{}")
+  status        String   @default("published")
+  isFeatured    Boolean  @default(false)
+  featuredOrder Int      @default(0)
+  metadata      Json     @default("{}")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   userId      String?

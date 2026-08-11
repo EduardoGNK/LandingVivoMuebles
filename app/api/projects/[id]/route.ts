@@ -46,22 +46,26 @@ export async function PUT(
     }
 
     const { id } = await params
-    const { title, comuna, startDate, endDate, workType, description, propertyType, location, gallery, videos } = await request.json()
+    const body = await request.json()
+    const { title, comuna, startDate, endDate, workType, description, propertyType, location, gallery, videos, isFeatured, featuredOrder } = body
     
+    const updateData: any = {}
+    if (title !== undefined) updateData.title = title
+    if (comuna !== undefined) updateData.comuna = comuna
+    if (startDate !== undefined) updateData.startDate = startDate
+    if (endDate !== undefined) updateData.endDate = endDate
+    if (workType !== undefined) updateData.workType = workType
+    if (description !== undefined) updateData.description = description
+    if (propertyType !== undefined) updateData.propertyType = propertyType
+    if (location !== undefined) updateData.location = location
+    if (gallery !== undefined) updateData.gallery = gallery
+    if (videos !== undefined) updateData.videos = videos
+    if (isFeatured !== undefined) updateData.isFeatured = Boolean(isFeatured)
+    if (featuredOrder !== undefined) updateData.featuredOrder = Number(featuredOrder) || 0
+
     const updatedProject = await prisma.project.update({
       where: { id },
-      data: {
-        title,
-        comuna: comuna || "Santiago",
-        startDate,
-        endDate,
-        workType,
-        description,
-        propertyType,
-        location,
-        gallery: gallery || [],
-        videos: videos || [],
-      },
+      data: updateData,
     })
 
     return NextResponse.json(updatedProject)
