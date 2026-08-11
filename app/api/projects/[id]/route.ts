@@ -45,21 +45,27 @@ export async function PUT(
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 
-    const { id } = await params
+    const resolvedParams = await params
+    const id = resolvedParams?.id || (params as any)?.id
+
+    if (!id) {
+      return NextResponse.json({ error: 'ID de proyecto no especificado' }, { status: 400 })
+    }
+
     const body = await request.json()
     const { title, comuna, startDate, endDate, workType, description, propertyType, location, gallery, videos, isFeatured, featuredOrder } = body
     
     const updateData: any = {}
     if (title !== undefined) updateData.title = title
-    if (comuna !== undefined) updateData.comuna = comuna
+    if (comuna !== undefined) updateData.comuna = comuna || "Santiago"
     if (startDate !== undefined) updateData.startDate = startDate
     if (endDate !== undefined) updateData.endDate = endDate
     if (workType !== undefined) updateData.workType = workType
     if (description !== undefined) updateData.description = description
     if (propertyType !== undefined) updateData.propertyType = propertyType
     if (location !== undefined) updateData.location = location
-    if (gallery !== undefined) updateData.gallery = gallery
-    if (videos !== undefined) updateData.videos = videos
+    if (gallery !== undefined) updateData.gallery = Array.isArray(gallery) ? gallery : []
+    if (videos !== undefined) updateData.videos = Array.isArray(videos) ? videos : []
     if (isFeatured !== undefined) updateData.isFeatured = Boolean(isFeatured)
     if (featuredOrder !== undefined) updateData.featuredOrder = Number(featuredOrder) || 0
 
@@ -69,10 +75,10 @@ export async function PUT(
     })
 
     return NextResponse.json(updatedProject)
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error updating project:', error)
     return NextResponse.json(
-      { error: 'Failed to update project' },
+      { error: error?.message || 'Error al actualizar el proyecto en la base de datos' },
       { status: 500 }
     )
   }

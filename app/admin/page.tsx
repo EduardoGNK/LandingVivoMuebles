@@ -134,19 +134,20 @@ export default function AdminPanel() {
     setFormError(null)
     setFormSuccess(null)
     setFormData({
-      title: project.title,
-      comuna: project.comuna,
-      startDate: project.startDate,
-      endDate: project.endDate,
-      workType: project.workType,
-      description: project.description,
-      propertyType: project.propertyType,
-      location: project.location,
+      title: project.title || "",
+      comuna: project.comuna || "Santiago",
+      startDate: project.startDate || "",
+      endDate: project.endDate || "",
+      workType: project.workType || "",
+      description: project.description || "",
+      propertyType: project.propertyType || "",
+      location: project.location || "",
       isFeatured: project.isFeatured ?? false,
       featuredOrder: project.featuredOrder ?? 0,
       gallery: project.gallery || [],
       videos: project.videos || []
     })
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -379,11 +380,12 @@ export default function AdminPanel() {
                     </label>
                     <Input
                       id="startDate"
-                      type="date"
+                      type="text"
                       value={formData.startDate}
                       onChange={(e) => setFormData({...formData, startDate: e.target.value})}
                       required
                       disabled={submitting}
+                      placeholder="Ej: 2023 o 2023-01-15"
                     />
                   </div>
                   <div className="space-y-2">
@@ -392,11 +394,12 @@ export default function AdminPanel() {
                     </label>
                     <Input
                       id="endDate"
-                      type="date"
+                      type="text"
                       value={formData.endDate}
                       onChange={(e) => setFormData({...formData, endDate: e.target.value})}
                       required
                       disabled={submitting}
+                      placeholder="Ej: 2024 o 2024-03-30"
                     />
                   </div>
                 </div>
@@ -411,9 +414,16 @@ export default function AdminPanel() {
                     disabled={submitting}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecciona el tipo de trabajo" />
+                      <SelectValue placeholder="Selecciona el tipo de trabajo">
+                        {formData.workType || "Selecciona el tipo de trabajo"}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
+                      {formData.workType && !workTypes.includes(formData.workType) && (
+                        <SelectItem value={formData.workType}>
+                          {formData.workType}
+                        </SelectItem>
+                      )}
                       {workTypes.map((type) => (
                         <SelectItem key={type} value={type}>
                           {type}
