@@ -1,7 +1,7 @@
 "use client"
 
 import { useSession, signOut } from "next-auth/react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -47,6 +47,7 @@ const workTypes = [
 
 export default function AdminPanel() {
   const { data: session } = useSession()
+  const formCardRef = useRef<HTMLDivElement>(null)
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [editingProject, setEditingProject] = useState<string | null>(null)
@@ -144,10 +145,16 @@ export default function AdminPanel() {
       location: project.location || "",
       isFeatured: project.isFeatured ?? false,
       featuredOrder: project.featuredOrder ?? 0,
-      gallery: project.gallery || [],
-      videos: project.videos || []
+      gallery: Array.isArray(project.gallery) ? project.gallery : [],
+      videos: Array.isArray(project.videos) ? project.videos : []
     })
-    window.scrollTo({ top: 0, behavior: "smooth" })
+
+    // Scroll suave hasta el formulario para que el usuario sepa que la edición está activa
+    setTimeout(() => {
+      if (formCardRef.current) {
+        formCardRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+      }
+    }, 50)
   }
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -301,19 +308,30 @@ export default function AdminPanel() {
         
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Formulario para crear/editar proyectos */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                {editingProject ? (
-                  <>
-                    <Edit className="h-5 w-5" />
-                    Editar Proyecto
-                  </>
-                ) : (
-                  <>
-                    <Plus className="h-5 w-5" />
-                    Crear Nuevo Proyecto
-                  </>
+          <Card ref={formCardRef} className={`scroll-mt-6 transition-all ${editingProject ? "ring-2 ring-blue-500 border-blue-500 shadow-md" : ""}`}>
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {editingProject ? (
+                    <>
+                      <Edit className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                      <span>Editar Proyecto</span>
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-blue-500/20 text-blue-700 dark:text-blue-300">
+                        En edición
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-5 w-5" />
+                      <span>Crear Nuevo Proyecto</span>
+                    </>
+                  )}
+                </div>
+                {editingProject && (
+                  <Button type="button" variant="ghost" size="sm" onClick={cancelEdit} className="text-muted-foreground hover:text-foreground">
+                    <X className="h-4 w-4 mr-1" />
+                    Cancelar
+                  </Button>
                 )}
               </CardTitle>
             </CardHeader>
@@ -380,12 +398,11 @@ export default function AdminPanel() {
                     </label>
                     <Input
                       id="startDate"
-                      type="text"
+                      type="date"
                       value={formData.startDate}
                       onChange={(e) => setFormData({...formData, startDate: e.target.value})}
                       required
                       disabled={submitting}
-                      placeholder="Ej: 2023 o 2023-01-15"
                     />
                   </div>
                   <div className="space-y-2">
@@ -394,12 +411,11 @@ export default function AdminPanel() {
                     </label>
                     <Input
                       id="endDate"
-                      type="text"
+                      type="date"
                       value={formData.endDate}
                       onChange={(e) => setFormData({...formData, endDate: e.target.value})}
                       required
                       disabled={submitting}
-                      placeholder="Ej: 2024 o 2024-03-30"
                     />
                   </div>
                 </div>
@@ -414,16 +430,9 @@ export default function AdminPanel() {
                     disabled={submitting}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecciona el tipo de trabajo">
-                        {formData.workType || "Selecciona el tipo de trabajo"}
-                      </SelectValue>
+                      <SelectValue placeholder="Selecciona el tipo de trabajo" />
                     </SelectTrigger>
                     <SelectContent>
-                      {formData.workType && !workTypes.includes(formData.workType) && (
-                        <SelectItem value={formData.workType}>
-                          {formData.workType}
-                        </SelectItem>
-                      )}
                       {workTypes.map((type) => (
                         <SelectItem key={type} value={type}>
                           {type}
@@ -562,90 +571,107 @@ export default function AdminPanel() {
                 </p>
               ) : (
                 <div className="space-y-4">
-                  {projects.map((project) => (
-                    <div key={project.id} className={`border rounded-lg p-4 space-y-3 transition-colors ${project.isFeatured ? "border-amber-400/60 bg-amber-500/5 dark:bg-amber-500/10" : ""}`}>
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="font-semibold">{project.title}</h3>
-                            {project.isFeatured && (
-                              <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-                                <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-                                Destacado #{project.featuredOrder || 1}
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-sm text-muted-foreground">{project.comuna} • {project.propertyType}</p>
-                          <p className="text-sm text-muted-foreground">{project.workType}</p>
-                          <p className="text-sm text-muted-foreground">
-                            Fecha: {project.startDate} - {project.endDate} | Ubicación: {project.location}
-                          </p>
-                          
-                          {/* Controles de ordenamiento rápido */}
-                          <div className="flex items-center gap-2 pt-2">
-                            <Button
-                              type="button"
-                              variant={project.isFeatured ? "default" : "outline"}
-                              size="sm"
-                              className={project.isFeatured ? "bg-amber-500 hover:bg-amber-600 text-white" : ""}
-                              onClick={() => handleQuickToggleFeatured(project)}
-                            >
-                              <Star className={`h-3.5 w-3.5 mr-1 ${project.isFeatured ? "fill-white" : ""}`} />
-                              {project.isFeatured ? "Destacado" : "Destacar"}
-                            </Button>
+                  {projects.map((project) => {
+                    const isBeingEdited = editingProject === project.id
+                    return (
+                      <div 
+                        key={project.id} 
+                        className={`border rounded-lg p-4 space-y-3 transition-all ${
+                          isBeingEdited
+                            ? "border-2 border-blue-500 bg-blue-500/5 dark:bg-blue-500/10 shadow-md"
+                            : project.isFeatured 
+                              ? "border-amber-400/60 bg-amber-500/5 dark:bg-amber-500/10" 
+                              : ""
+                        }`}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h3 className="font-semibold">{project.title}</h3>
+                              {isBeingEdited && (
+                                <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded bg-blue-600 text-white">
+                                  ✏️ Editando ahora
+                                </span>
+                              )}
+                              {project.isFeatured && (
+                                <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+                                  <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                                  Destacado #{project.featuredOrder || 1}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm text-muted-foreground">{project.comuna} • {project.propertyType}</p>
+                            <p className="text-sm text-muted-foreground">{project.workType}</p>
+                            <p className="text-sm text-muted-foreground">
+                              Fecha: {project.startDate} - {project.endDate} | Ubicación: {project.location}
+                            </p>
+                            
+                            {/* Controles de ordenamiento rápido */}
+                            <div className="flex items-center gap-2 pt-2">
+                              <Button
+                                type="button"
+                                variant={project.isFeatured ? "default" : "outline"}
+                                size="sm"
+                                className={project.isFeatured ? "bg-amber-500 hover:bg-amber-600 text-white" : ""}
+                                onClick={() => handleQuickToggleFeatured(project)}
+                              >
+                                <Star className={`h-3.5 w-3.5 mr-1 ${project.isFeatured ? "fill-white" : ""}`} />
+                                {project.isFeatured ? "Destacado" : "Destacar"}
+                              </Button>
 
-                            {project.isFeatured && (
-                              <div className="flex items-center gap-1 border rounded-md px-2 py-0.5 bg-background">
-                                <span className="text-xs text-muted-foreground font-medium">Orden:</span>
-                                <input
-                                  type="number"
-                                  min="1"
-                                  value={project.featuredOrder || 1}
-                                  onChange={(e) => handleQuickOrderChange(project, parseInt(e.target.value) || 1)}
-                                  className="w-12 text-xs font-bold text-center bg-transparent border-0 focus:outline-none focus:ring-0"
-                                />
-                                <div className="flex flex-col">
-                                  <button
-                                    type="button"
-                                    onClick={() => handleQuickOrderChange(project, Math.max(1, (project.featuredOrder || 1) - 1))}
-                                    className="text-muted-foreground hover:text-foreground text-[10px] leading-none"
-                                    title="Subir posición"
-                                  >
-                                    ▲
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleQuickOrderChange(project, (project.featuredOrder || 1) + 1)}
-                                    className="text-muted-foreground hover:text-foreground text-[10px] leading-none"
-                                    title="Bajar posición"
-                                  >
-                                    ▼
-                                  </button>
+                              {project.isFeatured && (
+                                <div className="flex items-center gap-1 border rounded-md px-2 py-0.5 bg-background">
+                                  <span className="text-xs text-muted-foreground font-medium">Orden:</span>
+                                  <input
+                                    type="number"
+                                    min="1"
+                                    value={project.featuredOrder || 1}
+                                    onChange={(e) => handleQuickOrderChange(project, parseInt(e.target.value) || 1)}
+                                    className="w-12 text-xs font-bold text-center bg-transparent border-0 focus:outline-none focus:ring-0"
+                                  />
+                                  <div className="flex flex-col">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleQuickOrderChange(project, Math.max(1, (project.featuredOrder || 1) - 1))}
+                                      className="text-muted-foreground hover:text-foreground text-[10px] leading-none"
+                                      title="Subir posición"
+                                    >
+                                      ▲
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleQuickOrderChange(project, (project.featuredOrder || 1) + 1)}
+                                      className="text-muted-foreground hover:text-foreground text-[10px] leading-none"
+                                      title="Bajar posición"
+                                    >
+                                      ▼
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant={isBeingEdited ? "default" : "outline"} 
+                              size="sm"
+                              onClick={() => handleEdit(project)}
+                              title={isBeingEdited ? "Volver arriba al formulario de edición" : "Editar proyecto"}
+                              className={isBeingEdited ? "bg-blue-600 hover:bg-blue-700 text-white font-medium" : ""}
+                            >
+                              <Edit className="h-4 w-4 mr-1" />
+                              {isBeingEdited ? "Editando" : ""}
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleDelete(project.id)}
+                              title="Eliminar proyecto"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => handleEdit(project)}
-                            disabled={editingProject === project.id}
-                            title="Editar proyecto"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => handleDelete(project.id)}
-                            title="Eliminar proyecto"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
                       
                       {/* Preview de imágenes del proyecto */}
                       {project.gallery && project.gallery.length > 0 && (
@@ -695,7 +721,8 @@ export default function AdminPanel() {
                         </div>
                       )}
                     </div>
-                  ))}
+                  )
+                })}
                 </div>
               )}
             </CardContent>
