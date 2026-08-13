@@ -1,36 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { PrismaClient } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-
-import { INITIAL_PROJECTS } from '@/data/artworks'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const SUPABASE_URL = "postgresql://postgres:Escalona1798.@db.qccdfmcbntyzzwstnvqu.supabase.co:5432/postgres?sslmode=require"
+const SUPABASE_URL = "postgresql://postgres:Escalona1798.@db.qccdfmcbntyzzwstnvqu.supabase.co:5432/postgres"
 
 export async function GET() {
-  try {
-    process.env.DATABASE_URL = SUPABASE_URL
+  const db = new PrismaClient({
+    datasources: {
+      db: {
+        url: SUPABASE_URL,
+      },
+    },
+  })
 
-    const projects = await prisma.project.findMany({
+  try {
+    const projects = await db.project.findMany({
       where: { status: 'published' },
       orderBy: { createdAt: 'desc' },
     })
-
-    if (Array.isArray(projects) && projects.length > 0) {
-      return NextResponse.json(projects)
-    }
-
-    return NextResponse.json({ info: "No projects in DB", fallback: INITIAL_PROJECTS })
+    await db.$disconnect()
+    return NextResponse.json(projects)
   } catch (error: any) {
-    console.error('Error fetching projects from DB:', error)
-    return NextResponse.json({
-      error: error?.message || String(error),
-      code: error?.code,
-      meta: error?.meta
-    }, { status: 500 })
+    await db.$disconnect()
+    console.error('Error fetching projects from Supabase:', error)
+    return NextResponse.json({ error: error?.message || String(error) }, { status: 500 })
   }
 }
 
