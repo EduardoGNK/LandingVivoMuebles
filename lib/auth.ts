@@ -23,8 +23,6 @@ declare module "next-auth/jwt" {
   }
 }
 
-import CredentialsProvider from "next-auth/providers/credentials"
-
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -38,24 +36,9 @@ export const authOptions: NextAuthOptions = {
         }
       }
     }),
-    CredentialsProvider({
-      id: "dev-admin",
-      name: "Acceso Local Admin",
-      credentials: {},
-      async authorize() {
-        return {
-          id: "dev-admin-id",
-          name: "Administrador (Local)",
-          email: "aeservicios@gmail.com",
-          role: "admin",
-          image: ""
-        }
-      }
-    })
   ],
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === "dev-admin") return true
       if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
         console.error("❌ GOOGLE_CLIENT_ID o GOOGLE_CLIENT_SECRET no están configurados")
         return false
