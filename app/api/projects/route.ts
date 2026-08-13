@@ -8,21 +8,44 @@ import { INITIAL_PROJECTS } from '@/data/artworks'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
+import { PrismaClient } from '@prisma/client'
+
+const SUPABASE_URL = "postgresql://postgres:Escalona1798.@db.qccdfmcbntyzzwstnvqu.supabase.co:5432/postgres?sslmode=require"
+
 export async function GET() {
   try {
     const projects = await prisma.project.findMany({
       where: { status: 'published' },
+      orderBy: { createdAt: 'desc' },
     })
 
-    if (!projects || projects.length === 0) {
-      return NextResponse.json(INITIAL_PROJECTS)
+    if (Array.isArray(projects) && projects.length > 0) {
+      return NextResponse.json(projects)
     }
-
-    return NextResponse.json(projects)
   } catch (error) {
-    console.error('Error fetching projects from DB, returning initial projects:', error)
-    return NextResponse.json(INITIAL_PROJECTS)
+    console.error('Error con prisma principal, intentando conexion directa a Supabase:', error)
   }
+
+  try {
+    const directPrisma = new PrismaClient({
+      datasources: {
+        db: { url: SUPABASE_URL }
+      }
+    })
+    const realProjects = await directPrisma.project.findMany({
+      where: { status: 'published' },
+      orderBy: { createdAt: 'desc' },
+    })
+    await directPrisma.$disconnect()
+
+    if (Array.isArray(realProjects) && realProjects.length > 0) {
+      return NextResponse.json(realProjects)
+    }
+  } catch (fallbackErr) {
+    console.error('Error en conexion directa a Supabase:', fallbackErr)
+  }
+
+  return NextResponse.json(INITIAL_PROJECTS)
 }
 
 export async function POST(request: NextRequest) {
