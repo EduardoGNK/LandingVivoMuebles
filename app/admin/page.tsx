@@ -65,6 +65,7 @@ export default function AdminPanel() {
     gallery: [] as string[],
     videos: [] as string[]
   })
+  const [isImageProcessing, setIsImageProcessing] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const [formSuccess, setFormSuccess] = useState<string | null>(null)
@@ -510,10 +511,11 @@ export default function AdminPanel() {
                   )}
                 </div>
 
-                {/* Subida de imágenes */}
+                {/* Subida de imágenes con optimización WebP */}
                 <ImageUpload
                   images={formData.gallery}
                   onImagesChange={handleGalleryChange}
+                  onProcessingChange={setIsImageProcessing}
                   disabled={submitting}
                 />
 
@@ -521,15 +523,20 @@ export default function AdminPanel() {
                 <VideoUpload
                   videos={formData.videos}
                   onVideosChange={handleVideosChange}
-                  disabled={submitting}
+                  disabled={submitting || isImageProcessing}
                 />
 
                 <div className="flex gap-2">
-                  <Button type="submit" disabled={submitting} className="flex-1">
+                  <Button type="submit" disabled={submitting || isImageProcessing} className="flex-1">
                     {submitting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         {editingProject ? "Actualizando..." : "Creando..."}
+                      </>
+                    ) : isImageProcessing ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Procesando / Subiendo WebP...
                       </>
                     ) : (
                       <>
@@ -545,7 +552,7 @@ export default function AdminPanel() {
                     )}
                   </Button>
                   {editingProject && (
-                    <Button type="button" variant="outline" onClick={cancelEdit} disabled={submitting}>
+                    <Button type="button" variant="outline" onClick={cancelEdit} disabled={submitting || isImageProcessing}>
                       <X className="mr-2 h-4 w-4" />
                       Cancelar
                     </Button>
