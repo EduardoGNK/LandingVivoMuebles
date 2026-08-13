@@ -147,9 +147,24 @@ export async function convertToWebP(
       newName,
       isAlreadyWebP: false,
     }
+  } catch (conversionError) {
+    console.warn(`[ImageConverter] No se pudo convertir "${file.name}" a WebP. Usando archivo original como resguardo:`, conversionError)
+    const fallbackPreviewUrl = URL.createObjectURL(file)
+    return {
+      file,
+      originalSize: file.size,
+      webpSize: file.size,
+      reductionPercentage: 0,
+      previewUrl: fallbackPreviewUrl,
+      width: origWidth || 0,
+      height: origHeight || 0,
+      originalName: file.name,
+      newName: file.name,
+      isAlreadyWebP: file.type === 'image/webp',
+    }
   } finally {
     // Liberación de recursos temporales en memoria
-    if ('close' in imgBitmap! && typeof imgBitmap.close === 'function') {
+    if (imgBitmap! && 'close' in imgBitmap && typeof imgBitmap.close === 'function') {
       imgBitmap.close()
     }
     if (tempObjectUrl) {
