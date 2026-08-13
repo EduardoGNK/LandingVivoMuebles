@@ -3,28 +3,22 @@ import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+import { INITIAL_PROJECTS } from '@/data/artworks'
+
 export async function GET() {
   try {
-    // Consulta simplificada sin orderBy para evitar problemas de memoria de MySQL
     const projects = await prisma.project.findMany({
       where: { status: 'published' },
-      // Removemos orderBy temporalmente para evitar problemas de memoria
-      // orderBy: { createdAt: 'desc' },
-      // Removemos include temporalmente para evitar problemas de memoria
-      // include: {
-      //   user: {
-      //     select: { name: true }
-      //   }
-      // }
     })
+
+    if (!projects || projects.length === 0) {
+      return NextResponse.json(INITIAL_PROJECTS)
+    }
 
     return NextResponse.json(projects)
   } catch (error) {
-    console.error('Error fetching projects:', error)
-    return NextResponse.json(
-      { error: 'Error al obtener proyectos' },
-      { status: 500 }
-    )
+    console.error('Error fetching projects from DB, returning initial projects:', error)
+    return NextResponse.json(INITIAL_PROJECTS)
   }
 }
 
