@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-const SUPABASE_URL = "postgresql://postgres:Escalona1798.@db.qccdfmcbntyzzwstnvqu.supabase.co:5432/postgres"
+const SUPABASE_URL = "postgres://postgres.qccdfmcbntyzzwstnvqu:Escalona1798.@aws-0-sa-east-1.pooler.supabase.com:5432/postgres"
 
 process.env.DATABASE_URL = SUPABASE_URL
 
