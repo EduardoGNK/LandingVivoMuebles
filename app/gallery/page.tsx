@@ -18,6 +18,8 @@ interface Project {
   createdAt: string
 }
 
+import { INITIAL_PROJECTS } from "@/data/artworks"
+
 export default function GalleryPage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
@@ -31,10 +33,17 @@ export default function GalleryPage() {
       const res = await fetch("/api/projects")
       if (res.ok) {
         const data = await res.json()
-        setProjects(data)
+        if (Array.isArray(data) && data.length > 0) {
+          setProjects(data)
+        } else {
+          setProjects(INITIAL_PROJECTS as any)
+        }
+      } else {
+        setProjects(INITIAL_PROJECTS as any)
       }
     } catch (error) {
-      console.error("Error fetching projects:", error)
+      console.error("Error fetching projects, using initial fallback:", error)
+      setProjects(INITIAL_PROJECTS as any)
     } finally {
       setLoading(false)
     }

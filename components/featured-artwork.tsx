@@ -36,7 +36,12 @@ export default function FeaturedArtwork() {
           finalFeatured = [...finalFeatured, ...nonFeatured.slice(0, needed)]
         }
 
-        setFeaturedArtworks(finalFeatured.slice(0, 6))
+        if (finalFeatured.length === 0) {
+          const staticFallback = getArtworksFromDatabase()
+          setFeaturedArtworks(staticFallback as any)
+        } else {
+          setFeaturedArtworks(finalFeatured.slice(0, 6))
+        }
       } catch (error) {
         console.error('Error loading artworks:', error)
         setFeaturedArtworks([])

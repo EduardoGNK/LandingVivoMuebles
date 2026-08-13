@@ -3,36 +3,31 @@ import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+import { INITIAL_PROJECTS } from '@/data/artworks'
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
-    const { id } = await params
     const project = await prisma.project.findUnique({
       where: { id },
-      include: {
-        user: {
-          select: { name: true }
-        }
-      }
     })
 
-    if (!project) {
-      return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
-      )
+    if (project) {
+      return NextResponse.json(project)
     }
-
-    return NextResponse.json(project)
   } catch (error) {
-    console.error('Error fetching project:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch project' },
-      { status: 500 }
-    )
+    console.error('Error fetching project from DB, searching in initial projects:', error)
   }
+
+  const initialProject = INITIAL_PROJECTS.find((p) => p.id === id)
+  if (initialProject) {
+    return NextResponse.json(initialProject)
+  }
+
+  return NextResponse.json({ error: 'Project not found' }, { status: 404 })
 }
 
 export async function PUT(
