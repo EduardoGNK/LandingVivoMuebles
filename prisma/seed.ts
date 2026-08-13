@@ -1,51 +1,61 @@
 import { PrismaClient } from '@prisma/client'
+import { INITIAL_PROJECTS } from '../data/artworks'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  // Crear usuario admin (sin contraseña, se usará Google OAuth)
+  console.log('🌱 Poblando base de datos Supabase...')
+
+  // Upsert usuario admin
   const admin = await prisma.user.upsert({
     where: { email: 'admin@aeservicios.cl' },
     update: {},
     create: {
       email: 'admin@aeservicios.cl',
-      name: 'Administrador AEservicios',
+      name: 'Administrador Vivo Muebles',
       role: 'admin'
     }
   })
 
-  // Crear proyecto de ejemplo
-  await prisma.project.create({
-    data: {
-      title: 'Cocina Moderna Las Condes',
-      description: 'Remodelación completa de cocina con estilo moderno, gabinetes blancos, encimera de mármol e isla central. Proyecto realizado en Las Condes, Santiago.',
-      location: 'Las Condes, Santiago',
-      gallery: [
-        '/fotos/modern-kitchen.jpg',
-        '/fotos/modern-kitchen-2.jpg',
-        '/fotos/modern-kitchen-3.jpg'
-      ],
-      startDate: '2025-06-01',
-      endDate: '2025-07-15',
-      workType: 'Remodelación de cocina',
-      propertyType: 'Departamento',
-      status: 'published',
-      metadata: {
-        area: '25m²',
-        duracion: '6 semanas',
-        materiales: ['Mármol', 'Madera', 'Acero inoxidable']
+  for (const proj of INITIAL_PROJECTS) {
+    await prisma.project.upsert({
+      where: { id: proj.id },
+      update: {
+        title: proj.title,
+        comuna: proj.comuna,
+        startDate: proj.startDate,
+        endDate: proj.endDate,
+        workType: proj.workType,
+        description: proj.description,
+        propertyType: proj.propertyType,
+        location: proj.location,
+        gallery: proj.gallery,
+        videos: proj.videos,
+        status: 'published',
+        isFeatured: proj.isFeatured,
+        featuredOrder: proj.featuredOrder,
       },
-      userId: admin.id
-    }
-  })
+      create: {
+        id: proj.id,
+        title: proj.title,
+        comuna: proj.comuna,
+        startDate: proj.startDate,
+        endDate: proj.endDate,
+        workType: proj.workType,
+        description: proj.description,
+        propertyType: proj.propertyType,
+        location: proj.location,
+        gallery: proj.gallery,
+        videos: proj.videos,
+        status: 'published',
+        isFeatured: proj.isFeatured,
+        featuredOrder: proj.featuredOrder,
+        userId: admin.id,
+      }
+    })
+  }
 
-  console.log('✅ Seed completado: Usuario admin y proyecto de ejemplo creados')
-  console.log('')
-  console.log('📝 Para acceder al panel de administración:')
-  console.log('1. Configura las credenciales de Google OAuth en .env')
-  console.log('2. Agrega tu email a la lista de emails autorizados en auth/[...nextauth]/route.ts')
-  console.log('3. Ve a http://localhost:3000/login')
-  console.log('4. Inicia sesión con Google')
+  console.log('✅ Seed completado: 5 proyectos iniciales creados/actualizados en Supabase')
 }
 
 main()
