@@ -5,7 +5,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
-import { getArtworksFromDatabase } from "@/data/artworks"
+import { getArtworksFromDatabase, INITIAL_PROJECTS } from "@/data/artworks"
 import { ImageGallery } from "@/components/image-gallery"
 
 export default function FeaturedArtwork() {
