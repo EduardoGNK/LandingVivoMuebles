@@ -6,29 +6,46 @@ import { authOptions } from '@/lib/auth'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const SUPABASE_URL = "postgresql://postgres:Escalona1798.@db.qccdfmcbntyzzwstnvqu.supabase.co:5432/postgres"
+const SUPABASE_DIRECT_URL = "postgresql://postgres:Escalona1798.@db.qccdfmcbntyzzwstnvqu.supabase.co:5432/postgres?sslmode=require"
+const SUPABASE_POOLER_URL = "postgres://postgres.qccdfmcbntyzzwstnvqu:Escalona1798.@aws-0-sa-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
 
 export async function GET() {
-  const db = new PrismaClient({
-    datasources: {
-      db: {
-        url: SUPABASE_URL,
-      },
-    },
-  })
+  const connectionUrls = [
+    process.env.DATABASE_URL,
+    SUPABASE_POOLER_URL,
+    SUPABASE_DIRECT_URL,
+  ].filter(Boolean) as string[]
 
-  try {
-    const projects = await db.project.findMany({
-      where: { status: 'published' },
-      orderBy: { createdAt: 'desc' },
+  let lastError: any = null
+
+  for (const url of connectionUrls) {
+    const db = new PrismaClient({
+      datasources: {
+        db: { url },
+      },
     })
-    await db.$disconnect()
-    return NextResponse.json(projects)
-  } catch (error: any) {
-    await db.$disconnect()
-    console.error('Error fetching projects from Supabase:', error)
-    return NextResponse.json({ error: error?.message || String(error) }, { status: 500 })
+
+    try {
+      const projects = await db.project.findMany({
+        where: { status: 'published' },
+        orderBy: { createdAt: 'desc' },
+      })
+      await db.$disconnect()
+
+      if (Array.isArray(projects) && projects.length > 0) {
+        return NextResponse.json(projects)
+      }
+    } catch (err: any) {
+      lastError = err
+      await db.$disconnect().catch(() => {})
+      console.warn(`[API GET] Error conectando con ${url}:`, err?.message || err)
+    }
   }
+
+  return NextResponse.json({
+    error: lastError?.message || 'No se pudo conectar a Supabase',
+    code: lastError?.code,
+  }, { status: 500 })
 }
 
 export async function POST(request: NextRequest) {
