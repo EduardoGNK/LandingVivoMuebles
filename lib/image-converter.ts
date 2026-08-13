@@ -185,7 +185,6 @@ function getImageDimensions(url: string): Promise<{ width: number; height: numbe
     img.onerror = () => {
       resolve({ width: 0, height: 0 })
     }
-    img.preload = 'metadata'
     img.src = url
   })
 }
