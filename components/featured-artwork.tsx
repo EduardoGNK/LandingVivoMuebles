@@ -37,14 +37,13 @@ export default function FeaturedArtwork() {
         }
 
         if (finalFeatured.length === 0) {
-          const staticFallback = getArtworksFromDatabase()
-          setFeaturedArtworks(staticFallback as any)
+          setFeaturedArtworks(INITIAL_PROJECTS as any)
         } else {
           setFeaturedArtworks(finalFeatured.slice(0, 6))
         }
       } catch (error) {
         console.error('Error loading artworks:', error)
-        setFeaturedArtworks([])
+        setFeaturedArtworks(INITIAL_PROJECTS as any)
       } finally {
         setLoading(false)
       }
@@ -100,15 +99,6 @@ export default function FeaturedArtwork() {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    )
-  }
-
-  // Mostrar mensaje si no hay proyectos
-  if (featuredArtworks.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">No hay proyectos disponibles en este momento.</p>
       </div>
     )
   }

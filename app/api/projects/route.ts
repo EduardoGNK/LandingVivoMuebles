@@ -5,6 +5,9 @@ import { authOptions } from '@/lib/auth'
 
 import { INITIAL_PROJECTS } from '@/data/artworks'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET() {
   try {
     const projects = await prisma.project.findMany({

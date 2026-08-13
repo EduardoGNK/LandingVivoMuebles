@@ -1,24 +1,42 @@
+import { prisma } from '@/lib/prisma'
+
 // Función para obtener proyectos de la base de datos
 export async function getArtworksFromDatabase() {
   try {
-    const response = await fetch('/api/projects', {
-      cache: 'no-store' // Para obtener datos frescos
-    });
-    
-    if (!response.ok) {
-      throw new Error('Error al obtener proyectos');
+    let rawProjects: any[] = []
+
+    if (typeof window === 'undefined') {
+      // Entorno Servidor (Vercel SSR): consultar directamente a Prisma sin fetch de URL relativa
+      try {
+        rawProjects = await prisma.project.findMany({
+          where: { status: 'published' },
+        })
+      } catch (dbErr) {
+        console.error('Error al consultar Prisma en servidor:', dbErr)
+        return getStaticArtworks()
+      }
+    } else {
+      // Entorno Navegador Cliente
+      const response = await fetch('/api/projects', {
+        cache: 'no-store',
+      })
+      if (response.ok) {
+        rawProjects = await response.json()
+      }
     }
-    
-    const projects = await response.json();
-    
+
+    if (!rawProjects || rawProjects.length === 0) {
+      return getStaticArtworks()
+    }
+
     // Transformar los proyectos de la base de datos al formato de artworks
-    return projects.map((project: any) => ({
+    return rawProjects.map((project: any) => ({
       id: project.id,
       title: project.title,
-      artist: project.comuna || "Vivo Muebles", // Usar comuna como artista
+      artist: project.comuna || "Vivo Muebles",
       year: project.startDate || "2023",
       medium: project.workType || "Cocina completa",
-      dimensions: project.propertyType || "4.0 × 3.0 m",
+      dimensions: project.propertyType || "Proporción estándar",
       description: project.description || "Proyecto de cocina personalizado por Vivo Muebles.",
       price: project.location || "Consultar precio",
       image: project.gallery && project.gallery.length > 0 ? project.gallery[0] : "/placeholder.jpg",
@@ -26,11 +44,10 @@ export async function getArtworksFromDatabase() {
       videos: project.videos || [],
       isFeatured: project.isFeatured ?? false,
       featuredOrder: project.featuredOrder ?? 0,
-    }));
+    }))
   } catch (error) {
-    console.error('Error fetching projects from database:', error);
-    // Fallback a datos estáticos si hay error
-    return getStaticArtworks();
+    console.error('Error fetching projects from database:', error)
+    return getStaticArtworks()
   }
 }
 

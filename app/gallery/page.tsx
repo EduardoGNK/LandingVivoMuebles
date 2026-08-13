@@ -49,18 +49,20 @@ export default function GalleryPage() {
     }
   }
 
+  const displayProjects = projects.length > 0 ? projects : (INITIAL_PROJECTS as any)
+
   // Transformar proyectos a formato compatible con ArtworkGrid
-  const transformedProjects = projects.map(project => ({
+  const transformedProjects = displayProjects.map((project: any) => ({
     id: project.id,
     title: project.title,
-    artist: project.comuna, // Usar comuna como artista
-    year: `${project.startDate} - ${project.endDate}`, // Usar fechas como año
-    medium: project.workType, // Usar tipo de trabajo como medio
-    dimensions: project.propertyType, // Usar tipo de vivienda como dimensiones
+    artist: project.comuna || "Vivo Muebles",
+    year: `${project.startDate || "2023"} - ${project.endDate || "2023"}`,
+    medium: project.workType || "Cocina completa",
+    dimensions: project.propertyType || "Proporción estándar",
     description: project.description,
-    price: project.location, // Usar ubicación como precio
-    image: project.gallery[0] || "/placeholder.jpg",
-    gallery: project.gallery,
+    price: project.location || "Consultar",
+    image: project.gallery && project.gallery.length > 0 ? project.gallery[0] : "/placeholder.jpg",
+    gallery: project.gallery || [],
   }))
 
   return (
@@ -79,10 +81,6 @@ export default function GalleryPage() {
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        ) : projects.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">No hay proyectos disponibles en este momento.</p>
           </div>
         ) : (
           <ArtworkGrid projects={transformedProjects} />
