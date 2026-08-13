@@ -1,55 +1,8 @@
-import { prisma } from '@/lib/prisma'
-
-// Función para obtener proyectos de la base de datos
-export async function getArtworksFromDatabase() {
-  try {
-    let rawProjects: any[] = []
-
-    if (typeof window === 'undefined') {
-      // Entorno Servidor (Vercel SSR): consultar directamente a Prisma sin fetch de URL relativa
-      try {
-        rawProjects = await prisma.project.findMany({
-          where: { status: 'published' },
-        })
-      } catch (dbErr) {
-        console.error('Error al consultar Prisma en servidor:', dbErr)
-        return getStaticArtworks()
-      }
-    } else {
-      // Entorno Navegador Cliente
-      const response = await fetch('/api/projects', {
-        cache: 'no-store',
-      })
-      if (response.ok) {
-        rawProjects = await response.json()
-      }
-    }
-
-    if (!rawProjects || rawProjects.length === 0) {
-      return getStaticArtworks()
-    }
-
-    // Transformar los proyectos de la base de datos al formato de artworks
-    return rawProjects.map((project: any) => ({
-      id: project.id,
-      title: project.title,
-      artist: project.comuna || "Vivo Muebles",
-      year: project.startDate || "2023",
-      medium: project.workType || "Cocina completa",
-      dimensions: project.propertyType || "Proporción estándar",
-      description: project.description || "Proyecto de cocina personalizado por Vivo Muebles.",
-      price: project.location || "Consultar precio",
-      image: project.gallery && project.gallery.length > 0 ? project.gallery[0] : "/placeholder.jpg",
-      gallery: project.gallery || ["/placeholder.jpg"],
-      videos: project.videos || [],
-      isFeatured: project.isFeatured ?? false,
-      featuredOrder: project.featuredOrder ?? 0,
-    }))
-  } catch (error) {
-    console.error('Error fetching projects from database:', error)
-    return getStaticArtworks()
-  }
-}
+﻿// ============================================================
+// DATOS ESTÁTICOS – catálogo base de proyectos de Vivo Muebles
+// NO importar Prisma aquí: este archivo se carga en el cliente.
+// La lógica de base de datos está en /app/api/projects/route.ts
+// ============================================================
 
 export const INITIAL_PROJECTS = [
   {
@@ -73,8 +26,8 @@ export const INITIAL_PROJECTS = [
     status: "published",
     isFeatured: true,
     featuredOrder: 1,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: "2023-01-15T00:00:00.000Z",
+    updatedAt: "2023-03-01T00:00:00.000Z",
   },
   {
     id: "proj-2",
@@ -96,8 +49,8 @@ export const INITIAL_PROJECTS = [
     status: "published",
     isFeatured: true,
     featuredOrder: 2,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: "2023-03-10T00:00:00.000Z",
+    updatedAt: "2023-05-20T00:00:00.000Z",
   },
   {
     id: "proj-3",
@@ -119,8 +72,8 @@ export const INITIAL_PROJECTS = [
     status: "published",
     isFeatured: true,
     featuredOrder: 3,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: "2022-08-01T00:00:00.000Z",
+    updatedAt: "2022-10-15T00:00:00.000Z",
   },
   {
     id: "proj-4",
@@ -142,8 +95,8 @@ export const INITIAL_PROJECTS = [
     status: "published",
     isFeatured: true,
     featuredOrder: 4,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: "2023-06-01T00:00:00.000Z",
+    updatedAt: "2023-07-30T00:00:00.000Z",
   },
   {
     id: "proj-5",
@@ -165,28 +118,57 @@ export const INITIAL_PROJECTS = [
     status: "published",
     isFeatured: true,
     featuredOrder: 5,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: "2022-11-01T00:00:00.000Z",
+    updatedAt: "2023-01-10T00:00:00.000Z",
   },
 ]
 
-// Datos estáticos como fallback
-function getStaticArtworks() {
-  return INITIAL_PROJECTS.map((item) => ({
-    id: item.id,
-    title: item.title,
-    artist: "Vivo Muebles",
-    year: "2023",
-    medium: item.workType,
-    dimensions: "Proporción estándar",
-    description: item.description,
-    price: "Consultar",
-    image: item.gallery[0] || "/placeholder.jpg",
-    gallery: item.gallery,
-    isFeatured: item.isFeatured,
-    featuredOrder: item.featuredOrder,
-  }))
-}
+// Formato transformado compatible con ArtworkGrid y FeaturedArtwork
+export const artworks = INITIAL_PROJECTS.map((p) => ({
+  id: p.id,
+  title: p.title,
+  artist: p.comuna || "Vivo Muebles",
+  year: p.startDate || "2023",
+  medium: p.workType,
+  dimensions: p.propertyType || "Proporción estándar",
+  description: p.description,
+  price: p.location || "Consultar",
+  image: p.gallery[0] || "/placeholder.jpg",
+  gallery: p.gallery,
+  videos: p.videos,
+  isFeatured: p.isFeatured,
+  featuredOrder: p.featuredOrder,
+}))
 
-// Exportar la función principal
-export const artworks = getStaticArtworks();
+/**
+ * Obtiene proyectos desde la API (navegador) o retorna el catálogo estático.
+ * SOLO se llama desde componentes cliente ("use client").
+ * En Server Components, usar la ruta API directamente.
+ */
+export async function getArtworksFromDatabase() {
+  try {
+    const response = await fetch("/api/projects", { cache: "no-store" })
+    if (!response.ok) return artworks
+
+    const raw: any[] = await response.json()
+    if (!Array.isArray(raw) || raw.length === 0) return artworks
+
+    return raw.map((p: any) => ({
+      id: p.id,
+      title: p.title,
+      artist: p.comuna || "Vivo Muebles",
+      year: p.startDate || "2023",
+      medium: p.workType || "Cocina completa",
+      dimensions: p.propertyType || "Proporción estándar",
+      description: p.description || "Proyecto de cocina personalizado.",
+      price: p.location || "Consultar",
+      image: p.gallery && p.gallery.length > 0 ? p.gallery[0] : "/placeholder.jpg",
+      gallery: p.gallery || [],
+      videos: p.videos || [],
+      isFeatured: p.isFeatured ?? false,
+      featuredOrder: p.featuredOrder ?? 0,
+    }))
+  } catch {
+    return artworks
+  }
+}
