@@ -5,7 +5,6 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
-// Carrusel de proyectos destacados - Vivo Muebles (Supabase)
 import { getArtworksFromDatabase, INITIAL_PROJECTS } from "@/data/artworks"
 import { ImageGallery } from "@/components/image-gallery"
 

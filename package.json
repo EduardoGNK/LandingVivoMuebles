@@ -53,6 +53,7 @@
     "framer-motion": "^12.19.2",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
+    "mysql2": "^3.23.3",
     "next": "^15.5.20",
     "next-auth": "^4.24.11",
     "next-themes": "^0.3.0",
