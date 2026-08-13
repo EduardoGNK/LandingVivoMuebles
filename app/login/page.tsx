@@ -20,6 +20,18 @@ export default function LoginPage() {
     return null
   }
 
+  const handleDevSignIn = async () => {
+    setLoading(true)
+    setError("")
+    try {
+      await signIn("dev-admin", { callbackUrl: "/admin", redirect: true })
+    } catch (err) {
+      console.error("Error en handleDevSignIn:", err)
+      setError("Error al iniciar sesión local.")
+      setLoading(false)
+    }
+  }
+
   const handleGoogleSignIn = async () => {
     setLoading(true)
     setError("")
@@ -112,6 +124,14 @@ export default function LoginPage() {
                 </svg>
               )}
               Continuar con Google
+            </Button>
+
+            <Button
+              onClick={handleDevSignIn}
+              disabled={loading}
+              className="w-full h-10 text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              ⚡ Acceso Directo Admin (Modo Desarrollo Local)
             </Button>
           </div>
 
